@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Export-Package: scheduler_msgs;version="0.9.0";uses:="org.ros.internal
+ .message,org.ros.message,rocon_std_msgs,std_msgs,uuid_msgs"
+Bundle-SymbolicName: org.ros.rosjava_messages.scheduler_msgs
+Bundle-Version: 0.9.0
+Bundle-Name: scheduler_msgs
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1521500577000
+Import-Package: org.ros.internal.message,org.ros.message,rocon_std_msg
+ s;version="[0.9,1)",std_msgs;version="[0.5,1)",uuid_msgs;version="[1.
+ 0,2)"
+Created-By: 1.8.0_161 (Oracle Corporation)
+Tool: Bnd-2.1.0.20130426-122213
+

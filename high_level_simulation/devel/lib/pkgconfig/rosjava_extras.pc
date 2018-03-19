@@ -1,0 +1,8 @@
+prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/devel
+
+Name: rosjava_extras
+Description: Description of rosjava_extras
+Version: 0.3.3
+Cflags: 
+Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/devel/lib 
+Requires: 

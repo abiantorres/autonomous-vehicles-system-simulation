@@ -1,0 +1,8 @@
+prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install
+
+Name: rosjava_core
+Description: Description of rosjava_core
+Version: 0.3.5
+Cflags: 
+Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install/lib 
+Requires: 

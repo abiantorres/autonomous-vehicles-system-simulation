@@ -1,0 +1,40 @@
+file(REMOVE_RECURSE
+  "std_msgs"
+  "rosgraph_msgs"
+  "std_srvs"
+  "rosjava_test_msgs"
+  "actionlib_msgs"
+  "common_msgs"
+  "diagnostic_msgs"
+  "geometry_msgs"
+  "nav_msgs"
+  "sensor_msgs"
+  "shape_msgs"
+  "stereo_msgs"
+  "trajectory_msgs"
+  "visualization_msgs"
+  "tf2_msgs"
+  "ar_track_alvar_msgs"
+  "uuid_msgs"
+  "yocs_msgs"
+  "concert_msgs"
+  "concert_service_msgs"
+  "gateway_msgs"
+  "rocon_app_manager_msgs"
+  "rocon_device_msgs"
+  "rocon_interaction_msgs"
+  "rocon_service_pair_msgs"
+  "rocon_std_msgs"
+  "rocon_tutorial_msgs"
+  "world_canvas_msgs"
+  "scheduler_msgs"
+  "move_base_msgs"
+  "map_store"
+  "roscpp"
+  "CMakeFiles/rosjava_messages_generate_artifacts"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang )
+  include(CMakeFiles/rosjava_messages_generate_artifacts.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

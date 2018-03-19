@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Export-Package: rocon_tutorial_msgs;version="0.9.0";uses:="org.ros.int
+ ernal.message"
+Bundle-SymbolicName: org.ros.rosjava_messages.rocon_tutorial_msgs
+Bundle-Version: 0.9.0
+Bundle-Name: rocon_tutorial_msgs
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1521500575000
+Import-Package: org.ros.internal.message
+Created-By: 1.8.0_161 (Oracle Corporation)
+Tool: Bnd-2.1.0.20130426-122213
+

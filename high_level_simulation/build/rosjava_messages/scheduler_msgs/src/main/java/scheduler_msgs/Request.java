@@ -1,0 +1,40 @@
+package scheduler_msgs;
+
+public interface Request extends org.ros.internal.message.Message {
+  static final java.lang.String _TYPE = "scheduler_msgs/Request";
+  static final java.lang.String _DEFINITION = "### Resource request description\n#\n#   This tracks the progress of a single requested resource group.\n#   All these resources will be granted, preempted or canceled\n#   together as a unit.\n\n##############################################################################\n# Resource Identification\n##############################################################################\n\nuuid_msgs/UniqueID id   # Requester-assigned universally unique identifier\nResource[] resources    # List of requested rapps and platforms\n\n##############################################################################\n# State\n##############################################################################\n\nuint8 status            # Current status of this request\nuint8 reason            # Reason for this status\nstring problem          # Convenience message for introspecting on the reason \n\n#  Status value labels:\nuint8 NEW         = 0   # New request for the scheduler\nuint8 RESERVED    = 1   # Request for a reservation at some future time\nuint8 WAITING     = 2   # Request has been queued by the scheduler\nuint8 GRANTED     = 3   # Request was granted by the scheduler\nuint8 PREEMPTING  = 4   # The scheduler wants to preempt this\n                        #   previously-granted request, but the\n                        #   requester has not yet canceled it\nuint8 CANCELING   = 5   # The requester wishes to cancel this\n                        #   request, but the scheduler has not yet\n                        #   confirmed that it is closed\nuint8 CLOSED      = 6   # Request is now closed (terminal state)\n\n# Reason labels:\nuint8 NONE        = 0   # No reason provided\nuint8 PREEMPTED   = 1   # Preempted for higher-priority task\nuint8 BUSY        = 2   # Requested resource busy elsewhere\nuint8 UNAVAILABLE = 3   # Requested resource not available\nuint8 TIMEOUT     = 4   # Lost contact with requester\nuint8 INVALID     = 5   # Ill-formed request: see problem string for details\n\n##############################################################################\n# Scheduling Variables\n##############################################################################\n\ntime     availability   # Estimated time of availability (zero if unknown)\nduration hold_time      # Estimated hold time once allocated (zero if unknown)\nint16    priority       # Current priority of this request\n\n# Priority labels:\nint16 BACKGROUND_PRIORITY = -20000      # When nothing else to do\nint16 LOW_PRIORITY = -10000             # Low-priority task\nint16 DEFAULT_PRIORITY = 0              # Sane default priority\nint16 HIGH_PRIORITY = 10000             # High-priority task\nint16 CRITICAL_PRIORITY = 20000         # Mission-critical task\n";
+  static final byte NEW = 0;
+  static final byte RESERVED = 1;
+  static final byte WAITING = 2;
+  static final byte GRANTED = 3;
+  static final byte PREEMPTING = 4;
+  static final byte CANCELING = 5;
+  static final byte CLOSED = 6;
+  static final byte NONE = 0;
+  static final byte PREEMPTED = 1;
+  static final byte BUSY = 2;
+  static final byte UNAVAILABLE = 3;
+  static final byte TIMEOUT = 4;
+  static final byte INVALID = 5;
+  static final short BACKGROUND_PRIORITY = -20000;
+  static final short LOW_PRIORITY = -10000;
+  static final short DEFAULT_PRIORITY = 0;
+  static final short HIGH_PRIORITY = 10000;
+  static final short CRITICAL_PRIORITY = 20000;
+  uuid_msgs.UniqueID getId();
+  void setId(uuid_msgs.UniqueID value);
+  java.util.List<scheduler_msgs.Resource> getResources();
+  void setResources(java.util.List<scheduler_msgs.Resource> value);
+  byte getStatus();
+  void setStatus(byte value);
+  byte getReason();
+  void setReason(byte value);
+  java.lang.String getProblem();
+  void setProblem(java.lang.String value);
+  org.ros.message.Time getAvailability();
+  void setAvailability(org.ros.message.Time value);
+  org.ros.message.Duration getHoldTime();
+  void setHoldTime(org.ros.message.Duration value);
+  short getPriority();
+  void setPriority(short value);
+}
