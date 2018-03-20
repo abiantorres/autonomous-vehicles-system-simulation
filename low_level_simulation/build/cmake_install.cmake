@@ -117,6 +117,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/gtest/cmake_install.cmake")
+  include("/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/robot_setup_tf/cmake_install.cmake")
 
 endif()
 
