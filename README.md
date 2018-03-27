@@ -35,7 +35,7 @@ levels of simulation and in the integration of them.
 
 > Still in development phase.
 
-* 27/03/2018: A basic simulation of the PR2 robot model using a Hoyuko sensor laser. 
+* 27/03/2018: A basic simulation of the PR2 robot model using a Hokuyo laser sensor. The graphics simulations will be launch using Blender, which is setting by default in MORSE, and the physics simulations using the Bullet library. 
 
 ## Dependencies:
 
