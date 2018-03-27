@@ -35,6 +35,8 @@ levels of simulation and in the integration of them.
 
 > Still in development phase.
 
+* 27/03/2018: A basic simulation of the PR2 robot model using a Hoyuko sensor laser. 
+
 ## Dependencies:
 
 * This proyect should be build correctly in a [Ubuntu Xenial Xerus (16.04)](http://releases.ubuntu.com/16.04/) system.
@@ -42,10 +44,43 @@ levels of simulation and in the integration of them.
 * For getting [rosjava](http://wiki.ros.org/rosjava) working, execute the followig command in a new terminal (note that it must be installed for ROS kinetic):
 
 ```
-sudo apt-get install ros-kinetic-catkin ros-kinetic-rospack python-wstool openjdk-8-jdk
+$ sudo apt-get install ros-kinetic-catkin ros-kinetic-rospack python-wstool openjdk-8-jdk
 ```
 
 * Install ROS Kinetic following [this tutorial](http://wiki.ros.org/kinetic/Installation/Ubuntu).
+
+```
+$ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+$ sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+$ sudo apt-get update
+$ sudo apt-get install ros-kinetic-desktop-full
+$ apt-cache search ros-kinetic
+$ sudo rosdep init
+$ rosdep update
+$ echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
+$ source /opt/ros/kinetic/setup.bash
+$ sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
+```
+
+* Install the MORSE simulator following [this tutorial](https://www.openrobots.org/morse/doc/stable/user/installation.html).
+
+```
+# Cmake:
+$ sudo apt-get install cmake
+# Python:
+$ sudo apt-get update
+$ sudo apt-get -y upgrade
+$ sudo apt-get install -y python3-pip
+$ python3 -V
+$ sudo apt-get install build-essential libssl-dev libffi-dev python-dev
+$ sudo pip3 install numpy
+# Blender:
+$ sudo add-apt-repository ppa:thomas-schiex/blender
+$ sudo apt-get update
+$ sudo apt-get install blender
+# Morse:
+$ sudo apt-get install python3-morse-simulator
+```
 
 ## Authors:
 
