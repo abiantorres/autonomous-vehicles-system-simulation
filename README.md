@@ -13,7 +13,7 @@ standard services of an operating system such as hardware abstraction, control o
 low level devices, implementation of commonly used functionalities, message passing
 between processes and package maintenance. It is based on a graph architecture where the
 processing takes place in nodes that can receive, send and multiplex messages from
-sensors, control, states, schedules and actuators, among others.
+sensors, control, states, schedulePs and actuators, among others.
 
 However, this is only one aspect of the problem. In any type of study, it is also interesting
 simulate the impact that the implementation of a system would have, in our case of transport
@@ -36,7 +36,7 @@ levels of simulation and in the integration of them.
 > Still in development phase.
 
 * 27/03/2018: A basic simulation of the PR2 robot model using a Hokuyo laser sensor. The graphics simulations will be launch using Blender, which is setting by default in MORSE, and the physics simulations using the Bullet library. 
-* 02/04/2018: Improving the configuration of the navigation stack to get a better autonomous behavior, especially move_base node parameters.
+* 02/04/2018: Improving the configuration of the navigation stack to get a better autonomous behavior, especially move_base node parameters. The robot model used is a differential drive formed by two wheels and one caster wheel anchored to a rectangular base next to a hokuyo laser sensor.
 
 ## Dependencies:
 
@@ -63,24 +63,24 @@ $ source /opt/ros/kinetic/setup.bash
 $ sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
 ```
 
-* ~~Install the MORSE simulator following [this tutorial](https://www.openrobots.org/morse/doc/stable/user/installation.html).~~ No using MORSE any more.
+* ~~Install the MORSE simulator following [this tutorial](https://www.openrobots.org/morse/doc/stable/user/installation.html).~~ **NO USING MORSE ANY MORE, SO NO INSTALLATION NEEDED**
 
 ```
-~~# Cmake:~~
-~~$ sudo apt-get install cmake~~
-~~# Python:~~
-~~$ sudo apt-get update~~
-~~$ sudo apt-get -y upgrade~~
-~~$ sudo apt-get install -y python3-pip~~
-~~$ python3 -V~~
-~~$ sudo apt-get install build-essential libssl-dev libffi-dev python-dev~~
-~~$ sudo pip3 install numpy~~
-~~# Blender:~~
-~~$ sudo add-apt-repository ppa:thomas-schiex/blender~~
-~~$ sudo apt-get update~~
-~~$ sudo apt-get install blender~~
-~~# Morse:~~
-~~$ sudo apt-get install python3-morse-simulator~~
+# Cmake:
+$ sudo apt-get install cmake
+# Python:
+$ sudo apt-get update
+$ sudo apt-get -y upgrade
+$ sudo apt-get install -y python3-pip
+$ python3 -V
+$ sudo apt-get install build-essential libssl-dev libffi-dev python-dev
+$ sudo pip3 install numpy
+# Blender:
+$ sudo add-apt-repository ppa:thomas-schiex/blender
+$ sudo apt-get update
+$ sudo apt-get install blender
+# Morse:
+$ sudo apt-get install python3-morse-simulator
 ```
 
 ## Authors:
