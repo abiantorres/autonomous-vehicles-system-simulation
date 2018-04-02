@@ -7,7 +7,5 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel:$CMAKE_PREFIX_PATH"
 export PWD="/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build"
-export ROSLISP_PACKAGE_DIRECTORIES="/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/common-lisp"
-export ROS_PACKAGE_PATH="/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src:$ROS_PACKAGE_PATH"
+export PYTHONPATH="/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib/python2.7/dist-packages:$PYTHONPATH"

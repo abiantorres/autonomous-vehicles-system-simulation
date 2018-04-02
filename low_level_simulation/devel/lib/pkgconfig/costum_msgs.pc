@@ -1,0 +1,8 @@
+prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel
+
+Name: costum_msgs
+Description: Description of costum_msgs
+Version: 0.0.0
+Cflags: -I/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/include
+Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib 
+Requires: 

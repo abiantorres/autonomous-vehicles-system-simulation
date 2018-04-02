@@ -7,18 +7,23 @@
   <arg name="map_file" default="$(find navigation)/maps/hotel_map.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
+
   <!-- Place map frame at odometry frame -->
   <node pkg="tf" type="static_transform_publisher" name="map_odom_broadcaster" args="0 0 0 0 0 0 map odom 100"/>
 
   <!-- Localization -->
   <node pkg="amcl" type="amcl" name="amcl" output="screen">
-    <remap from="scan" to="vehicle/laser/scan"/>
+    <!--remap from="scan" to="vehicle/laser/scan"/>
     <param name="odom_frame_id" value="odom"/>
     <param name="odom_model_type" value="diff-corrected"/>
     <param name="base_frame_id" value="base_link"/>
     <param name="update_min_d" value="0.5"/>
-    <param name="update_min_a" value="1.0"/>
+    <param name="update_min_a" value="1.0"/-->
+    <rosparam file="$(find navigation)/config/amcl.yaml" command="load" />
   </node>
+
+<!-- Distribute pose array across free space -->
+  <node pkg="rosservice" type="rosservice" name="global_loc" args="call --wait /global_localization"/>
 
   <!-- Move base -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
