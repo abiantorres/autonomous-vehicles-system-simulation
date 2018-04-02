@@ -1,8 +1,0 @@
-prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install
-
-Name: robot_setup_tf
-Description: Description of robot_setup_tf
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install/lib 
-Requires: 

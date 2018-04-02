@@ -1,0 +1,8 @@
+prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install
+
+Name: description
+Description: Description of description
+Version: 1.0.0
+Cflags: 
+Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install/lib 
+Requires: 

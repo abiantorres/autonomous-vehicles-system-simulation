@@ -1,0 +1,18 @@
+# setup ros:
+source /opt/ros/kinetic/setup.bash 
+catkin_make
+source devel/setup.bash
+---------------------------------------------
+# laser information:
+<range>
+  <min>0.10</min>
+  <max>30.0</max>
+  <resolution>0.01</resolution>
+</range>
+---------------------------------------------
+# each lateral wheel dimensions:
+<cylinder radius="0.1" length="0.05"/>
+<wheelSeparation>0.4</wheelSeparation>
+---------------------------------------------
+# robot radius = (0.4 + 0.05 * 2) / 2 = 0.25
+

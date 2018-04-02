@@ -1,2 +1,2 @@
-robot_setup_tf
+control:description:gazebo_simulation:navigation
 -DCATKIN_DEVEL_PREFIX=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel -DCMAKE_INSTALL_PREFIX=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install -G Unix Makefiles
