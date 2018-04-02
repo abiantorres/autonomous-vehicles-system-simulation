@@ -1,2 +1,0 @@
-genjava:rosjava:rosjava_bootstrap:rosjava_build_tools:rosjava_core:rosjava_extras:rosjava_messages:rosjava_test_msgs:zeroconf_jmdns_suite
--DCATKIN_DEVEL_PREFIX=/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/devel -DCMAKE_INSTALL_PREFIX=/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install -G Unix Makefiles

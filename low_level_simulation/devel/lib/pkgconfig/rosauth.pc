@@ -1,0 +1,8 @@
+prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel
+
+Name: rosauth
+Description: Description of rosauth
+Version: 0.1.7
+Cflags: -I/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/include
+Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib 
+Requires: roscpp message_runtime

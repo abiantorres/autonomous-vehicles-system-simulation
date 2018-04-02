@@ -83,6 +83,12 @@ $ sudo apt-get install blender
 $ sudo apt-get install python3-morse-simulator
 ```
 
+* Intall the following python dependencies to get rosbridge_server working:
+
+```
+$ sudo pip install tornado
+```
+
 ## Authors:
 
 |Name | Email |

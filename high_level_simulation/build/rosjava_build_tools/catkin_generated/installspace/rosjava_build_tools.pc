@@ -1,8 +1,0 @@
-prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install
-
-Name: rosjava_build_tools
-Description: Description of rosjava_build_tools
-Version: 0.3.2
-Cflags: 
-Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install/lib 
-Requires: 

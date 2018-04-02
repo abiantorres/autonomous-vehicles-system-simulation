@@ -140,7 +140,7 @@ class PathComplete(State):
         """ Low level information publisher. High level should be
         subscribed to this topic.
         """
-        self.path_plan_info_pub = rospy.Publisher('path_plan_info',PathInfo)
+        self.path_plan_info_pub = rospy.Publisher('path_plan_info', PathInfo)
 
     def execute(self, userdata):
         global results

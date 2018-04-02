@@ -1,8 +1,0 @@
-prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/devel
-
-Name: rosjava_messages
-Description: Description of rosjava_messages
-Version: 0.3.0
-Cflags: 
-Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/devel/lib 
-Requires: 

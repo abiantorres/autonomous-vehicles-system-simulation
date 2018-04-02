@@ -8,4 +8,3 @@
 
 # modified environment variables
 export PWD="/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build"
-export PYTHONPATH="/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib/python2.7/dist-packages:$PYTHONPATH"

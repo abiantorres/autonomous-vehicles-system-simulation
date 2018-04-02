@@ -1,8 +1,0 @@
-prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install
-
-Name: genjava
-Description: Description of genjava
-Version: 0.3.3
-Cflags: 
-Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install/lib 
-Requires: genmsg rosjava_build_tools

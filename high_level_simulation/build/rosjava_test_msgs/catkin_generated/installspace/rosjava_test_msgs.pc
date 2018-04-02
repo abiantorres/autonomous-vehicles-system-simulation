@@ -1,8 +1,0 @@
-prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install
-
-Name: rosjava_test_msgs
-Description: Description of rosjava_test_msgs
-Version: 0.3.0
-Cflags: -I/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install/include
-Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install/lib 
-Requires: message_runtime std_msgs

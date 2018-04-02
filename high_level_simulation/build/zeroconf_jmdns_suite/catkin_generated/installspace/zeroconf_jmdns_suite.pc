@@ -1,8 +1,0 @@
-prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install
-
-Name: zeroconf_jmdns_suite
-Description: Description of zeroconf_jmdns_suite
-Version: 0.3.0
-Cflags: 
-Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/install/lib 
-Requires: 
