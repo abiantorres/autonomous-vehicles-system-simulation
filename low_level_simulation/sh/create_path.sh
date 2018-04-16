@@ -8,6 +8,6 @@ if [ $# -eq 1 ]; then
 	    exit 0
 	fi
 else
-    roslaunch path_utilities save_path.launch output_file:=path.bag
+    roslaunch path_utilities save_path.launch output_file:=path.baf
     exit 1
 fi

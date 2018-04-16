@@ -17,6 +17,7 @@ import rosbag
 
 waypoints = []
 results = []
+file_name = ""
 
 def convert_PoseWithCovArray_to_PoseArray(waypoints):
     """Used to publish waypoints as pose array so that you can see them in rviz, etc."""
@@ -30,12 +31,11 @@ def read_route_configuration_from_file():
     Function with allows us to get a path pre-configured from file and
     load it to be used in the simulation.
     """
-    global waypoints
+    global waypoints, file_name
     waypoints = []
     file_name = rospy.get_param('~input_file')
     bag = rosbag.Bag(file_name)
-    for topic, msg, t in bag.read_messages(topics=['waypoints_file']):
-        rospy.loginfo("WAYPOINT   " + str(msg))
+    for topic, msg, t in bag.read_messages(topics=['path_goals_bag']):
         waypoints.append(msg)
     bag.close()
 
@@ -56,6 +56,7 @@ def run():
     poseArray_publisher.publish(convert_PoseWithCovArray_to_PoseArray(waypoints))
     results = [] # make sure we have an empty array of times
     # Execute waypoints each in seqsuence
+    rospy.loginfo("WAYPOINTS: " + str(waypoints))
     for waypoint in waypoints:
         # Break if preempted
         if waypoints == []:
@@ -84,6 +85,8 @@ def run():
     path_plan_info_pub.publish(route_times)
 
 if __name__ == '__main__':
+    global file_name
     rospy.init_node('load_path')
+    file_name = rospy.get_param('~input_file')
     run()
 

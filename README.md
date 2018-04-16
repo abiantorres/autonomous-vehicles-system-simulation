@@ -37,6 +37,7 @@ levels of simulation and in the integration of them.
 
 * 27/03/2018: A basic simulation of the PR2 robot model using a Hokuyo laser sensor. The graphics simulations will be launch using Blender, which is setting by default in MORSE, and the physics simulations using the Bullet library. 
 * 02/04/2018: Improving the configuration of the navigation stack to get a better autonomous behavior, especially move_base node parameters. The robot model used is a differential drive formed by two wheels and one caster wheel anchored to a rectangular base next to a hokuyo laser sensor.
+* 16/04/2018: Adding save and load (from file) path nodes in the low level simulation and importing PSIGHOS library dependencies.
 
 ## Dependencies:
 
