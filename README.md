@@ -83,10 +83,31 @@ $ sudo apt-get install blender
 $ sudo apt-get install python3-morse-simulator
 ```
 
-* Intall the following python dependencies to get rosbridge_server working:
+* Intall the following python dependencies to get rosbridge_server working from source:
+** [Rosbridge source code](https://github.com/RobotWebTools/rosbridge_suite)
 
 ```
+# install pip if you have not done it yet:
+sudo apt-get install python-pip python-dev build-essential 
+sudo pip install --upgrade pip 
+sudo pip install --upgrade virtualenv 
+# Other dependencies:
 $ sudo pip install tornado
+$ sudo apt-get install ros-kinetic-rosauth
+# Get the rosbridge_suite package:
+$ git clone https://github.com/RobotWebTools/rosbridge_suite.git
+$ cd ~/your_work_space
+$ catkin_make
+$ source devel/setup.bash
+```
+
+* If you prefer to get rosbridge_server working via apt-get:
+
+```
+$ sudo apt-get install ros-kinetic-rosbridge-suite
+$ source /opt/ros/kinetic/setup.bash
+# To launch rosbridge_sever, execute the following launch file:
+$ roslaunch rosbridge_server rosbridge_websocket.launch
 ```
 
 ## Authors:

@@ -244,7 +244,7 @@ UBUNTU:BOOL=TRUE
 UBUNTU_XENIAL:BOOL=TRUE
 
 //Path to a file.
-_file_name:FILEPATH=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_library/test/internal/test_internal.test
+_file_name:FILEPATH=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosbridge_library/test/internal/test_internal.test
 
 //Path to a file.
 _gmock_INCLUDES:FILEPATH=/usr/include/gmock/gmock.h
@@ -275,6 +275,9 @@ control_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulat
 
 //Value Computed by CMake
 costum_msgs_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/costum_msgs
+
+//The directory containing a CMake configuration file for costum_msgs.
+costum_msgs_DIR:PATH=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/costum_msgs/cmake
 
 //Value Computed by CMake
 costum_msgs_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs
@@ -380,10 +383,16 @@ navigation_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simu
 navigation_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/navigation
 
 //Value Computed by CMake
-rosapi_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosapi
+path_utilities_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/path_utilities
 
 //Value Computed by CMake
-rosapi_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosapi
+path_utilities_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/path_utilities
+
+//Value Computed by CMake
+rosapi_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosbridge_suite/rosapi
+
+//Value Computed by CMake
+rosapi_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosapi
 
 //Value Computed by CMake
 rosauth_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosauth
@@ -392,22 +401,22 @@ rosauth_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulat
 rosauth_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosauth
 
 //Value Computed by CMake
-rosbridge_library_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosbridge_library
+rosbridge_library_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosbridge_suite/rosbridge_library
 
 //Value Computed by CMake
-rosbridge_library_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_library
+rosbridge_library_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosbridge_library
 
 //Value Computed by CMake
-rosbridge_server_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosbridge_server
+rosbridge_server_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosbridge_suite/rosbridge_server
 
 //Value Computed by CMake
-rosbridge_server_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_server
+rosbridge_server_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosbridge_server
 
 //Value Computed by CMake
-rosbridge_suite_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosbridge_suite
+rosbridge_suite_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosbridge_suite/rosbridge_suite
 
 //Value Computed by CMake
-rosbridge_suite_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite
+rosbridge_suite_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosbridge_suite
 
 //The directory containing a CMake configuration file for rosconsole.
 rosconsole_DIR:PATH=/opt/ros/kinetic/share/rosconsole/cmake

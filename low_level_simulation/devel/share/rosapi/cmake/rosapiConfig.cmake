@@ -67,7 +67,7 @@ set(rosapi_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(rosapi_SOURCE_PREFIX /home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosapi)
+  set(rosapi_SOURCE_PREFIX /home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosapi)
   set(rosapi_DEVEL_PREFIX /home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel)
   set(rosapi_INSTALL_PREFIX "")
   set(rosapi_PREFIX ${rosapi_DEVEL_PREFIX})
@@ -110,7 +110,7 @@ if(NOT "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simu
         message(FATAL_ERROR "Project 'rosapi' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'rosapi' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosapi/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'rosapi' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosapi/${idir}'.  ${_report}")
     endif()
     _list_append_unique(rosapi_INCLUDE_DIRS ${include})
   endforeach()

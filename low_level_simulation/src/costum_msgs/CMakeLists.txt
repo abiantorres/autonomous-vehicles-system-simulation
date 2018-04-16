@@ -52,6 +52,7 @@ add_message_files(
    FILES
    GoalInfo.msg
    PathInfo.msg
+   RouteTimes.msg
 )
 
 ## Generate added messages and services with any dependencies listed here

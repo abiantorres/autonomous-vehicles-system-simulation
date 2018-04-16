@@ -5,5 +5,7 @@
    "GOALINFO"
    "<PATHINFO>"
    "PATHINFO"
+   "<ROUTETIMES>"
+   "ROUTETIMES"
   ))
 

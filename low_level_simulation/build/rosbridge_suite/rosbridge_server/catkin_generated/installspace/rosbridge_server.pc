@@ -1,0 +1,8 @@
+prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install
+
+Name: rosbridge_server
+Description: Description of rosbridge_server
+Version: 0.8.6
+Cflags: 
+Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install/lib 
+Requires: 

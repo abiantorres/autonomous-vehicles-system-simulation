@@ -3,17 +3,79 @@
 import threading
 import rospy
 import actionlib
+import numpy as np
+import os
 
 # Path information messages
-from costum_msgs.msg import PathInfo, GoalInfo
+#from costum_msgs.msg import PathInfo, GoalInfo
+from costum_msgs.msg import RouteTimes
 
 from smach import State,StateMachine
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-from geometry_msgs.msg import PoseWithCovarianceStamped, PoseArray
+from geometry_msgs.msg import PoseWithCovarianceStamped, PoseArray, Pose
 from std_msgs.msg import Empty
+from nav_msgs.msg import Odometry
+import rosbag
 
 waypoints = []
 results = []
+initial_vehicle_pose = Odometry()
+
+##############
+#Get Odometry#
+##############
+
+def callback(msg):
+    """ 
+    Funtions to get the initial vehicle pose and keep it in the
+    global variable "initial_vehicle_pose", so it could be
+    used later, when we want to save it in a file vehicle initial pose.
+    """
+    global initial_vehicle_pose
+    initial_vehicle_pose = msg
+
+# Get subscribe to the odometry topic
+odom_sub = rospy.Subscriber('/odom', Odometry, callback)
+odom_pub = rospy.Publisher("/odom", Odometry, queue_size=50)
+
+#####################################
+#Load and write path goals from file#
+#####################################
+
+def write_route_configuration_from_file(file_name):
+    """
+    Function with allows us to save a pre-configured path from file and
+    keep it to be used in the simulation.
+    """
+    global waypoints, initial_vehicle_pose
+    bag = rosbag.Bag(file_name, 'w')
+    try:
+        bag.write('initial_pose_file', initial_vehicle_pose) 
+        for waypoint in waypoints:
+           bag.write('waypoints_file', waypoint) 
+    finally:
+        bag.close()
+
+
+def read_route_configuration_from_file(file_name):
+    """
+    Function with allows us to get a path pre-configured from file and
+    load it to be used in the simulation.
+    """
+    global waypoints
+    waypoints = []
+    bag = rosbag.Bag(file_name)
+    for topic, msg, t in bag.read_messages(topics=['initial_pose_file']):
+        rospy.loginfo("INITIAL   " + str(msg))
+        odom_pub.publish(msg)
+    for topic, msg, t in bag.read_messages(topics=['waypoints_file']):
+        rospy.loginfo("WAYPOINT   " + str(msg))
+        waypoints.append(msg)
+    bag.close()
+
+################
+#States Machine#
+################
 
 class FollowPath(State):
     def __init__(self):
@@ -27,6 +89,7 @@ class FollowPath(State):
 
     def execute(self, userdata):
         global waypoints, results
+        results = [] # make sure we have an empty array of times
         # Execute waypoints each in sequence
         for waypoint in waypoints:
             # Break if preempted
@@ -45,25 +108,7 @@ class FollowPath(State):
             # set start time for the current goal
             start_time = rospy.get_time()
             self.client.wait_for_result()
-            # build data information message about the current goal
-            goal_info = GoalInfo()
-            # position
-            goal_info.x_position = waypoint.pose.pose.position.x
-            goal_info.y_position = waypoint.pose.pose.position.y
-            goal_info.z_position = waypoint.pose.pose.position.z
-            # orientation
-            goal_info.x_orientation = waypoint.pose.pose.orientation.x
-            goal_info.y_orientation = waypoint.pose.pose.orientation.y
-            goal_info.z_orientation = waypoint.pose.pose.orientation.z
-            goal_info.w_orientation = waypoint.pose.pose.orientation.w
-            # path simulation time
-            goal_info.time = rospy.get_time() - start_time
-            # append to results array for pack all goals in an PathInfo 
-            # message when the PathComplete state is called
-            results.append(goal_info)
-            #results.append([waypoint.pose.pose.position, waypoint.pose.pose.orientation, rospy.get_time() - start_time])
-
-
+            results.append(rospy.get_time() - start_time)
         return 'success'
 
 def convert_PoseWithCovArray_to_PoseArray(waypoints):
@@ -78,7 +123,6 @@ class GetPath(State):
         State.__init__(self, outcomes=['success'], input_keys=['waypoints'], output_keys=['waypoints'])
         # Create publsher to publish waypoints as pose array so that you can see them in rviz, etc.
         self.poseArray_publisher = rospy.Publisher('/waypoints', PoseArray, queue_size=1)
-
         # Start thread to listen for reset messages to clear the waypoint queue
         def wait_for_path_reset():
             """thread worker function"""
@@ -103,7 +147,7 @@ class GetPath(State):
         global waypoints
         self.initialize_path_queue()
         self.path_ready = False
-
+        #load_route_configuration_from_file('~/.ros/path01.path')
         # Start thread to listen for when the path is ready (this function will end then)
         def wait_for_path_ready():
             """thread worker function"""
@@ -113,25 +157,31 @@ class GetPath(State):
         ready_thread = threading.Thread(target=wait_for_path_ready)
         ready_thread.start()
 
+        """
         topic = "/initialpose"
         rospy.loginfo("Waiting to recieve waypoints via Pose msg on topic %s" % topic)
         rospy.loginfo("To start following waypoints: 'rostopic pub /path_ready std_msgs/Empty -1'")
-
+        """
+        read_route_configuration_from_file("test.bag")
         # Wait for published waypoints
         while not self.path_ready:
             try:
-                pose = rospy.wait_for_message(topic, PoseWithCovarianceStamped, timeout=1)
+                #pose = rospy.wait_for_message(topic, PoseWithCovarianceStamped, timeout=1)
+                pass
             except rospy.ROSException as e:
                 if 'timeout exceeded' in e.message:
                     continue  # no new waypoint within timeout, looping...
                 else:
                     raise e
-            rospy.loginfo("Recieved new waypoint")
-            waypoints.append(pose)
+            #rospy.loginfo("Recieved new waypoint")
+            #waypoints.append(pose)
+            #rospy.loginfo(pose)
             # publish waypoint queue as pose array so that you can see them in rviz, etc.
             self.poseArray_publisher.publish(convert_PoseWithCovArray_to_PoseArray(waypoints))
-
         # Path is ready! return success and move on to the next state (FOLLOW_PATH)
+        rospy.loginfo(waypoints)
+
+        #write_route_configuration_from_file("test.bag")"""
         return 'success'
 
 class PathComplete(State):
@@ -140,17 +190,20 @@ class PathComplete(State):
         """ Low level information publisher. High level should be
         subscribed to this topic.
         """
-        self.path_plan_info_pub = rospy.Publisher('path_plan_info', PathInfo)
+        #self.path_plan_info_pub = rospy.Publisher('/path_plan_info', PathInfo)
+        self.path_plan_info_pub = rospy.Publisher('/path_plan_info', RouteTimes)
 
     def execute(self, userdata):
         global results
         rospy.loginfo('###############################')
         rospy.loginfo('##### REACHED FINISH GATE #####')
         rospy.loginfo('###############################')
-        path_plan_info = PathInfo()
-        path_plan_info.data = results
-        rospy.loginfo(path_plan_info)
-        self.path_plan_info_pub.publish(path_plan_info)
+        # path_plan_info = PathInfo()
+        route_times = RouteTimes()
+        # path_plan_info.data = results
+        route_times.times = results
+        rospy.loginfo(route_times)
+        self.path_plan_info_pub.publish(route_times)
         return 'success'
 
 def main():

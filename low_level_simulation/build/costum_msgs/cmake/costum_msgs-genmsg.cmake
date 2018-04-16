@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "costum_msgs: 2 messages, 0 services")
+message(STATUS "costum_msgs: 3 messages, 0 services")
 
 set(MSG_I_FLAGS "-Icostum_msgs:/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg;-Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg")
 
@@ -27,6 +27,11 @@ add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" "costum_msgs/GoalInfo"
 )
 
+get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
+add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" ""
+)
+
 #
 #  langs = gencpp;geneus;genlisp;gennodejs;genpy
 #
@@ -35,6 +40,12 @@ add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
 ### Generating Messages
 _generate_msg_cpp(costum_msgs
   "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/costum_msgs
+)
+_generate_msg_cpp(costum_msgs
+  "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/costum_msgs
@@ -64,6 +75,8 @@ get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system
 add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
+add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(costum_msgs_gencpp)
@@ -76,6 +89,12 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS costum_msgs_generate_messages_cpp)
 ### Generating Messages
 _generate_msg_eus(costum_msgs
   "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs
+)
+_generate_msg_eus(costum_msgs
+  "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs
@@ -105,6 +124,8 @@ get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system
 add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
+add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(costum_msgs_geneus)
@@ -117,6 +138,12 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS costum_msgs_generate_messages_eus)
 ### Generating Messages
 _generate_msg_lisp(costum_msgs
   "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs
+)
+_generate_msg_lisp(costum_msgs
+  "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs
@@ -146,6 +173,8 @@ get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system
 add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
+add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(costum_msgs_genlisp)
@@ -158,6 +187,12 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS costum_msgs_generate_messages_lisp)
 ### Generating Messages
 _generate_msg_nodejs(costum_msgs
   "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs
+)
+_generate_msg_nodejs(costum_msgs
+  "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs
@@ -187,6 +222,8 @@ get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system
 add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
+add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(costum_msgs_gennodejs)
@@ -199,6 +236,12 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS costum_msgs_generate_messages_nodej
 ### Generating Messages
 _generate_msg_py(costum_msgs
   "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs
+)
+_generate_msg_py(costum_msgs
+  "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs
@@ -227,6 +270,8 @@ add_dependencies(costum_msgs_generate_messages costum_msgs_generate_messages_py)
 get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
+add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

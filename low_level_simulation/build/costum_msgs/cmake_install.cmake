@@ -36,6 +36,7 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/costum_msgs/msg" TYPE FILE FILES
     "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
     "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg"
+    "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
     )
 endif()
 

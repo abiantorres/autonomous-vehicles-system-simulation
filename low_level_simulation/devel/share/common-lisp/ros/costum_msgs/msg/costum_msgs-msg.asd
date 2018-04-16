@@ -8,4 +8,6 @@
     (:file "_package_GoalInfo" :depends-on ("_package"))
     (:file "PathInfo" :depends-on ("_package_PathInfo"))
     (:file "_package_PathInfo" :depends-on ("_package"))
+    (:file "RouteTimes" :depends-on ("_package_RouteTimes"))
+    (:file "_package_RouteTimes" :depends-on ("_package"))
   ))

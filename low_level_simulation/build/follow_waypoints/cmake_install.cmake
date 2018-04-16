@@ -56,6 +56,10 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/follow_waypoints" TYPE PROGRAM FILES "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/follow_waypoints/catkin_generated/installspace/save_waypoints")
+endif()
+
+if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/follow_waypoints/launch" TYPE DIRECTORY FILES "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/follow_waypoints/launch/")
 endif()
 
