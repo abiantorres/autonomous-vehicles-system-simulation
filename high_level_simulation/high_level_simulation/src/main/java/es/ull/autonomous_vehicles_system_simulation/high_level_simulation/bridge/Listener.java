@@ -11,22 +11,21 @@ import ros.RosListenDelegate;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities.Constants;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities.DataProcessing;
 
-public class Listener {
+public class Listener /*extends Experiment*/ {
 
 	/**************
 	 * ATRIBUTTES *
 	 *************/
 	
 	/* - times: will keep the times required by the vehicle to reach each
-	 * point established on the route */
+	 * point established on the route (average times) */
 	protected static ArrayList<Double> times;
-		
+	
 	/***********************
 	 * DEFAULT CONSTRUCTOR *
 	 **********************/
 	
 	public Listener() {
-		super();
 		Listener.times = new ArrayList<Double>();
 	}
 	
@@ -59,4 +58,5 @@ public class Listener {
 	public static void setTimes(ArrayList<Double> times) {
 		Listener.times = times;
 	}
+	
 }

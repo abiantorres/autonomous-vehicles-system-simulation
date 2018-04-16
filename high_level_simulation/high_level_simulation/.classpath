@@ -22,5 +22,11 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/PSIGHOS /PSIGHOS/lib/jbarrier-1.0.jar"/>
+	<classpathentry kind="lib" path="/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/PSIGHOS /PSIGHOS/lib/JFlex.jar"/>
+	<classpathentry kind="lib" path="/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/PSIGHOS /PSIGHOS/lib/tools.jar"/>
+	<classpathentry kind="lib" path="/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/PSIGHOS /utils/lib/actions.jar"/>
+	<classpathentry kind="lib" path="/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/PSIGHOS /utils/lib/poi-3.0.2-FINAL-20080204.jar"/>
+	<classpathentry kind="lib" path="/home/parallels/tfg/autonomous-vehicles-system-simulation/high_level_simulation/PSIGHOS /utils/lib/simkit.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
