@@ -15,8 +15,29 @@ from geometry_msgs.msg import PoseWithCovarianceStamped, PoseArray, Pose
 from std_msgs.msg import Empty
 from nav_msgs.msg import Odometry
 
+from gazebo_msgs.srv import GetModelState
+from gazebo_msgs.msg import ModelState
+
 waypoints = []
 file_name = ""
+
+def get_vehicle_model_state():
+    """
+    Function used to obtained the vehicle model initial state. This will
+    help when, in future simulations, we want to relaunch a path plan simulation.
+    """
+    rospy.wait_for_service('gazebo/get_model_state')
+    get_model_state = rospy.ServiceProxy('gazebo/get_model_state', GetModelState)
+    try:
+        model = ModelState()
+        res = get_model_state('vehicle', 'world')
+        model.model_name = 'vehicle'
+        model.pose = res.pose
+        model.twist = res.twist
+        model.reference_frame = 'world'
+        return model
+    except rospy.ServiceException as exc:
+      rospy.loginfo("Service did not process request: " + str(exc))
 
 def write_route_configuration_from_file():
     """
@@ -24,15 +45,9 @@ def write_route_configuration_from_file():
     keep it to be used in the simulation.
     """
     global waypoints, file_name
-    #goals = []
-    #rospy.loginfo(waypoints)
-    #for waypoint in waypoints:
-        #goals.append([waypoint.pose.pose.position.x, waypoint.pose.pose.position.y, waypoint.pose.pose.position.z, waypoint.pose.pose.orientation.x, waypoint.pose.pose.orientation.y, waypoint.pose.pose.orientation.z])
-    #np_goals = np.array(goals, np.float32)
-    #np.savetxt(file_name, np_goals)
-
     bag = rosbag.Bag(file_name, 'w')
     try:
+        bag.write('initial_model_state', get_vehicle_model_state())
         for waypoint in waypoints:
             bag.write('path_goals_bag', waypoint)
     finally:
@@ -82,6 +97,7 @@ class GetPath(State):
         rospy.loginfo("To start following waypoints: 'rostopic pub /path_ready std_msgs/Empty -1'")
         # Wait for published waypoints
         while not self.path_ready:
+            rospy.loginfo(get_vehicle_model_state())
             try:
                 pose = rospy.wait_for_message(topic, PoseWithCovarianceStamped, timeout=1)
                 pass
