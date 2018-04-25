@@ -7,11 +7,12 @@ from actionlib_msgs.msg import *
 import roslib
 import numpy as np
 import os
+from math import pow, sqrt
 
 # Path information messages
 from costum_msgs.msg import RouteTimes
 
-from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseActionFeedback
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseArray, Pose
 from std_msgs.msg import Empty
 from std_srvs.srv import Empty
@@ -30,6 +31,24 @@ distance_travelled_by_section = []
 initial_state = ModelState()
 # Path planning input file 
 file_name = ""
+
+
+# Auxiliar variables to compute the traveled distance
+current_traveled_distance = 0.0
+# Last vehicle position (x, y)
+last_x_position = 0.0
+last_y_position = 0.0
+compute_distance = False
+
+# Compute the euclidean distance
+def callback(data):
+    global last_x_position, last_y_position, current_traveled_distance, compute_distance
+    if(compute_distance):
+        current_traveled_distance += sqrt(pow(data.feedback.base_position.pose.position.x - last_x_position, 2) + pow(data.feedback.base_position.pose.position.y - last_y_position, 2))
+    last_x_position = data.feedback.base_position.pose.position.x
+    last_y_position = data.feedback.base_position.pose.position.y
+    
+rospy.Subscriber("move_base/feedback", MoveBaseActionFeedback, callback)
 
 def reset_gazebo_world():
     rospy.wait_for_service('gazebo/reset_world')
@@ -77,7 +96,7 @@ def run(n_simulations):
     """ Low level information publisher. High level should be
     subscribed to the path_plan_info topic.
     """
-    global waypoints, time_average_by_section, failures_by_section, distance_travelled_by_section
+    global waypoints, time_average_by_section, failures_by_section, distance_travelled_by_section,last_x_position, last_y_position, current_traveled_distance, compute_distance
     
     # configure needed topics and move_base client
     path_plan_info_pub = rospy.Publisher('/path_plan_info', RouteTimes, queue_size=1)
@@ -105,7 +124,7 @@ def run(n_simulations):
     # Run the n simulations
     for x in range(0, n_simulations):
         # Re-set the initial robot pose
-        reset_gazebo_world()
+        #reset_gazebo_world()
         # Set the initial vehicle model state
         set_vehicle_model_state()
         # Print in Rviz the visual end point icons
@@ -114,18 +133,24 @@ def run(n_simulations):
         rospy.loginfo("waypoints: " + str(waypoints))
         i = 0 # variable to index the results times
 
+
         # Send to path planner each of the move base goals
         for waypoint in waypoints:
             
             # Build goal
             goal = MoveBaseGoal()
             goal.target_pose.header.frame_id = frame_id
+            goal.target_pose.header.stamp = rospy.Time.now()
             goal.target_pose.pose.position = waypoint.pose.pose.position
             goal.target_pose.pose.orientation = waypoint.pose.pose.orientation
             rospy.loginfo('Executing move_base goal to position (x,y): %s, %s' %
                 (waypoint.pose.pose.position.x, waypoint.pose.pose.position.y))
             rospy.loginfo("To cancel the goal: 'rostopic pub -1 /move_base/cancel actionlib_msgs/GoalID -- {}'")
             
+
+            current_traveled_distance = 0.0
+            compute_distance = True
+
             # Send goal to path planner
             client.send_goal(goal)
 
@@ -134,7 +159,7 @@ def run(n_simulations):
 
             # Keep waiting for results 2 minutes and 30 seconds
             finished_within_time = client.wait_for_result(rospy.Duration(150)) # Wait only
-
+            compute_distance = False
             # Check for success or failure
             if not finished_within_time:
                 client.cancel_goal()
@@ -152,9 +177,10 @@ def run(n_simulations):
                     rospy.loginfo("Goal failed with error code: " + str(state))
                     # Increase the failures count for the current section
                     failures_by_section[i] += 1
+            rospy.loginfo("DISTANCE " + str(current_traveled_distance))
             i += 1 
 
-        rospy.loginfo("###### Section " + str(x+1) + " finished ######")
+        rospy.loginfo("###### Simulation " + str(x+1) + " finished ######")
 
     # Compute average times for each section
     for i in range(0, len(waypoints)):
