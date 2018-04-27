@@ -24,52 +24,37 @@ struct GoalInfo_
   typedef GoalInfo_<ContainerAllocator> Type;
 
   GoalInfo_()
-    : x_position(0.0)
-    , y_position(0.0)
-    , z_position(0.0)
-    , x_orientation(0.0)
-    , y_orientation(0.0)
-    , z_orientation(0.0)
-    , w_orientation(0.0)
-    , time(0.0)  {
+    : id()
+    , time_average(0.0)
+    , distance_average(0.0)
+    , velocity_average(0.0)
+    , failures(0)  {
     }
   GoalInfo_(const ContainerAllocator& _alloc)
-    : x_position(0.0)
-    , y_position(0.0)
-    , z_position(0.0)
-    , x_orientation(0.0)
-    , y_orientation(0.0)
-    , z_orientation(0.0)
-    , w_orientation(0.0)
-    , time(0.0)  {
+    : id(_alloc)
+    , time_average(0.0)
+    , distance_average(0.0)
+    , velocity_average(0.0)
+    , failures(0)  {
   (void)_alloc;
     }
 
 
 
-   typedef double _x_position_type;
-  _x_position_type x_position;
+   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _id_type;
+  _id_type id;
 
-   typedef double _y_position_type;
-  _y_position_type y_position;
+   typedef double _time_average_type;
+  _time_average_type time_average;
 
-   typedef double _z_position_type;
-  _z_position_type z_position;
+   typedef double _distance_average_type;
+  _distance_average_type distance_average;
 
-   typedef double _x_orientation_type;
-  _x_orientation_type x_orientation;
+   typedef double _velocity_average_type;
+  _velocity_average_type velocity_average;
 
-   typedef double _y_orientation_type;
-  _y_orientation_type y_orientation;
-
-   typedef double _z_orientation_type;
-  _z_orientation_type z_orientation;
-
-   typedef double _w_orientation_type;
-  _w_orientation_type w_orientation;
-
-   typedef double _time_type;
-  _time_type time;
+   typedef int16_t _failures_type;
+  _failures_type failures;
 
 
 
@@ -105,7 +90,7 @@ namespace message_traits
 
 
 
-// BOOLTRAITS {'IsFixedSize': True, 'IsMessage': True, 'HasHeader': False}
+// BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': False}
 // {'costum_msgs': ['/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
@@ -115,12 +100,12 @@ namespace message_traits
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::costum_msgs::GoalInfo_<ContainerAllocator> >
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::costum_msgs::GoalInfo_<ContainerAllocator> const>
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
@@ -149,12 +134,12 @@ struct MD5Sum< ::costum_msgs::GoalInfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "5c2161efb882ab714cdc912beb12392f";
+    return "8d65c3a28a49ef2e0abb508952cb41a4";
   }
 
   static const char* value(const ::costum_msgs::GoalInfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x5c2161efb882ab71ULL;
-  static const uint64_t static_value2 = 0x4cdc912beb12392fULL;
+  static const uint64_t static_value1 = 0x8d65c3a28a49ef2eULL;
+  static const uint64_t static_value2 = 0x0abb508952cb41a4ULL;
 };
 
 template<class ContainerAllocator>
@@ -173,14 +158,11 @@ struct Definition< ::costum_msgs::GoalInfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "float64 x_position\n\
-float64 y_position\n\
-float64 z_position\n\
-float64 x_orientation\n\
-float64 y_orientation\n\
-float64 z_orientation\n\
-float64 w_orientation\n\
-float64 time\n\
+    return "string id\n\
+float64 time_average\n\
+float64 distance_average\n\
+float64 velocity_average\n\
+int16 failures\n\
 ";
   }
 
@@ -199,14 +181,11 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.x_position);
-      stream.next(m.y_position);
-      stream.next(m.z_position);
-      stream.next(m.x_orientation);
-      stream.next(m.y_orientation);
-      stream.next(m.z_orientation);
-      stream.next(m.w_orientation);
-      stream.next(m.time);
+      stream.next(m.id);
+      stream.next(m.time_average);
+      stream.next(m.distance_average);
+      stream.next(m.velocity_average);
+      stream.next(m.failures);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -225,22 +204,16 @@ struct Printer< ::costum_msgs::GoalInfo_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::costum_msgs::GoalInfo_<ContainerAllocator>& v)
   {
-    s << indent << "x_position: ";
-    Printer<double>::stream(s, indent + "  ", v.x_position);
-    s << indent << "y_position: ";
-    Printer<double>::stream(s, indent + "  ", v.y_position);
-    s << indent << "z_position: ";
-    Printer<double>::stream(s, indent + "  ", v.z_position);
-    s << indent << "x_orientation: ";
-    Printer<double>::stream(s, indent + "  ", v.x_orientation);
-    s << indent << "y_orientation: ";
-    Printer<double>::stream(s, indent + "  ", v.y_orientation);
-    s << indent << "z_orientation: ";
-    Printer<double>::stream(s, indent + "  ", v.z_orientation);
-    s << indent << "w_orientation: ";
-    Printer<double>::stream(s, indent + "  ", v.w_orientation);
-    s << indent << "time: ";
-    Printer<double>::stream(s, indent + "  ", v.time);
+    s << indent << "id: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.id);
+    s << indent << "time_average: ";
+    Printer<double>::stream(s, indent + "  ", v.time_average);
+    s << indent << "distance_average: ";
+    Printer<double>::stream(s, indent + "  ", v.distance_average);
+    s << indent << "velocity_average: ";
+    Printer<double>::stream(s, indent + "  ", v.velocity_average);
+    s << indent << "failures: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.failures);
   }
 };
 

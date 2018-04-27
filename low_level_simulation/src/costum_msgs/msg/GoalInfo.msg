@@ -1,3 +1,5 @@
-float64 average_time
-float64 distance
-int16 n_aborts
+string id
+float64 time_average
+float64 distance_average
+float64 velocity_average
+int16 failures

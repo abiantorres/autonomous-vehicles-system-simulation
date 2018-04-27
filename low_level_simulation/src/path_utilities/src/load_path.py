@@ -8,9 +8,11 @@ import roslib
 import numpy as np
 import os
 from math import pow, sqrt
+from datetime import datetime
+import time
 
 # Path information messages
-from costum_msgs.msg import RouteTimes
+from costum_msgs.msg import RouteTimes, GoalInfo, PathInfo
 
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseActionFeedback
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseArray, Pose
@@ -23,15 +25,18 @@ import rosbag
 
 # Path planning goals
 waypoints = []
-# Statistics per path section (Each array position corresponds to a section)
-time_average_by_section = []
-failures_by_section = []
-distance_travelled_by_section = []
-# Initial vehicle model state
-initial_state = ModelState()
-# Path planning input file 
-file_name = ""
 
+# Local statistics by path section (Each array position corresponds to a section)
+time_average_by_section = [] # time by section
+failures_by_section = [] # failures by section
+traveled_distance_average_by_section = [] # distance traveled by section
+velocity_average_by_section = [] # velocity by section
+
+# Global statistics
+global_time_average = 0.0
+global_failures = 0.0
+global_traveled_distance_average = 0.0
+global_velocity_average = 0.0
 
 # Auxiliar variables to compute the traveled distance
 current_traveled_distance = 0.0
@@ -39,6 +44,13 @@ current_traveled_distance = 0.0
 last_x_position = 0.0
 last_y_position = 0.0
 compute_distance = False
+
+# Initial vehicle model state
+initial_state = ModelState()
+
+# Path planning input file 
+file_name = ""
+
 
 # Compute the euclidean distance
 def callback(data):
@@ -96,10 +108,10 @@ def run(n_simulations):
     """ Low level information publisher. High level should be
     subscribed to the path_plan_info topic.
     """
-    global waypoints, time_average_by_section, failures_by_section, distance_travelled_by_section,last_x_position, last_y_position, current_traveled_distance, compute_distance
+    global waypoints, time_average_by_section, failures_by_section, traveled_distance_average_by_section, velocity_average_by_section, last_x_position, last_y_position, current_traveled_distance, compute_distance, global_time_average, global_failures, global_traveled_distance_average, global_velocity_average
     
     # configure needed topics and move_base client
-    path_plan_info_pub = rospy.Publisher('/path_plan_info', RouteTimes, queue_size=1)
+    path_plan_info_pub = rospy.Publisher('/path_plan_info', PathInfo, queue_size=1)
     poseArray_publisher = rospy.Publisher('/waypoints', PoseArray, queue_size=1)
     frame_id = rospy.get_param('~goal_frame_id','map')
     # Get a move_base action client
@@ -113,13 +125,22 @@ def run(n_simulations):
 
     # Make sure we have an empty array of average times.
     # The lenght of the array is equal to the number of end points (path sections)
-    time_average_by_section = [0] * len(waypoints) 
+    time_average_by_section = [0.0] * len(waypoints) 
     # Make sure we have an empty array of aborts.
     # The lenght of the array is equal to the number of end points (path sections)
-    failures_by_section = [0] * len(waypoints)
+    failures_by_section = [0.0] * len(waypoints)
     # Make sure we have an empty array of distances.
     # The lenght of the array is equal to the number of end points (path sections)
-    distance_travelled_by_section = [0] * len(waypoints)
+    traveled_distance_average_by_section = [0.0] * len(waypoints)
+    # Make sure we have an empty array of velocities.
+    # The lenght of the array is equal to the number of end points (path sections)
+    velocity_average_by_section = [0.0] * len(waypoints)
+    
+    # Initialize global statistics
+    global_time_average = 0.0
+    global_failures_average = 0.0
+    global_traveled_distance_average = 0.0
+    global_velocity_average = 0.0
     
     # Run the n simulations
     for x in range(0, n_simulations):
@@ -171,13 +192,14 @@ def run(n_simulations):
                 if state == GoalStatus.SUCCEEDED:
                     rospy.loginfo("Goal succeeded!")
                     rospy.loginfo("State:" + str(state))
-                    # Computes travel time for last plan
-                    time_average_by_section[i] += (rospy.get_time() - start_time)
                 else:
                     rospy.loginfo("Goal failed with error code: " + str(state))
                     # Increase the failures count for the current section
                     failures_by_section[i] += 1
-            rospy.loginfo("DISTANCE " + str(current_traveled_distance))
+            # Computes section statistics
+            time_average_by_section[i] += (rospy.get_time() - start_time)
+            traveled_distance_average_by_section[i] = current_traveled_distance
+            velocity_average_by_section[i] = traveled_distance_average_by_section[i] / time_average_by_section[i]
             i += 1 
 
         rospy.loginfo("###### Simulation " + str(x+1) + " finished ######")
@@ -185,10 +207,43 @@ def run(n_simulations):
     # Compute average times for each section
     for i in range(0, len(waypoints)):
         time_average_by_section[i] /= n_simulations
-    #route_times = RouteTimes()
-    #route_times.times = results
-    #rospy.loginfo(route_times)
-    #path_plan_info_pub.publish(route_times)
+        rospy.loginfo("###### Section " + str(i+1) + " -> time  " + str(time_average_by_section[i]) + "  ######")
+        traveled_distance_average_by_section[i] /= n_simulations
+        rospy.loginfo("###### Section " + str(i+1) + " -> distance  " + str(traveled_distance_average_by_section[i]) + "  ######")
+        velocity_average_by_section[i] /= n_simulations
+        rospy.loginfo("###### Section " + str(i+1) + " -> velocity  " + str(velocity_average_by_section[i]) + "  ######")
+    global_time_average = sum(time_average_by_section) 
+    rospy.loginfo("###### Global -> time  " + str(time_average_by_section[i]) + "  ######")
+    global_traveled_distance_average = sum(traveled_distance_average_by_section)
+    rospy.loginfo("###### Global -> distance  " + str(global_traveled_distance_average) + "  ######")
+    global_failures = sum(failures_by_section)
+    rospy.loginfo("###### Global -> failures  " + str(global_failures) + "  ######")
+    global_velocity_average = sum(velocity_average_by_section) / float(len(waypoints))
+    rospy.loginfo("###### Global -> velocity  " + str(global_velocity_average) + "  ######")
+
+    # Build plan results message
+    plan_results = PathInfo()
+    plan_results.plan_file = file_name
+    plan_results.date = time.strftime("%c")
+    plan_results.simulations = n_simulations
+    plan_results.global_time_average = global_time_average
+    plan_results.global_distance_average = global_traveled_distance_average
+    plan_results.global_velocity_average = global_velocity_average
+    plan_results.global_failures = global_failures
+
+    sections = []
+    for i in range(0, len(waypoints)):
+        section = GoalInfo()
+        section.id = str(i+1)
+        section.time_average = time_average_by_section[i]
+        section.distance_average =  traveled_distance_average_by_section[i]
+        section.velocity_average = velocity_average_by_section[i]
+        section.failures = failures_by_section[i]
+        sections.append(section)
+    plan_results.sections = sections
+
+    path_plan_info_pub.publish(plan_results)
+    rospy.loginfo(plan_results)
 
 if __name__ == '__main__':
     global file_name

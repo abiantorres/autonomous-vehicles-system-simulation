@@ -14,134 +14,98 @@
 
 (defclass costum_msgs::GoalInfo
   :super ros::object
-  :slots (_x_position _y_position _z_position _x_orientation _y_orientation _z_orientation _w_orientation _time ))
+  :slots (_id _time_average _distance_average _velocity_average _failures ))
 
 (defmethod costum_msgs::GoalInfo
   (:init
    (&key
-    ((:x_position __x_position) 0.0)
-    ((:y_position __y_position) 0.0)
-    ((:z_position __z_position) 0.0)
-    ((:x_orientation __x_orientation) 0.0)
-    ((:y_orientation __y_orientation) 0.0)
-    ((:z_orientation __z_orientation) 0.0)
-    ((:w_orientation __w_orientation) 0.0)
-    ((:time __time) 0.0)
+    ((:id __id) "")
+    ((:time_average __time_average) 0.0)
+    ((:distance_average __distance_average) 0.0)
+    ((:velocity_average __velocity_average) 0.0)
+    ((:failures __failures) 0)
     )
    (send-super :init)
-   (setq _x_position (float __x_position))
-   (setq _y_position (float __y_position))
-   (setq _z_position (float __z_position))
-   (setq _x_orientation (float __x_orientation))
-   (setq _y_orientation (float __y_orientation))
-   (setq _z_orientation (float __z_orientation))
-   (setq _w_orientation (float __w_orientation))
-   (setq _time (float __time))
+   (setq _id (string __id))
+   (setq _time_average (float __time_average))
+   (setq _distance_average (float __distance_average))
+   (setq _velocity_average (float __velocity_average))
+   (setq _failures (round __failures))
    self)
-  (:x_position
-   (&optional __x_position)
-   (if __x_position (setq _x_position __x_position)) _x_position)
-  (:y_position
-   (&optional __y_position)
-   (if __y_position (setq _y_position __y_position)) _y_position)
-  (:z_position
-   (&optional __z_position)
-   (if __z_position (setq _z_position __z_position)) _z_position)
-  (:x_orientation
-   (&optional __x_orientation)
-   (if __x_orientation (setq _x_orientation __x_orientation)) _x_orientation)
-  (:y_orientation
-   (&optional __y_orientation)
-   (if __y_orientation (setq _y_orientation __y_orientation)) _y_orientation)
-  (:z_orientation
-   (&optional __z_orientation)
-   (if __z_orientation (setq _z_orientation __z_orientation)) _z_orientation)
-  (:w_orientation
-   (&optional __w_orientation)
-   (if __w_orientation (setq _w_orientation __w_orientation)) _w_orientation)
-  (:time
-   (&optional __time)
-   (if __time (setq _time __time)) _time)
+  (:id
+   (&optional __id)
+   (if __id (setq _id __id)) _id)
+  (:time_average
+   (&optional __time_average)
+   (if __time_average (setq _time_average __time_average)) _time_average)
+  (:distance_average
+   (&optional __distance_average)
+   (if __distance_average (setq _distance_average __distance_average)) _distance_average)
+  (:velocity_average
+   (&optional __velocity_average)
+   (if __velocity_average (setq _velocity_average __velocity_average)) _velocity_average)
+  (:failures
+   (&optional __failures)
+   (if __failures (setq _failures __failures)) _failures)
   (:serialization-length
    ()
    (+
-    ;; float64 _x_position
+    ;; string _id
+    4 (length _id)
+    ;; float64 _time_average
     8
-    ;; float64 _y_position
+    ;; float64 _distance_average
     8
-    ;; float64 _z_position
+    ;; float64 _velocity_average
     8
-    ;; float64 _x_orientation
-    8
-    ;; float64 _y_orientation
-    8
-    ;; float64 _z_orientation
-    8
-    ;; float64 _w_orientation
-    8
-    ;; float64 _time
-    8
+    ;; int16 _failures
+    2
     ))
   (:serialize
    (&optional strm)
    (let ((s (if strm strm
               (make-string-output-stream (send self :serialization-length)))))
-     ;; float64 _x_position
-       (sys::poke _x_position (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
-     ;; float64 _y_position
-       (sys::poke _y_position (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
-     ;; float64 _z_position
-       (sys::poke _z_position (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
-     ;; float64 _x_orientation
-       (sys::poke _x_orientation (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
-     ;; float64 _y_orientation
-       (sys::poke _y_orientation (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
-     ;; float64 _z_orientation
-       (sys::poke _z_orientation (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
-     ;; float64 _w_orientation
-       (sys::poke _w_orientation (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
-     ;; float64 _time
-       (sys::poke _time (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; string _id
+       (write-long (length _id) s) (princ _id s)
+     ;; float64 _time_average
+       (sys::poke _time_average (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _distance_average
+       (sys::poke _distance_average (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _velocity_average
+       (sys::poke _velocity_average (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; int16 _failures
+       (write-word _failures s)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
    (buf &optional (ptr- 0))
-   ;; float64 _x_position
-     (setq _x_position (sys::peek buf ptr- :double)) (incf ptr- 8)
-   ;; float64 _y_position
-     (setq _y_position (sys::peek buf ptr- :double)) (incf ptr- 8)
-   ;; float64 _z_position
-     (setq _z_position (sys::peek buf ptr- :double)) (incf ptr- 8)
-   ;; float64 _x_orientation
-     (setq _x_orientation (sys::peek buf ptr- :double)) (incf ptr- 8)
-   ;; float64 _y_orientation
-     (setq _y_orientation (sys::peek buf ptr- :double)) (incf ptr- 8)
-   ;; float64 _z_orientation
-     (setq _z_orientation (sys::peek buf ptr- :double)) (incf ptr- 8)
-   ;; float64 _w_orientation
-     (setq _w_orientation (sys::peek buf ptr- :double)) (incf ptr- 8)
-   ;; float64 _time
-     (setq _time (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; string _id
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _id (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
+   ;; float64 _time_average
+     (setq _time_average (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _distance_average
+     (setq _distance_average (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _velocity_average
+     (setq _velocity_average (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; int16 _failures
+     (setq _failures (sys::peek buf ptr- :short)) (incf ptr- 2)
    ;;
    self)
   )
 
-(setf (get costum_msgs::GoalInfo :md5sum-) "5c2161efb882ab714cdc912beb12392f")
+(setf (get costum_msgs::GoalInfo :md5sum-) "8d65c3a28a49ef2e0abb508952cb41a4")
 (setf (get costum_msgs::GoalInfo :datatype-) "costum_msgs/GoalInfo")
 (setf (get costum_msgs::GoalInfo :definition-)
-      "float64 x_position
-float64 y_position
-float64 z_position
-float64 x_orientation
-float64 y_orientation
-float64 z_orientation
-float64 w_orientation
-float64 time
+      "string id
+float64 time_average
+float64 distance_average
+float64 velocity_average
+int16 failures
 
 ")
 
 
 
-(provide :costum_msgs/GoalInfo "5c2161efb882ab714cdc912beb12392f")
+(provide :costum_msgs/GoalInfo "8d65c3a28a49ef2e0abb508952cb41a4")
 
 

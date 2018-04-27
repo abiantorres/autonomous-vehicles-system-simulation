@@ -8,23 +8,27 @@ import struct
 import costum_msgs.msg
 
 class PathInfo(genpy.Message):
-  _md5sum = "787d6ccfed1205277495425c79499d72"
+  _md5sum = "707c653de7245a2abe80f9bbaf62b59f"
   _type = "costum_msgs/PathInfo"
   _has_header = False #flag to mark the presence of a Header object
-  _full_text = """GoalInfo[] data
+  _full_text = """string plan_file
+string date
+int16 simulations
+float64 global_time_average
+float64 global_distance_average
+float64 global_velocity_average
+int16 global_failures
+GoalInfo[] sections
 ================================================================================
 MSG: costum_msgs/GoalInfo
-float64 x_position
-float64 y_position
-float64 z_position
-float64 x_orientation
-float64 y_orientation
-float64 z_orientation
-float64 w_orientation
-float64 time
+string id
+float64 time_average
+float64 distance_average
+float64 velocity_average
+int16 failures
 """
-  __slots__ = ['data']
-  _slot_types = ['costum_msgs/GoalInfo[]']
+  __slots__ = ['plan_file','date','simulations','global_time_average','global_distance_average','global_velocity_average','global_failures','sections']
+  _slot_types = ['string','string','int16','float64','float64','float64','int16','costum_msgs/GoalInfo[]']
 
   def __init__(self, *args, **kwds):
     """
@@ -34,7 +38,7 @@ float64 time
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       data
+       plan_file,date,simulations,global_time_average,global_distance_average,global_velocity_average,global_failures,sections
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -43,10 +47,31 @@ float64 time
     if args or kwds:
       super(PathInfo, self).__init__(*args, **kwds)
       #message fields cannot be None, assign default values for those that are
-      if self.data is None:
-        self.data = []
+      if self.plan_file is None:
+        self.plan_file = ''
+      if self.date is None:
+        self.date = ''
+      if self.simulations is None:
+        self.simulations = 0
+      if self.global_time_average is None:
+        self.global_time_average = 0.
+      if self.global_distance_average is None:
+        self.global_distance_average = 0.
+      if self.global_velocity_average is None:
+        self.global_velocity_average = 0.
+      if self.global_failures is None:
+        self.global_failures = 0
+      if self.sections is None:
+        self.sections = []
     else:
-      self.data = []
+      self.plan_file = ''
+      self.date = ''
+      self.simulations = 0
+      self.global_time_average = 0.
+      self.global_distance_average = 0.
+      self.global_velocity_average = 0.
+      self.global_failures = 0
+      self.sections = []
 
   def _get_types(self):
     """
@@ -60,11 +85,31 @@ float64 time
     :param buff: buffer, ``StringIO``
     """
     try:
-      length = len(self.data)
+      _x = self.plan_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.date
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self
+      buff.write(_get_struct_h3dh().pack(_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_failures))
+      length = len(self.sections)
       buff.write(_struct_I.pack(length))
-      for val1 in self.data:
+      for val1 in self.sections:
+        _x = val1.id
+        length = len(_x)
+        if python3 or type(_x) == unicode:
+          _x = _x.encode('utf-8')
+          length = len(_x)
+        buff.write(struct.pack('<I%ss'%length, length, _x))
         _x = val1
-        buff.write(_get_struct_8d().pack(_x.x_position, _x.y_position, _x.z_position, _x.x_orientation, _x.y_orientation, _x.z_orientation, _x.w_orientation, _x.time))
+        buff.write(_get_struct_3dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.failures))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -74,20 +119,51 @@ float64 time
     :param str: byte array of serialized message, ``str``
     """
     try:
-      if self.data is None:
-        self.data = None
+      if self.sections is None:
+        self.sections = None
       end = 0
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      self.data = []
+      start = end
+      end += length
+      if python3:
+        self.plan_file = str[start:end].decode('utf-8')
+      else:
+        self.plan_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.date = str[start:end].decode('utf-8')
+      else:
+        self.date = str[start:end]
+      _x = self
+      start = end
+      end += 28
+      (_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_failures,) = _get_struct_h3dh().unpack(str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      self.sections = []
       for i in range(0, length):
         val1 = costum_msgs.msg.GoalInfo()
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        start = end
+        end += length
+        if python3:
+          val1.id = str[start:end].decode('utf-8')
+        else:
+          val1.id = str[start:end]
         _x = val1
         start = end
-        end += 64
-        (_x.x_position, _x.y_position, _x.z_position, _x.x_orientation, _x.y_orientation, _x.z_orientation, _x.w_orientation, _x.time,) = _get_struct_8d().unpack(str[start:end])
-        self.data.append(val1)
+        end += 26
+        (_x.time_average, _x.distance_average, _x.velocity_average, _x.failures,) = _get_struct_3dh().unpack(str[start:end])
+        self.sections.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -100,11 +176,31 @@ float64 time
     :param numpy: numpy python module
     """
     try:
-      length = len(self.data)
+      _x = self.plan_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.date
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self
+      buff.write(_get_struct_h3dh().pack(_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_failures))
+      length = len(self.sections)
       buff.write(_struct_I.pack(length))
-      for val1 in self.data:
+      for val1 in self.sections:
+        _x = val1.id
+        length = len(_x)
+        if python3 or type(_x) == unicode:
+          _x = _x.encode('utf-8')
+          length = len(_x)
+        buff.write(struct.pack('<I%ss'%length, length, _x))
         _x = val1
-        buff.write(_get_struct_8d().pack(_x.x_position, _x.y_position, _x.z_position, _x.x_orientation, _x.y_orientation, _x.z_orientation, _x.w_orientation, _x.time))
+        buff.write(_get_struct_3dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.failures))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -115,20 +211,51 @@ float64 time
     :param numpy: numpy python module
     """
     try:
-      if self.data is None:
-        self.data = None
+      if self.sections is None:
+        self.sections = None
       end = 0
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      self.data = []
+      start = end
+      end += length
+      if python3:
+        self.plan_file = str[start:end].decode('utf-8')
+      else:
+        self.plan_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.date = str[start:end].decode('utf-8')
+      else:
+        self.date = str[start:end]
+      _x = self
+      start = end
+      end += 28
+      (_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_failures,) = _get_struct_h3dh().unpack(str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      self.sections = []
       for i in range(0, length):
         val1 = costum_msgs.msg.GoalInfo()
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        start = end
+        end += length
+        if python3:
+          val1.id = str[start:end].decode('utf-8')
+        else:
+          val1.id = str[start:end]
         _x = val1
         start = end
-        end += 64
-        (_x.x_position, _x.y_position, _x.z_position, _x.x_orientation, _x.y_orientation, _x.z_orientation, _x.w_orientation, _x.time,) = _get_struct_8d().unpack(str[start:end])
-        self.data.append(val1)
+        end += 26
+        (_x.time_average, _x.distance_average, _x.velocity_average, _x.failures,) = _get_struct_3dh().unpack(str[start:end])
+        self.sections.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -137,9 +264,15 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_8d = None
-def _get_struct_8d():
-    global _struct_8d
-    if _struct_8d is None:
-        _struct_8d = struct.Struct("<8d")
-    return _struct_8d
+_struct_h3dh = None
+def _get_struct_h3dh():
+    global _struct_h3dh
+    if _struct_h3dh is None:
+        _struct_h3dh = struct.Struct("<h3dh")
+    return _struct_h3dh
+_struct_3dh = None
+def _get_struct_3dh():
+    global _struct_3dh
+    if _struct_3dh is None:
+        _struct_3dh = struct.Struct("<3dh")
+    return _struct_3dh

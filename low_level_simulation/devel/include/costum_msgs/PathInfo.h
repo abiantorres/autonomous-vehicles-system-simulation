@@ -25,17 +25,52 @@ struct PathInfo_
   typedef PathInfo_<ContainerAllocator> Type;
 
   PathInfo_()
-    : data()  {
+    : plan_file()
+    , date()
+    , simulations(0)
+    , global_time_average(0.0)
+    , global_distance_average(0.0)
+    , global_velocity_average(0.0)
+    , global_failures(0)
+    , sections()  {
     }
   PathInfo_(const ContainerAllocator& _alloc)
-    : data(_alloc)  {
+    : plan_file(_alloc)
+    , date(_alloc)
+    , simulations(0)
+    , global_time_average(0.0)
+    , global_distance_average(0.0)
+    , global_velocity_average(0.0)
+    , global_failures(0)
+    , sections(_alloc)  {
   (void)_alloc;
     }
 
 
 
-   typedef std::vector< ::costum_msgs::GoalInfo_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::costum_msgs::GoalInfo_<ContainerAllocator> >::other >  _data_type;
-  _data_type data;
+   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _plan_file_type;
+  _plan_file_type plan_file;
+
+   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _date_type;
+  _date_type date;
+
+   typedef int16_t _simulations_type;
+  _simulations_type simulations;
+
+   typedef double _global_time_average_type;
+  _global_time_average_type global_time_average;
+
+   typedef double _global_distance_average_type;
+  _global_distance_average_type global_distance_average;
+
+   typedef double _global_velocity_average_type;
+  _global_velocity_average_type global_velocity_average;
+
+   typedef int16_t _global_failures_type;
+  _global_failures_type global_failures;
+
+   typedef std::vector< ::costum_msgs::GoalInfo_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::costum_msgs::GoalInfo_<ContainerAllocator> >::other >  _sections_type;
+  _sections_type sections;
 
 
 
@@ -115,12 +150,12 @@ struct MD5Sum< ::costum_msgs::PathInfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "787d6ccfed1205277495425c79499d72";
+    return "707c653de7245a2abe80f9bbaf62b59f";
   }
 
   static const char* value(const ::costum_msgs::PathInfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x787d6ccfed120527ULL;
-  static const uint64_t static_value2 = 0x7495425c79499d72ULL;
+  static const uint64_t static_value1 = 0x707c653de7245a2aULL;
+  static const uint64_t static_value2 = 0xbe80f9bbaf62b59fULL;
 };
 
 template<class ContainerAllocator>
@@ -139,17 +174,21 @@ struct Definition< ::costum_msgs::PathInfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "GoalInfo[] data\n\
+    return "string plan_file\n\
+string date\n\
+int16 simulations\n\
+float64 global_time_average\n\
+float64 global_distance_average\n\
+float64 global_velocity_average\n\
+int16 global_failures\n\
+GoalInfo[] sections\n\
 ================================================================================\n\
 MSG: costum_msgs/GoalInfo\n\
-float64 x_position\n\
-float64 y_position\n\
-float64 z_position\n\
-float64 x_orientation\n\
-float64 y_orientation\n\
-float64 z_orientation\n\
-float64 w_orientation\n\
-float64 time\n\
+string id\n\
+float64 time_average\n\
+float64 distance_average\n\
+float64 velocity_average\n\
+int16 failures\n\
 ";
   }
 
@@ -168,7 +207,14 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.data);
+      stream.next(m.plan_file);
+      stream.next(m.date);
+      stream.next(m.simulations);
+      stream.next(m.global_time_average);
+      stream.next(m.global_distance_average);
+      stream.next(m.global_velocity_average);
+      stream.next(m.global_failures);
+      stream.next(m.sections);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -187,13 +233,27 @@ struct Printer< ::costum_msgs::PathInfo_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::costum_msgs::PathInfo_<ContainerAllocator>& v)
   {
-    s << indent << "data[]" << std::endl;
-    for (size_t i = 0; i < v.data.size(); ++i)
+    s << indent << "plan_file: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.plan_file);
+    s << indent << "date: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.date);
+    s << indent << "simulations: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.simulations);
+    s << indent << "global_time_average: ";
+    Printer<double>::stream(s, indent + "  ", v.global_time_average);
+    s << indent << "global_distance_average: ";
+    Printer<double>::stream(s, indent + "  ", v.global_distance_average);
+    s << indent << "global_velocity_average: ";
+    Printer<double>::stream(s, indent + "  ", v.global_velocity_average);
+    s << indent << "global_failures: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.global_failures);
+    s << indent << "sections[]" << std::endl;
+    for (size_t i = 0; i < v.sections.size(); ++i)
     {
-      s << indent << "  data[" << i << "]: ";
+      s << indent << "  sections[" << i << "]: ";
       s << std::endl;
       s << indent;
-      Printer< ::costum_msgs::GoalInfo_<ContainerAllocator> >::stream(s, indent + "    ", v.data[i]);
+      Printer< ::costum_msgs::GoalInfo_<ContainerAllocator> >::stream(s, indent + "    ", v.sections[i]);
     }
   }
 };

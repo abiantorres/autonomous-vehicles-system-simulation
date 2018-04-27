@@ -126,7 +126,6 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/costum_msgs/cmake_install.cmake")
   include("/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosbridge_suite/rosapi/cmake_install.cmake")
   include("/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosbridge_suite/rosbridge_library/cmake_install.cmake")
-  include("/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/follow_waypoints/cmake_install.cmake")
   include("/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/path_utilities/cmake_install.cmake")
 
 endif()

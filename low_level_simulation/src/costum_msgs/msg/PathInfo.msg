@@ -1,1 +1,8 @@
-GoalInfo[] data
+string plan_file
+string date
+int16 simulations
+float64 global_time_average
+float64 global_distance_average
+float64 global_velocity_average
+int16 global_failures
+GoalInfo[] sections

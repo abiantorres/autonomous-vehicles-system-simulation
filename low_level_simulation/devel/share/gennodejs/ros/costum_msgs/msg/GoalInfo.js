@@ -18,85 +18,58 @@ class GoalInfo {
   constructor(initObj={}) {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
-      this.x_position = null;
-      this.y_position = null;
-      this.z_position = null;
-      this.x_orientation = null;
-      this.y_orientation = null;
-      this.z_orientation = null;
-      this.w_orientation = null;
-      this.time = null;
+      this.id = null;
+      this.time_average = null;
+      this.distance_average = null;
+      this.velocity_average = null;
+      this.failures = null;
     }
     else {
-      if (initObj.hasOwnProperty('x_position')) {
-        this.x_position = initObj.x_position
+      if (initObj.hasOwnProperty('id')) {
+        this.id = initObj.id
       }
       else {
-        this.x_position = 0.0;
+        this.id = '';
       }
-      if (initObj.hasOwnProperty('y_position')) {
-        this.y_position = initObj.y_position
-      }
-      else {
-        this.y_position = 0.0;
-      }
-      if (initObj.hasOwnProperty('z_position')) {
-        this.z_position = initObj.z_position
+      if (initObj.hasOwnProperty('time_average')) {
+        this.time_average = initObj.time_average
       }
       else {
-        this.z_position = 0.0;
+        this.time_average = 0.0;
       }
-      if (initObj.hasOwnProperty('x_orientation')) {
-        this.x_orientation = initObj.x_orientation
-      }
-      else {
-        this.x_orientation = 0.0;
-      }
-      if (initObj.hasOwnProperty('y_orientation')) {
-        this.y_orientation = initObj.y_orientation
+      if (initObj.hasOwnProperty('distance_average')) {
+        this.distance_average = initObj.distance_average
       }
       else {
-        this.y_orientation = 0.0;
+        this.distance_average = 0.0;
       }
-      if (initObj.hasOwnProperty('z_orientation')) {
-        this.z_orientation = initObj.z_orientation
-      }
-      else {
-        this.z_orientation = 0.0;
-      }
-      if (initObj.hasOwnProperty('w_orientation')) {
-        this.w_orientation = initObj.w_orientation
+      if (initObj.hasOwnProperty('velocity_average')) {
+        this.velocity_average = initObj.velocity_average
       }
       else {
-        this.w_orientation = 0.0;
+        this.velocity_average = 0.0;
       }
-      if (initObj.hasOwnProperty('time')) {
-        this.time = initObj.time
+      if (initObj.hasOwnProperty('failures')) {
+        this.failures = initObj.failures
       }
       else {
-        this.time = 0.0;
+        this.failures = 0;
       }
     }
   }
 
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type GoalInfo
-    // Serialize message field [x_position]
-    bufferOffset = _serializer.float64(obj.x_position, buffer, bufferOffset);
-    // Serialize message field [y_position]
-    bufferOffset = _serializer.float64(obj.y_position, buffer, bufferOffset);
-    // Serialize message field [z_position]
-    bufferOffset = _serializer.float64(obj.z_position, buffer, bufferOffset);
-    // Serialize message field [x_orientation]
-    bufferOffset = _serializer.float64(obj.x_orientation, buffer, bufferOffset);
-    // Serialize message field [y_orientation]
-    bufferOffset = _serializer.float64(obj.y_orientation, buffer, bufferOffset);
-    // Serialize message field [z_orientation]
-    bufferOffset = _serializer.float64(obj.z_orientation, buffer, bufferOffset);
-    // Serialize message field [w_orientation]
-    bufferOffset = _serializer.float64(obj.w_orientation, buffer, bufferOffset);
-    // Serialize message field [time]
-    bufferOffset = _serializer.float64(obj.time, buffer, bufferOffset);
+    // Serialize message field [id]
+    bufferOffset = _serializer.string(obj.id, buffer, bufferOffset);
+    // Serialize message field [time_average]
+    bufferOffset = _serializer.float64(obj.time_average, buffer, bufferOffset);
+    // Serialize message field [distance_average]
+    bufferOffset = _serializer.float64(obj.distance_average, buffer, bufferOffset);
+    // Serialize message field [velocity_average]
+    bufferOffset = _serializer.float64(obj.velocity_average, buffer, bufferOffset);
+    // Serialize message field [failures]
+    bufferOffset = _serializer.int16(obj.failures, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -104,27 +77,23 @@ class GoalInfo {
     //deserializes a message object of type GoalInfo
     let len;
     let data = new GoalInfo(null);
-    // Deserialize message field [x_position]
-    data.x_position = _deserializer.float64(buffer, bufferOffset);
-    // Deserialize message field [y_position]
-    data.y_position = _deserializer.float64(buffer, bufferOffset);
-    // Deserialize message field [z_position]
-    data.z_position = _deserializer.float64(buffer, bufferOffset);
-    // Deserialize message field [x_orientation]
-    data.x_orientation = _deserializer.float64(buffer, bufferOffset);
-    // Deserialize message field [y_orientation]
-    data.y_orientation = _deserializer.float64(buffer, bufferOffset);
-    // Deserialize message field [z_orientation]
-    data.z_orientation = _deserializer.float64(buffer, bufferOffset);
-    // Deserialize message field [w_orientation]
-    data.w_orientation = _deserializer.float64(buffer, bufferOffset);
-    // Deserialize message field [time]
-    data.time = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [id]
+    data.id = _deserializer.string(buffer, bufferOffset);
+    // Deserialize message field [time_average]
+    data.time_average = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [distance_average]
+    data.distance_average = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [velocity_average]
+    data.velocity_average = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [failures]
+    data.failures = _deserializer.int16(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 64;
+    let length = 0;
+    length += object.id.length;
+    return length + 30;
   }
 
   static datatype() {
@@ -134,20 +103,17 @@ class GoalInfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '5c2161efb882ab714cdc912beb12392f';
+    return '8d65c3a28a49ef2e0abb508952cb41a4';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
-    float64 x_position
-    float64 y_position
-    float64 z_position
-    float64 x_orientation
-    float64 y_orientation
-    float64 z_orientation
-    float64 w_orientation
-    float64 time
+    string id
+    float64 time_average
+    float64 distance_average
+    float64 velocity_average
+    int16 failures
     
     `;
   }
@@ -158,60 +124,39 @@ class GoalInfo {
       msg = {};
     }
     const resolved = new GoalInfo(null);
-    if (msg.x_position !== undefined) {
-      resolved.x_position = msg.x_position;
+    if (msg.id !== undefined) {
+      resolved.id = msg.id;
     }
     else {
-      resolved.x_position = 0.0
+      resolved.id = ''
     }
 
-    if (msg.y_position !== undefined) {
-      resolved.y_position = msg.y_position;
+    if (msg.time_average !== undefined) {
+      resolved.time_average = msg.time_average;
     }
     else {
-      resolved.y_position = 0.0
+      resolved.time_average = 0.0
     }
 
-    if (msg.z_position !== undefined) {
-      resolved.z_position = msg.z_position;
+    if (msg.distance_average !== undefined) {
+      resolved.distance_average = msg.distance_average;
     }
     else {
-      resolved.z_position = 0.0
+      resolved.distance_average = 0.0
     }
 
-    if (msg.x_orientation !== undefined) {
-      resolved.x_orientation = msg.x_orientation;
+    if (msg.velocity_average !== undefined) {
+      resolved.velocity_average = msg.velocity_average;
     }
     else {
-      resolved.x_orientation = 0.0
+      resolved.velocity_average = 0.0
     }
 
-    if (msg.y_orientation !== undefined) {
-      resolved.y_orientation = msg.y_orientation;
+    if (msg.failures !== undefined) {
+      resolved.failures = msg.failures;
     }
     else {
-      resolved.y_orientation = 0.0
-    }
-
-    if (msg.z_orientation !== undefined) {
-      resolved.z_orientation = msg.z_orientation;
-    }
-    else {
-      resolved.z_orientation = 0.0
-    }
-
-    if (msg.w_orientation !== undefined) {
-      resolved.w_orientation = msg.w_orientation;
-    }
-    else {
-      resolved.w_orientation = 0.0
-    }
-
-    if (msg.time !== undefined) {
-      resolved.time = msg.time;
-    }
-    else {
-      resolved.time = 0.0
+      resolved.failures = 0
     }
 
     return resolved;
