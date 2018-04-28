@@ -109,9 +109,11 @@ sudo service mongodb stop
 
 The high level simulation needs the following dependencies for the proper functioning of MongoDB with **Java**:
 
-**1.** mongodb-driver-3.0.2.jar ([mongodb-driver](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver/3.0.2/))
-**2.** bson-3.0.2.jar ([bson](https://oss.sonatype.org/content/repositories/releases/org/mongodb/bson/3.0.2/))
-**3.** mongodb-driver-core-3.0.2.jar ([mongodb-driver-core](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver-core/3.0.2/))
+1. mongodb-driver-3.0.2.jar ([mongodb-driver](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver/3.0.2/))
+
+2. bson-3.0.2.jar ([bson](https://oss.sonatype.org/content/repositories/releases/org/mongodb/bson/3.0.2/))
+
+3. mongodb-driver-core-3.0.2.jar ([mongodb-driver-core](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver-core/3.0.2/))
 
 
 ## Authors:
