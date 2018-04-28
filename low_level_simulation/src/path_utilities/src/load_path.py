@@ -31,19 +31,33 @@ time_average_by_section = [] # time by section
 failures_by_section = [] # failures by section
 traveled_distance_average_by_section = [] # distance traveled by section
 velocity_average_by_section = [] # velocity by section
+linear_velocity_average_by_section = [] # linear velocity average by section
+maximum_linear_velocity_by_section = [] # maximun linear velocity by section
 
 # Global statistics
 global_time_average = 0.0
 global_failures = 0.0
 global_traveled_distance_average = 0.0
-global_velocity_average = 0.0
+global_velocity_average = 0.0 # Counting stops (distance / time)
+global_linear_velocity_average = 0.0
 
-# Auxiliar variables to compute the traveled distance
+# Auxiliar variables to compute the traveled distance and velocity
 current_traveled_distance = 0.0
-# Last vehicle position (x, y)
+current_linear_velocity_average = 0.0
+
+# Last vehicle position (x, y) and velocities
 last_x_position = 0.0
 last_y_position = 0.0
+
+last_linear_velocity = 0.0
+
+# current maximun velocity (temporal for each section)
+max_linear_velocity = -1.0
+
+
+# Boolean variables to avoid unnecessary calculations
 compute_distance = False
+compute_linear_velocity = False
 
 # Initial vehicle model state
 initial_state = ModelState()
@@ -56,40 +70,60 @@ time_to_relocation = 5
 # Default: 2 minutes and 30 seconds
 simulation_timeout = 150 
 
+# Number of simulations
+simulations = 1
+
 # Path planning input file 
 file_name = ""
 
 odom_pub = rospy.Publisher("odom", Odometry, queue_size=50)
 
+
 # Compute the euclidean distance
-def callback(data):
+def callback_move_base(data):
     global last_x_position, last_y_position, current_traveled_distance, compute_distance
     if(compute_distance):
         current_traveled_distance += sqrt(pow(data.feedback.base_position.pose.position.x - last_x_position, 2) + pow(data.feedback.base_position.pose.position.y - last_y_position, 2))
     last_x_position = data.feedback.base_position.pose.position.x
     last_y_position = data.feedback.base_position.pose.position.y
     
-rospy.Subscriber("move_base/feedback", MoveBaseActionFeedback, callback)
+rospy.Subscriber("move_base/feedback", MoveBaseActionFeedback, callback_move_base)
+
+
+def callback_odom(msg):
+    global current_linear_velocity_average, last_linear_velocity, max_linear_velocity, compute_linear_velocity
+    if(compute_linear_velocity): # avoid unnecessary calculations
+        current_linear_velocity = sqrt(pow(msg.twist.twist.linear.x, 2) + pow(msg.twist.twist.linear.y, 2) + pow(msg.twist.twist.linear.z, 2))
+        if(current_linear_velocity > 0.00001): # If the robot is not stopped
+            # Update the linear velocity average
+            current_linear_velocity_average = (current_linear_velocity + last_linear_velocity) / 2
+            # Update the maximun linear velocity value
+            if(max_linear_velocity < current_linear_velocity):
+                max_linear_velocity = current_linear_velocity
+            # Current linear velocity is now the last linear velocity
+            last_linear_velocity = current_linear_velocity_average
+  
+rospy.Subscriber('odom', Odometry, callback_odom)
 
 def reset_gazebo_world():
-    rospy.wait_for_service('gazebo/reset_world')
-    reset_world = rospy.ServiceProxy('gazebo/reset_world', Empty)
+    rospy.wait_for_service('/gazebo/reset_world')
+    reset_world = rospy.ServiceProxy('/gazebo/reset_world', Empty)
     try:
       res = reset_world()
     except rospy.ServiceException as exc:
       rospy.loginfo("Service did not process request: " + str(exc))
 
 def clear_gazebo_world():
-    rospy.wait_for_service('gazebo/clear_world')
-    clear_world = rospy.ServiceProxy('gazebo/clear_world', Empty)
+    rospy.wait_for_service('/gazebo/clear_world')
+    clear_world = rospy.ServiceProxy('/gazebo/clear_world', Empty)
     try:
       res = clear_world()
     except rospy.ServiceException as exc:
       rospy.loginfo("Service did not process request: " + str(exc))
 
 def clear_costmaps():
-    rospy.wait_for_service('move_base/clear_costmaps')
-    clear_costmaps = rospy.ServiceProxy('move_base/clear_costmaps', Empty)
+    rospy.wait_for_service('/move_base/clear_costmaps')
+    clear_costmaps = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
     try:
       res = clear_costmaps()
     except rospy.ServiceException as exc:
@@ -116,6 +150,7 @@ def set_vehicle_model_state():
     odom.twist.twist = initial_state.twist
     # publish the message
     odom_pub.publish(odom)
+
 
 def convert_PoseWithCovArray_to_PoseArray(waypoints):
     """Used to publish waypoints as pose array so that you can see them in rviz, etc."""
@@ -146,7 +181,7 @@ def run(n_simulations):
     """ Low level information publisher. High level should be
     subscribed to the path_plan_info topic.
     """
-    global waypoints, time_average_by_section, failures_by_section, traveled_distance_average_by_section, velocity_average_by_section, last_x_position, last_y_position, current_traveled_distance, compute_distance, global_time_average, global_failures, global_traveled_distance_average, global_velocity_average
+    global waypoints, time_average_by_section, failures_by_section, traveled_distance_average_by_section, velocity_average_by_section, last_x_position, last_y_position, current_traveled_distance, compute_distance, global_time_average, global_failures, global_traveled_distance_average, global_velocity_average, maximum_linear_velocity_by_section, linear_velocity_average_by_section, global_linear_velocity_average, max_linear_velocity, current_linear_velocity, compute_linear_velocity
     
     # configure needed topics and move_base client
     path_plan_info_pub = rospy.Publisher('/path_plan_info', PathInfo, queue_size=1)
@@ -173,12 +208,21 @@ def run(n_simulations):
     # Make sure we have an empty array of velocities.
     # The lenght of the array is equal to the number of end points (path sections)
     velocity_average_by_section = [0.0] * len(waypoints)
+    # Make sure we have an empty array of linear velocities.
+    # The lenght of the array is equal to the number of end points (path sections)
+    linear_velocity_average_by_section = [0.0] * len(waypoints)
+       # Make sure we have an empty array of maximun linear velocities.
+    # The lenght of the array is equal to the number of end points (path sections)
+    maximum_linear_velocity_by_section = [0.0] * len(waypoints)
     
     # Initialize global statistics
     global_time_average = 0.0
     global_failures_average = 0.0
     global_traveled_distance_average = 0.0
     global_velocity_average = 0.0
+    global_linear_velocity_average = 0.0
+    max_linear_velocity = -1.0
+    current_linear_velocity = 0.0
     
     # Run the n simulations
     for x in range(0, n_simulations):        
@@ -203,7 +247,12 @@ def run(n_simulations):
             
 
             current_traveled_distance = 0.0
+            last_linear_velocity = 0.0
+            max_linear_velocity = -1.0
+            current_linear_velocity = 0.0
+            
             compute_distance = True
+            compute_linear_velocity = True
 
             # Send goal to path planner
             client.send_goal(goal)
@@ -213,7 +262,10 @@ def run(n_simulations):
 
             # Keep waiting for results 
             finished_within_time = client.wait_for_result(rospy.Duration(simulation_timeout))
+            
             compute_distance = False
+            compute_linear_velocity = False
+            
             # Check for success or failure
             if not finished_within_time:
                 client.cancel_goal()
@@ -235,13 +287,15 @@ def run(n_simulations):
             time_average_by_section[i] += (rospy.get_time() - start_time)
             traveled_distance_average_by_section[i] = current_traveled_distance
             velocity_average_by_section[i] = traveled_distance_average_by_section[i] / time_average_by_section[i]
+            linear_velocity_average_by_section[i] = current_linear_velocity_average
+            maximum_linear_velocity_by_section[i] = max_linear_velocity
             i += 1 
         # Reset gazebo word to avoid posible modifications in the last simulation
-        reset_gazebo_world()
+        #reset_gazebo_world()
         # Set the initial vehicle model state
         set_vehicle_model_state()
         # Clear costmaps to avoid problems when we "teletransport" our vehicle
-        clear_costmaps()
+        #clear_costmaps()
         # Wait for AMCL algorithm does its work (relocate robot)
         time.sleep(time_to_relocation)
         rospy.loginfo("###### Simulation " + str(x+1) + " finished ######")
@@ -264,6 +318,9 @@ def run(n_simulations):
     rospy.loginfo("###### Global -> failures  " + str(global_failures) + "  ######")
     global_velocity_average = sum(velocity_average_by_section) / float(len(waypoints))
     rospy.loginfo("###### Global -> velocity  " + str(global_velocity_average) + "  ######")
+    global_linear_velocity_average = sum(linear_velocity_average_by_section) / float(len(waypoints))
+    rospy.loginfo("###### Global -> linear velocity  " + str(global_linear_velocity_average) + "  ######")
+
 
     # Build plan results message
     plan_results = PathInfo()
@@ -274,8 +331,11 @@ def run(n_simulations):
     plan_results.global_distance_average = global_traveled_distance_average
     plan_results.global_velocity_average = global_velocity_average
     plan_results.global_failures = global_failures
+    plan_results.global_linear_velocity_average = global_linear_velocity_average
+    plan_results.global_maximum_linear_velocity = max(maximum_linear_velocity_by_section)
 
     sections = []
+
     for i in range(0, len(waypoints)):
         section = GoalInfo()
         section.id = str(i+1)
@@ -283,9 +343,11 @@ def run(n_simulations):
         section.distance_average =  traveled_distance_average_by_section[i]
         section.velocity_average = velocity_average_by_section[i]
         section.failures = failures_by_section[i]
+        section.linear_velocity_average = linear_velocity_average_by_section[i]
+        section.maximum_linear_velocity = maximum_linear_velocity_by_section[i]
         sections.append(section)
+    
     plan_results.sections = sections
-
     path_plan_info_pub.publish(plan_results)
     rospy.loginfo(plan_results)
 
@@ -294,4 +356,4 @@ if __name__ == '__main__':
     rospy.init_node('load_path')
     # get input file name
     file_name = rospy.get_param('~input_file')
-    run(2)
+    run(1)

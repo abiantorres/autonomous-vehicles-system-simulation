@@ -7,17 +7,19 @@ import struct
 
 
 class GoalInfo(genpy.Message):
-  _md5sum = "8d65c3a28a49ef2e0abb508952cb41a4"
+  _md5sum = "3b498f03ccbc82c91ef84003efa1d87e"
   _type = "costum_msgs/GoalInfo"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """string id
 float64 time_average
 float64 distance_average
 float64 velocity_average
+float64 linear_velocity_average
+float64 maximum_linear_velocity
 int16 failures
 """
-  __slots__ = ['id','time_average','distance_average','velocity_average','failures']
-  _slot_types = ['string','float64','float64','float64','int16']
+  __slots__ = ['id','time_average','distance_average','velocity_average','linear_velocity_average','maximum_linear_velocity','failures']
+  _slot_types = ['string','float64','float64','float64','float64','float64','int16']
 
   def __init__(self, *args, **kwds):
     """
@@ -27,7 +29,7 @@ int16 failures
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       id,time_average,distance_average,velocity_average,failures
+       id,time_average,distance_average,velocity_average,linear_velocity_average,maximum_linear_velocity,failures
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -44,6 +46,10 @@ int16 failures
         self.distance_average = 0.
       if self.velocity_average is None:
         self.velocity_average = 0.
+      if self.linear_velocity_average is None:
+        self.linear_velocity_average = 0.
+      if self.maximum_linear_velocity is None:
+        self.maximum_linear_velocity = 0.
       if self.failures is None:
         self.failures = 0
     else:
@@ -51,6 +57,8 @@ int16 failures
       self.time_average = 0.
       self.distance_average = 0.
       self.velocity_average = 0.
+      self.linear_velocity_average = 0.
+      self.maximum_linear_velocity = 0.
       self.failures = 0
 
   def _get_types(self):
@@ -72,7 +80,7 @@ int16 failures
         length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self
-      buff.write(_get_struct_3dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.failures))
+      buff.write(_get_struct_5dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -94,8 +102,8 @@ int16 failures
         self.id = str[start:end]
       _x = self
       start = end
-      end += 26
-      (_x.time_average, _x.distance_average, _x.velocity_average, _x.failures,) = _get_struct_3dh().unpack(str[start:end])
+      end += 42
+      (_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures,) = _get_struct_5dh().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -115,7 +123,7 @@ int16 failures
         length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self
-      buff.write(_get_struct_3dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.failures))
+      buff.write(_get_struct_5dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -138,8 +146,8 @@ int16 failures
         self.id = str[start:end]
       _x = self
       start = end
-      end += 26
-      (_x.time_average, _x.distance_average, _x.velocity_average, _x.failures,) = _get_struct_3dh().unpack(str[start:end])
+      end += 42
+      (_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures,) = _get_struct_5dh().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -148,9 +156,9 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_3dh = None
-def _get_struct_3dh():
-    global _struct_3dh
-    if _struct_3dh is None:
-        _struct_3dh = struct.Struct("<3dh")
-    return _struct_3dh
+_struct_5dh = None
+def _get_struct_5dh():
+    global _struct_5dh
+    if _struct_5dh is None:
+        _struct_5dh = struct.Struct("<5dh")
+    return _struct_5dh

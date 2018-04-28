@@ -2,4 +2,6 @@ string id
 float64 time_average
 float64 distance_average
 float64 velocity_average
+float64 linear_velocity_average
+float64 maximum_linear_velocity
 int16 failures

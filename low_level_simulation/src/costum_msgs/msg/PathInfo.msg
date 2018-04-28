@@ -4,5 +4,7 @@ int16 simulations
 float64 global_time_average
 float64 global_distance_average
 float64 global_velocity_average
+float64 global_linear_velocity_average
+float64 global_maximum_linear_velocity
 int16 global_failures
 GoalInfo[] sections

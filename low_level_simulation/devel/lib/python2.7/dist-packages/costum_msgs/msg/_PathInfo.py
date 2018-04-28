@@ -8,7 +8,7 @@ import struct
 import costum_msgs.msg
 
 class PathInfo(genpy.Message):
-  _md5sum = "707c653de7245a2abe80f9bbaf62b59f"
+  _md5sum = "406f78da04ae6e0a1419c2646f9bbca9"
   _type = "costum_msgs/PathInfo"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """string plan_file
@@ -17,6 +17,8 @@ int16 simulations
 float64 global_time_average
 float64 global_distance_average
 float64 global_velocity_average
+float64 global_linear_velocity_average
+float64 global_maximum_linear_velocity
 int16 global_failures
 GoalInfo[] sections
 ================================================================================
@@ -25,10 +27,12 @@ string id
 float64 time_average
 float64 distance_average
 float64 velocity_average
+float64 linear_velocity_average
+float64 maximum_linear_velocity
 int16 failures
 """
-  __slots__ = ['plan_file','date','simulations','global_time_average','global_distance_average','global_velocity_average','global_failures','sections']
-  _slot_types = ['string','string','int16','float64','float64','float64','int16','costum_msgs/GoalInfo[]']
+  __slots__ = ['plan_file','date','simulations','global_time_average','global_distance_average','global_velocity_average','global_linear_velocity_average','global_maximum_linear_velocity','global_failures','sections']
+  _slot_types = ['string','string','int16','float64','float64','float64','float64','float64','int16','costum_msgs/GoalInfo[]']
 
   def __init__(self, *args, **kwds):
     """
@@ -38,7 +42,7 @@ int16 failures
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       plan_file,date,simulations,global_time_average,global_distance_average,global_velocity_average,global_failures,sections
+       plan_file,date,simulations,global_time_average,global_distance_average,global_velocity_average,global_linear_velocity_average,global_maximum_linear_velocity,global_failures,sections
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -59,6 +63,10 @@ int16 failures
         self.global_distance_average = 0.
       if self.global_velocity_average is None:
         self.global_velocity_average = 0.
+      if self.global_linear_velocity_average is None:
+        self.global_linear_velocity_average = 0.
+      if self.global_maximum_linear_velocity is None:
+        self.global_maximum_linear_velocity = 0.
       if self.global_failures is None:
         self.global_failures = 0
       if self.sections is None:
@@ -70,6 +78,8 @@ int16 failures
       self.global_time_average = 0.
       self.global_distance_average = 0.
       self.global_velocity_average = 0.
+      self.global_linear_velocity_average = 0.
+      self.global_maximum_linear_velocity = 0.
       self.global_failures = 0
       self.sections = []
 
@@ -98,7 +108,7 @@ int16 failures
         length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self
-      buff.write(_get_struct_h3dh().pack(_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_failures))
+      buff.write(_get_struct_h5dh().pack(_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_linear_velocity_average, _x.global_maximum_linear_velocity, _x.global_failures))
       length = len(self.sections)
       buff.write(_struct_I.pack(length))
       for val1 in self.sections:
@@ -109,7 +119,7 @@ int16 failures
           length = len(_x)
         buff.write(struct.pack('<I%ss'%length, length, _x))
         _x = val1
-        buff.write(_get_struct_3dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.failures))
+        buff.write(_get_struct_5dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -142,8 +152,8 @@ int16 failures
         self.date = str[start:end]
       _x = self
       start = end
-      end += 28
-      (_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_failures,) = _get_struct_h3dh().unpack(str[start:end])
+      end += 44
+      (_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_linear_velocity_average, _x.global_maximum_linear_velocity, _x.global_failures,) = _get_struct_h5dh().unpack(str[start:end])
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
@@ -161,8 +171,8 @@ int16 failures
           val1.id = str[start:end]
         _x = val1
         start = end
-        end += 26
-        (_x.time_average, _x.distance_average, _x.velocity_average, _x.failures,) = _get_struct_3dh().unpack(str[start:end])
+        end += 42
+        (_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures,) = _get_struct_5dh().unpack(str[start:end])
         self.sections.append(val1)
       return self
     except struct.error as e:
@@ -189,7 +199,7 @@ int16 failures
         length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self
-      buff.write(_get_struct_h3dh().pack(_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_failures))
+      buff.write(_get_struct_h5dh().pack(_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_linear_velocity_average, _x.global_maximum_linear_velocity, _x.global_failures))
       length = len(self.sections)
       buff.write(_struct_I.pack(length))
       for val1 in self.sections:
@@ -200,7 +210,7 @@ int16 failures
           length = len(_x)
         buff.write(struct.pack('<I%ss'%length, length, _x))
         _x = val1
-        buff.write(_get_struct_3dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.failures))
+        buff.write(_get_struct_5dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -234,8 +244,8 @@ int16 failures
         self.date = str[start:end]
       _x = self
       start = end
-      end += 28
-      (_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_failures,) = _get_struct_h3dh().unpack(str[start:end])
+      end += 44
+      (_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_linear_velocity_average, _x.global_maximum_linear_velocity, _x.global_failures,) = _get_struct_h5dh().unpack(str[start:end])
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
@@ -253,8 +263,8 @@ int16 failures
           val1.id = str[start:end]
         _x = val1
         start = end
-        end += 26
-        (_x.time_average, _x.distance_average, _x.velocity_average, _x.failures,) = _get_struct_3dh().unpack(str[start:end])
+        end += 42
+        (_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures,) = _get_struct_5dh().unpack(str[start:end])
         self.sections.append(val1)
       return self
     except struct.error as e:
@@ -264,15 +274,15 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_h3dh = None
-def _get_struct_h3dh():
-    global _struct_h3dh
-    if _struct_h3dh is None:
-        _struct_h3dh = struct.Struct("<h3dh")
-    return _struct_h3dh
-_struct_3dh = None
-def _get_struct_3dh():
-    global _struct_3dh
-    if _struct_3dh is None:
-        _struct_3dh = struct.Struct("<3dh")
-    return _struct_3dh
+_struct_5dh = None
+def _get_struct_5dh():
+    global _struct_5dh
+    if _struct_5dh is None:
+        _struct_5dh = struct.Struct("<5dh")
+    return _struct_5dh
+_struct_h5dh = None
+def _get_struct_h5dh():
+    global _struct_h5dh
+    if _struct_h5dh is None:
+        _struct_h5dh = struct.Struct("<h5dh")
+    return _struct_h5dh

@@ -14,7 +14,7 @@
 
 (defclass costum_msgs::PathInfo
   :super ros::object
-  :slots (_plan_file _date _simulations _global_time_average _global_distance_average _global_velocity_average _global_failures _sections ))
+  :slots (_plan_file _date _simulations _global_time_average _global_distance_average _global_velocity_average _global_linear_velocity_average _global_maximum_linear_velocity _global_failures _sections ))
 
 (defmethod costum_msgs::PathInfo
   (:init
@@ -25,6 +25,8 @@
     ((:global_time_average __global_time_average) 0.0)
     ((:global_distance_average __global_distance_average) 0.0)
     ((:global_velocity_average __global_velocity_average) 0.0)
+    ((:global_linear_velocity_average __global_linear_velocity_average) 0.0)
+    ((:global_maximum_linear_velocity __global_maximum_linear_velocity) 0.0)
     ((:global_failures __global_failures) 0)
     ((:sections __sections) (let (r) (dotimes (i 0) (push (instance costum_msgs::GoalInfo :init) r)) r))
     )
@@ -35,6 +37,8 @@
    (setq _global_time_average (float __global_time_average))
    (setq _global_distance_average (float __global_distance_average))
    (setq _global_velocity_average (float __global_velocity_average))
+   (setq _global_linear_velocity_average (float __global_linear_velocity_average))
+   (setq _global_maximum_linear_velocity (float __global_maximum_linear_velocity))
    (setq _global_failures (round __global_failures))
    (setq _sections __sections)
    self)
@@ -56,6 +60,12 @@
   (:global_velocity_average
    (&optional __global_velocity_average)
    (if __global_velocity_average (setq _global_velocity_average __global_velocity_average)) _global_velocity_average)
+  (:global_linear_velocity_average
+   (&optional __global_linear_velocity_average)
+   (if __global_linear_velocity_average (setq _global_linear_velocity_average __global_linear_velocity_average)) _global_linear_velocity_average)
+  (:global_maximum_linear_velocity
+   (&optional __global_maximum_linear_velocity)
+   (if __global_maximum_linear_velocity (setq _global_maximum_linear_velocity __global_maximum_linear_velocity)) _global_maximum_linear_velocity)
   (:global_failures
    (&optional __global_failures)
    (if __global_failures (setq _global_failures __global_failures)) _global_failures)
@@ -81,6 +91,10 @@
     8
     ;; float64 _global_velocity_average
     8
+    ;; float64 _global_linear_velocity_average
+    8
+    ;; float64 _global_maximum_linear_velocity
+    8
     ;; int16 _global_failures
     2
     ;; costum_msgs/GoalInfo[] _sections
@@ -102,6 +116,10 @@
        (sys::poke _global_distance_average (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _global_velocity_average
        (sys::poke _global_velocity_average (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _global_linear_velocity_average
+       (sys::poke _global_linear_velocity_average (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _global_maximum_linear_velocity
+       (sys::poke _global_maximum_linear_velocity (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; int16 _global_failures
        (write-word _global_failures s)
      ;; costum_msgs/GoalInfo[] _sections
@@ -125,6 +143,10 @@
      (setq _global_distance_average (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _global_velocity_average
      (setq _global_velocity_average (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _global_linear_velocity_average
+     (setq _global_linear_velocity_average (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _global_maximum_linear_velocity
+     (setq _global_maximum_linear_velocity (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; int16 _global_failures
      (setq _global_failures (sys::peek buf ptr- :short)) (incf ptr- 2)
    ;; costum_msgs/GoalInfo[] _sections
@@ -138,7 +160,7 @@
    self)
   )
 
-(setf (get costum_msgs::PathInfo :md5sum-) "707c653de7245a2abe80f9bbaf62b59f")
+(setf (get costum_msgs::PathInfo :md5sum-) "406f78da04ae6e0a1419c2646f9bbca9")
 (setf (get costum_msgs::PathInfo :datatype-) "costum_msgs/PathInfo")
 (setf (get costum_msgs::PathInfo :definition-)
       "string plan_file
@@ -147,6 +169,8 @@ int16 simulations
 float64 global_time_average
 float64 global_distance_average
 float64 global_velocity_average
+float64 global_linear_velocity_average
+float64 global_maximum_linear_velocity
 int16 global_failures
 GoalInfo[] sections
 ================================================================================
@@ -155,12 +179,14 @@ string id
 float64 time_average
 float64 distance_average
 float64 velocity_average
+float64 linear_velocity_average
+float64 maximum_linear_velocity
 int16 failures
 
 ")
 
 
 
-(provide :costum_msgs/PathInfo "707c653de7245a2abe80f9bbaf62b59f")
+(provide :costum_msgs/PathInfo "406f78da04ae6e0a1419c2646f9bbca9")
 
 

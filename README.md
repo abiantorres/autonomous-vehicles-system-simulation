@@ -46,46 +46,46 @@ levels of simulation and in the integration of them.
 * For getting [rosjava](http://wiki.ros.org/rosjava) working, execute the followig command in a new terminal (note that it must be installed for ROS kinetic):
 
 ```
-$ sudo apt-get install ros-kinetic-catkin ros-kinetic-rospack python-wstool openjdk-8-jdk
+sudo apt-get install ros-kinetic-catkin ros-kinetic-rospack python-wstool openjdk-8-jdk
 ```
 
 * Install ROS Kinetic following [this tutorial](http://wiki.ros.org/kinetic/Installation/Ubuntu).
 
 ```
-$ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-$ sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
-$ sudo apt-get update
-$ sudo apt-get install ros-kinetic-desktop-full
-$ apt-cache search ros-kinetic
-$ sudo rosdep init
-$ rosdep update
-$ echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
-$ source /opt/ros/kinetic/setup.bash
-$ sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+sudo apt-get update
+sudo apt-get install ros-kinetic-desktop-full
+apt-cache search ros-kinetic
+sudo rosdep init
+rosdep update
+echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
+source /opt/ros/kinetic/setup.bash
+sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
 ```
 
 * ~~Install the MORSE simulator following [this tutorial](https://www.openrobots.org/morse/doc/stable/user/installation.html).~~ **NO USING MORSE ANY MORE, SO NO INSTALLATION NEEDED**
 
 ```
 # Cmake:
-$ sudo apt-get install cmake
+sudo apt-get install cmake
 # Python:
-$ sudo apt-get update
-$ sudo apt-get -y upgrade
-$ sudo apt-get install -y python3-pip
-$ python3 -V
-$ sudo apt-get install build-essential libssl-dev libffi-dev python-dev
-$ sudo pip3 install numpy
+sudo apt-get update
+sudo apt-get -y upgrade
+sudo apt-get install -y python3-pip
+python3 -V
+sudo apt-get install build-essential libssl-dev libffi-dev python-dev
+sudo pip3 install numpy
 # Blender:
-$ sudo add-apt-repository ppa:thomas-schiex/blender
-$ sudo apt-get update
-$ sudo apt-get install blender
+sudo add-apt-repository ppa:thomas-schiex/blender
+sudo apt-get update
+sudo apt-get install blender
 # Morse:
-$ sudo apt-get install python3-morse-simulator
+sudo apt-get install python3-morse-simulator
 ```
 
-* Intall the following python dependencies to get rosbridge_server working from source:
-** [Rosbridge source code](https://github.com/RobotWebTools/rosbridge_suite)
+* Install the following python dependencies to get rosbridge_server working from source:
+	* [Rosbridge source code](https://github.com/RobotWebTools/rosbridge_suite)
 
 ```
 # install pip if you have not done it yet:
@@ -93,26 +93,50 @@ sudo apt-get install python-pip python-dev build-essential
 sudo pip install --upgrade pip 
 sudo pip install --upgrade virtualenv 
 # Other dependencies:
-$ sudo pip install tornado
-$ sudo apt-get install ros-kinetic-rosauth
+sudo pip install tornado
+sudo apt-get install ros-kinetic-rosauth
 # Get the rosbridge_suite package:
-$ git clone https://github.com/RobotWebTools/rosbridge_suite.git
-$ cd ~/your_work_space
-$ catkin_make
-$ source devel/setup.bash
+git clone https://github.com/RobotWebTools/rosbridge_suite.git
+cd ~/your_work_space
+catkin_make
+source devel/setup.bash
 ```
 
 * If you prefer to get rosbridge_server working via apt-get:
 
 ```
-$ sudo apt-get install ros-kinetic-rosbridge-suite
-$ source /opt/ros/kinetic/setup.bash
+sudo apt-get install ros-kinetic-rosbridge-suite
+source /opt/ros/kinetic/setup.bash
 # To launch rosbridge_sever, execute the following launch file:
-$ roslaunch rosbridge_server rosbridge_websocket.launch
+roslaunch rosbridge_server rosbridge_websocket.launch
 ```
+
+* Install **MongoDB** to provide persistence to our simulation system. This will help us to manipulate the data and draw conclusions:
+
+	* Install mongodb **package** via apt-get:
+```
+sudo apt-get install mongodb
+```
+
+	* To **start** the mongdb service:
+```
+sudo service mongodb start
+```
+
+	* To **stop** the mongdb service:
+```
+sudo service mongodb stop
+```
+
+	* The high level simulation needs the following dependencies for the proper functioning of MongoDB with **Java**:
+
+		* mongodb-driver-3.0.2.jar ([mongodb-driver](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver/3.0.2/))
+		* bson-3.0.2.jar ([bson](https://oss.sonatype.org/content/repositories/releases/org/mongodb/bson/3.0.2/))
+		* mongodb-driver-core-3.0.2.jar ([mongodb-driver-core](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver-core/3.0.2/))
+
 
 ## Authors:
 
 |Name | Email |
 |:-----:|:-------:|
-|Abián Torres Torres|abiantorres.generic@gmail.com|
+|Abián Torres Torres|abiantorres.generic@gmail.com

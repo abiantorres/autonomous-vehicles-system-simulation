@@ -28,6 +28,8 @@ struct GoalInfo_
     , time_average(0.0)
     , distance_average(0.0)
     , velocity_average(0.0)
+    , linear_velocity_average(0.0)
+    , maximum_linear_velocity(0.0)
     , failures(0)  {
     }
   GoalInfo_(const ContainerAllocator& _alloc)
@@ -35,6 +37,8 @@ struct GoalInfo_
     , time_average(0.0)
     , distance_average(0.0)
     , velocity_average(0.0)
+    , linear_velocity_average(0.0)
+    , maximum_linear_velocity(0.0)
     , failures(0)  {
   (void)_alloc;
     }
@@ -52,6 +56,12 @@ struct GoalInfo_
 
    typedef double _velocity_average_type;
   _velocity_average_type velocity_average;
+
+   typedef double _linear_velocity_average_type;
+  _linear_velocity_average_type linear_velocity_average;
+
+   typedef double _maximum_linear_velocity_type;
+  _maximum_linear_velocity_type maximum_linear_velocity;
 
    typedef int16_t _failures_type;
   _failures_type failures;
@@ -134,12 +144,12 @@ struct MD5Sum< ::costum_msgs::GoalInfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "8d65c3a28a49ef2e0abb508952cb41a4";
+    return "3b498f03ccbc82c91ef84003efa1d87e";
   }
 
   static const char* value(const ::costum_msgs::GoalInfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x8d65c3a28a49ef2eULL;
-  static const uint64_t static_value2 = 0x0abb508952cb41a4ULL;
+  static const uint64_t static_value1 = 0x3b498f03ccbc82c9ULL;
+  static const uint64_t static_value2 = 0x1ef84003efa1d87eULL;
 };
 
 template<class ContainerAllocator>
@@ -162,6 +172,8 @@ struct Definition< ::costum_msgs::GoalInfo_<ContainerAllocator> >
 float64 time_average\n\
 float64 distance_average\n\
 float64 velocity_average\n\
+float64 linear_velocity_average\n\
+float64 maximum_linear_velocity\n\
 int16 failures\n\
 ";
   }
@@ -185,6 +197,8 @@ namespace serialization
       stream.next(m.time_average);
       stream.next(m.distance_average);
       stream.next(m.velocity_average);
+      stream.next(m.linear_velocity_average);
+      stream.next(m.maximum_linear_velocity);
       stream.next(m.failures);
     }
 
@@ -212,6 +226,10 @@ struct Printer< ::costum_msgs::GoalInfo_<ContainerAllocator> >
     Printer<double>::stream(s, indent + "  ", v.distance_average);
     s << indent << "velocity_average: ";
     Printer<double>::stream(s, indent + "  ", v.velocity_average);
+    s << indent << "linear_velocity_average: ";
+    Printer<double>::stream(s, indent + "  ", v.linear_velocity_average);
+    s << indent << "maximum_linear_velocity: ";
+    Printer<double>::stream(s, indent + "  ", v.maximum_linear_velocity);
     s << indent << "failures: ";
     Printer<int16_t>::stream(s, indent + "  ", v.failures);
   }

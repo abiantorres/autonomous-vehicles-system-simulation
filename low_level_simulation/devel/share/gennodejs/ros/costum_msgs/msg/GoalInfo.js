@@ -22,6 +22,8 @@ class GoalInfo {
       this.time_average = null;
       this.distance_average = null;
       this.velocity_average = null;
+      this.linear_velocity_average = null;
+      this.maximum_linear_velocity = null;
       this.failures = null;
     }
     else {
@@ -49,6 +51,18 @@ class GoalInfo {
       else {
         this.velocity_average = 0.0;
       }
+      if (initObj.hasOwnProperty('linear_velocity_average')) {
+        this.linear_velocity_average = initObj.linear_velocity_average
+      }
+      else {
+        this.linear_velocity_average = 0.0;
+      }
+      if (initObj.hasOwnProperty('maximum_linear_velocity')) {
+        this.maximum_linear_velocity = initObj.maximum_linear_velocity
+      }
+      else {
+        this.maximum_linear_velocity = 0.0;
+      }
       if (initObj.hasOwnProperty('failures')) {
         this.failures = initObj.failures
       }
@@ -68,6 +82,10 @@ class GoalInfo {
     bufferOffset = _serializer.float64(obj.distance_average, buffer, bufferOffset);
     // Serialize message field [velocity_average]
     bufferOffset = _serializer.float64(obj.velocity_average, buffer, bufferOffset);
+    // Serialize message field [linear_velocity_average]
+    bufferOffset = _serializer.float64(obj.linear_velocity_average, buffer, bufferOffset);
+    // Serialize message field [maximum_linear_velocity]
+    bufferOffset = _serializer.float64(obj.maximum_linear_velocity, buffer, bufferOffset);
     // Serialize message field [failures]
     bufferOffset = _serializer.int16(obj.failures, buffer, bufferOffset);
     return bufferOffset;
@@ -85,6 +103,10 @@ class GoalInfo {
     data.distance_average = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [velocity_average]
     data.velocity_average = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [linear_velocity_average]
+    data.linear_velocity_average = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [maximum_linear_velocity]
+    data.maximum_linear_velocity = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [failures]
     data.failures = _deserializer.int16(buffer, bufferOffset);
     return data;
@@ -93,7 +115,7 @@ class GoalInfo {
   static getMessageSize(object) {
     let length = 0;
     length += object.id.length;
-    return length + 30;
+    return length + 46;
   }
 
   static datatype() {
@@ -103,7 +125,7 @@ class GoalInfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '8d65c3a28a49ef2e0abb508952cb41a4';
+    return '3b498f03ccbc82c91ef84003efa1d87e';
   }
 
   static messageDefinition() {
@@ -113,6 +135,8 @@ class GoalInfo {
     float64 time_average
     float64 distance_average
     float64 velocity_average
+    float64 linear_velocity_average
+    float64 maximum_linear_velocity
     int16 failures
     
     `;
@@ -150,6 +174,20 @@ class GoalInfo {
     }
     else {
       resolved.velocity_average = 0.0
+    }
+
+    if (msg.linear_velocity_average !== undefined) {
+      resolved.linear_velocity_average = msg.linear_velocity_average;
+    }
+    else {
+      resolved.linear_velocity_average = 0.0
+    }
+
+    if (msg.maximum_linear_velocity !== undefined) {
+      resolved.maximum_linear_velocity = msg.maximum_linear_velocity;
+    }
+    else {
+      resolved.maximum_linear_velocity = 0.0
     }
 
     if (msg.failures !== undefined) {

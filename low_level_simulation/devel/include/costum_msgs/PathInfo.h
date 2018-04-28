@@ -31,6 +31,8 @@ struct PathInfo_
     , global_time_average(0.0)
     , global_distance_average(0.0)
     , global_velocity_average(0.0)
+    , global_linear_velocity_average(0.0)
+    , global_maximum_linear_velocity(0.0)
     , global_failures(0)
     , sections()  {
     }
@@ -41,6 +43,8 @@ struct PathInfo_
     , global_time_average(0.0)
     , global_distance_average(0.0)
     , global_velocity_average(0.0)
+    , global_linear_velocity_average(0.0)
+    , global_maximum_linear_velocity(0.0)
     , global_failures(0)
     , sections(_alloc)  {
   (void)_alloc;
@@ -65,6 +69,12 @@ struct PathInfo_
 
    typedef double _global_velocity_average_type;
   _global_velocity_average_type global_velocity_average;
+
+   typedef double _global_linear_velocity_average_type;
+  _global_linear_velocity_average_type global_linear_velocity_average;
+
+   typedef double _global_maximum_linear_velocity_type;
+  _global_maximum_linear_velocity_type global_maximum_linear_velocity;
 
    typedef int16_t _global_failures_type;
   _global_failures_type global_failures;
@@ -150,12 +160,12 @@ struct MD5Sum< ::costum_msgs::PathInfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "707c653de7245a2abe80f9bbaf62b59f";
+    return "406f78da04ae6e0a1419c2646f9bbca9";
   }
 
   static const char* value(const ::costum_msgs::PathInfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x707c653de7245a2aULL;
-  static const uint64_t static_value2 = 0xbe80f9bbaf62b59fULL;
+  static const uint64_t static_value1 = 0x406f78da04ae6e0aULL;
+  static const uint64_t static_value2 = 0x1419c2646f9bbca9ULL;
 };
 
 template<class ContainerAllocator>
@@ -180,6 +190,8 @@ int16 simulations\n\
 float64 global_time_average\n\
 float64 global_distance_average\n\
 float64 global_velocity_average\n\
+float64 global_linear_velocity_average\n\
+float64 global_maximum_linear_velocity\n\
 int16 global_failures\n\
 GoalInfo[] sections\n\
 ================================================================================\n\
@@ -188,6 +200,8 @@ string id\n\
 float64 time_average\n\
 float64 distance_average\n\
 float64 velocity_average\n\
+float64 linear_velocity_average\n\
+float64 maximum_linear_velocity\n\
 int16 failures\n\
 ";
   }
@@ -213,6 +227,8 @@ namespace serialization
       stream.next(m.global_time_average);
       stream.next(m.global_distance_average);
       stream.next(m.global_velocity_average);
+      stream.next(m.global_linear_velocity_average);
+      stream.next(m.global_maximum_linear_velocity);
       stream.next(m.global_failures);
       stream.next(m.sections);
     }
@@ -245,6 +261,10 @@ struct Printer< ::costum_msgs::PathInfo_<ContainerAllocator> >
     Printer<double>::stream(s, indent + "  ", v.global_distance_average);
     s << indent << "global_velocity_average: ";
     Printer<double>::stream(s, indent + "  ", v.global_velocity_average);
+    s << indent << "global_linear_velocity_average: ";
+    Printer<double>::stream(s, indent + "  ", v.global_linear_velocity_average);
+    s << indent << "global_maximum_linear_velocity: ";
+    Printer<double>::stream(s, indent + "  ", v.global_maximum_linear_velocity);
     s << indent << "global_failures: ";
     Printer<int16_t>::stream(s, indent + "  ", v.global_failures);
     s << indent << "sections[]" << std::endl;

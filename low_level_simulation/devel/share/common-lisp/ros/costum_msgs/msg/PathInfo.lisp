@@ -37,6 +37,16 @@
     :initarg :global_velocity_average
     :type cl:float
     :initform 0.0)
+   (global_linear_velocity_average
+    :reader global_linear_velocity_average
+    :initarg :global_linear_velocity_average
+    :type cl:float
+    :initform 0.0)
+   (global_maximum_linear_velocity
+    :reader global_maximum_linear_velocity
+    :initarg :global_maximum_linear_velocity
+    :type cl:float
+    :initform 0.0)
    (global_failures
     :reader global_failures
     :initarg :global_failures
@@ -87,6 +97,16 @@
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:global_velocity_average-val is deprecated.  Use costum_msgs-msg:global_velocity_average instead.")
   (global_velocity_average m))
 
+(cl:ensure-generic-function 'global_linear_velocity_average-val :lambda-list '(m))
+(cl:defmethod global_linear_velocity_average-val ((m <PathInfo>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:global_linear_velocity_average-val is deprecated.  Use costum_msgs-msg:global_linear_velocity_average instead.")
+  (global_linear_velocity_average m))
+
+(cl:ensure-generic-function 'global_maximum_linear_velocity-val :lambda-list '(m))
+(cl:defmethod global_maximum_linear_velocity-val ((m <PathInfo>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:global_maximum_linear_velocity-val is deprecated.  Use costum_msgs-msg:global_maximum_linear_velocity instead.")
+  (global_maximum_linear_velocity m))
+
 (cl:ensure-generic-function 'global_failures-val :lambda-list '(m))
 (cl:defmethod global_failures-val ((m <PathInfo>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:global_failures-val is deprecated.  Use costum_msgs-msg:global_failures instead.")
@@ -133,6 +153,24 @@
     (cl:write-byte (cl:ldb (cl:byte 8 48) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 56) bits) ostream))
   (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'global_velocity_average))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 32) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 40) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 48) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 56) bits) ostream))
+  (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'global_linear_velocity_average))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 32) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 40) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 48) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 56) bits) ostream))
+  (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'global_maximum_linear_velocity))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
@@ -205,6 +243,26 @@
       (cl:setf (cl:ldb (cl:byte 8 48) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 56) bits) (cl:read-byte istream))
     (cl:setf (cl:slot-value msg 'global_velocity_average) (roslisp-utils:decode-double-float-bits bits)))
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 32) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 40) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 48) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 56) bits) (cl:read-byte istream))
+    (cl:setf (cl:slot-value msg 'global_linear_velocity_average) (roslisp-utils:decode-double-float-bits bits)))
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 32) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 40) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 48) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 56) bits) (cl:read-byte istream))
+    (cl:setf (cl:slot-value msg 'global_maximum_linear_velocity) (roslisp-utils:decode-double-float-bits bits)))
     (cl:let ((unsigned 0))
       (cl:setf (cl:ldb (cl:byte 8 0) unsigned) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) unsigned) (cl:read-byte istream))
@@ -229,21 +287,23 @@
   "costum_msgs/PathInfo")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<PathInfo>)))
   "Returns md5sum for a message object of type '<PathInfo>"
-  "707c653de7245a2abe80f9bbaf62b59f")
+  "406f78da04ae6e0a1419c2646f9bbca9")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'PathInfo)))
   "Returns md5sum for a message object of type 'PathInfo"
-  "707c653de7245a2abe80f9bbaf62b59f")
+  "406f78da04ae6e0a1419c2646f9bbca9")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<PathInfo>)))
   "Returns full string definition for message of type '<PathInfo>"
-  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%int16 global_failures~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 distance_average~%float64 velocity_average~%int16 failures~%~%~%"))
+  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%float64 global_linear_velocity_average~%float64 global_maximum_linear_velocity~%int16 global_failures~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 distance_average~%float64 velocity_average~%float64 linear_velocity_average~%float64 maximum_linear_velocity~%int16 failures~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'PathInfo)))
   "Returns full string definition for message of type 'PathInfo"
-  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%int16 global_failures~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 distance_average~%float64 velocity_average~%int16 failures~%~%~%"))
+  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%float64 global_linear_velocity_average~%float64 global_maximum_linear_velocity~%int16 global_failures~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 distance_average~%float64 velocity_average~%float64 linear_velocity_average~%float64 maximum_linear_velocity~%int16 failures~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <PathInfo>))
   (cl:+ 0
      4 (cl:length (cl:slot-value msg 'plan_file))
      4 (cl:length (cl:slot-value msg 'date))
      2
+     8
+     8
      8
      8
      8
@@ -259,6 +319,8 @@
     (cl:cons ':global_time_average (global_time_average msg))
     (cl:cons ':global_distance_average (global_distance_average msg))
     (cl:cons ':global_velocity_average (global_velocity_average msg))
+    (cl:cons ':global_linear_velocity_average (global_linear_velocity_average msg))
+    (cl:cons ':global_maximum_linear_velocity (global_maximum_linear_velocity msg))
     (cl:cons ':global_failures (global_failures msg))
     (cl:cons ':sections (sections msg))
 ))
