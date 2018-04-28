@@ -48,9 +48,18 @@ compute_distance = False
 # Initial vehicle model state
 initial_state = ModelState()
 
+# Simulation parameters
+
+# Wait time between simualtions to to apply relocation (in seconds)
+time_to_relocation = 5
+# Timeout for each simulation (in seconds)
+# Default: 2 minutes and 30 seconds
+simulation_timeout = 150 
+
 # Path planning input file 
 file_name = ""
 
+odom_pub = rospy.Publisher("odom", Odometry, queue_size=50)
 
 # Compute the euclidean distance
 def callback(data):
@@ -70,14 +79,43 @@ def reset_gazebo_world():
     except rospy.ServiceException as exc:
       rospy.loginfo("Service did not process request: " + str(exc))
 
+def clear_gazebo_world():
+    rospy.wait_for_service('gazebo/clear_world')
+    clear_world = rospy.ServiceProxy('gazebo/clear_world', Empty)
+    try:
+      res = clear_world()
+    except rospy.ServiceException as exc:
+      rospy.loginfo("Service did not process request: " + str(exc))
+
+def clear_costmaps():
+    rospy.wait_for_service('move_base/clear_costmaps')
+    clear_costmaps = rospy.ServiceProxy('move_base/clear_costmaps', Empty)
+    try:
+      res = clear_costmaps()
+    except rospy.ServiceException as exc:
+      rospy.loginfo("Service did not process request: " + str(exc))
+
 def set_vehicle_model_state():
-    global initial_state
+    global initial_state, odom_pub
+   
     rospy.wait_for_service('gazebo/set_model_state')
     set_model_state = rospy.ServiceProxy('gazebo/set_model_state', SetModelState)
     try:
-      res = set_model_state(initial_state)
+        res = set_model_state(initial_state)
     except rospy.ServiceException as exc:
-      rospy.loginfo("Service did not process request: " + str(exc))
+        rospy.loginfo("Service did not process request: " + str(exc))
+
+    # next, we'll publish the odometry message over ROS
+    odom = Odometry()
+    odom.header.stamp = rospy.Time.now()
+    odom.header.frame_id = "odom"
+    # set the position
+    odom.pose.pose = initial_state.pose
+    # set the velocity
+    odom.child_frame_id = "base_link"
+    odom.twist.twist = initial_state.twist
+    # publish the message
+    odom_pub.publish(odom)
 
 def convert_PoseWithCovArray_to_PoseArray(waypoints):
     """Used to publish waypoints as pose array so that you can see them in rviz, etc."""
@@ -143,17 +181,12 @@ def run(n_simulations):
     global_velocity_average = 0.0
     
     # Run the n simulations
-    for x in range(0, n_simulations):
-        # Re-set the initial robot pose
-        #reset_gazebo_world()
-        # Set the initial vehicle model state
-        set_vehicle_model_state()
+    for x in range(0, n_simulations):        
         # Print in Rviz the visual end point icons
         poseArray_publisher.publish(convert_PoseWithCovArray_to_PoseArray(waypoints))
         # Execute waypoints each in seqsuence
         rospy.loginfo("waypoints: " + str(waypoints))
         i = 0 # variable to index the results times
-
 
         # Send to path planner each of the move base goals
         for waypoint in waypoints:
@@ -178,8 +211,8 @@ def run(n_simulations):
             # Set the start time for the current plan
             start_time = rospy.get_time()
 
-            # Keep waiting for results 2 minutes and 30 seconds
-            finished_within_time = client.wait_for_result(rospy.Duration(150)) # Wait only
+            # Keep waiting for results 
+            finished_within_time = client.wait_for_result(rospy.Duration(simulation_timeout))
             compute_distance = False
             # Check for success or failure
             if not finished_within_time:
@@ -187,6 +220,7 @@ def run(n_simulations):
                 rospy.loginfo("Timed out achieving goal")
                 # Increase the failures count for the current section
                 failures_by_section[i] += 1
+                break
             else:
                 state = client.get_state()
                 if state == GoalStatus.SUCCEEDED:
@@ -196,15 +230,23 @@ def run(n_simulations):
                     rospy.loginfo("Goal failed with error code: " + str(state))
                     # Increase the failures count for the current section
                     failures_by_section[i] += 1
+                    break
             # Computes section statistics
             time_average_by_section[i] += (rospy.get_time() - start_time)
             traveled_distance_average_by_section[i] = current_traveled_distance
             velocity_average_by_section[i] = traveled_distance_average_by_section[i] / time_average_by_section[i]
             i += 1 
-
+        # Reset gazebo word to avoid posible modifications in the last simulation
+        reset_gazebo_world()
+        # Set the initial vehicle model state
+        set_vehicle_model_state()
+        # Clear costmaps to avoid problems when we "teletransport" our vehicle
+        clear_costmaps()
+        # Wait for AMCL algorithm does its work (relocate robot)
+        time.sleep(time_to_relocation)
         rospy.loginfo("###### Simulation " + str(x+1) + " finished ######")
 
-    # Compute average times for each section
+    # Compute local statistics for each section
     for i in range(0, len(waypoints)):
         time_average_by_section[i] /= n_simulations
         rospy.loginfo("###### Section " + str(i+1) + " -> time  " + str(time_average_by_section[i]) + "  ######")
@@ -212,6 +254,8 @@ def run(n_simulations):
         rospy.loginfo("###### Section " + str(i+1) + " -> distance  " + str(traveled_distance_average_by_section[i]) + "  ######")
         velocity_average_by_section[i] /= n_simulations
         rospy.loginfo("###### Section " + str(i+1) + " -> velocity  " + str(velocity_average_by_section[i]) + "  ######")
+    
+    # Compute global statistics
     global_time_average = sum(time_average_by_section) 
     rospy.loginfo("###### Global -> time  " + str(time_average_by_section[i]) + "  ######")
     global_traveled_distance_average = sum(traveled_distance_average_by_section)
