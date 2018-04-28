@@ -2,34 +2,10 @@
 
 ## Description:
 
-In the development of an autonomous transport system, its advisable to carry out a battery of
-tests or simulations before checking their operation in a real environment. For this
-purpose, we have at our disposal certain software tools that allow, among others
-things, simulate the environment and the behavior of a robot on it. For the development of this
-project at this level of abstraction, we will use ROS (Robot Operating System). This "operative
-system" is a free and open source framework for the development of software for robots
-that provides the functionality of an operating system in a heterogeneous cluster. It provides the
-standard services of an operating system such as hardware abstraction, control of
-low level devices, implementation of commonly used functionalities, message passing
-between processes and package maintenance. It is based on a graph architecture where the
-processing takes place in nodes that can receive, send and multiplex messages from
-sensors, control, states, schedulePs and actuators, among others.
+In the development of an autonomous transport system, its advisable to carry out a battery of tests or simulations before checking their operation in a real environment. For this purpose, we have at our disposal certain software tools that allow, among others things, simulate the environment and the behavior of a robot on it. For the development of this project at this level of abstraction, we will use ROS (Robot Operating System). This "operative system" is a free and open source framework for the development of software for robots that provides the functionality of an operating system in a heterogeneous cluster. It provides the standard services of an operating system such as hardware abstraction, control of low level devices, implementation of commonly used functionalities, message passing between processes and package maintenance. It is based on a graph architecture where the processing takes place in nodes that can receive, send and multiplex messages from sensors, control, states, schedulePs and actuators, among others.
 
-However, this is only one aspect of the problem. In any type of study, it is also interesting
-simulate the impact that the implementation of a system would have, in our case of transport
-autonomous, in certain scenarios. Consequently, it would be necessary to carry out a
-simulation at a higher level of abstraction. For example, to simulate an autonomous system of
-public transportation, such as a fleet of taxis or buses, we would have, on the one hand,
-simulate the behavior of each of the vehicles within the environment and, on the other hand, simulate
-certain elements of the urban environment, such as the density of vehicles by sections, for
-analyze the proposed solution in terms of its cost / effectiveness. In the latter case, the
-tool to use will be PSIGHOS. This library implements a discrete event simulator
-process oriented The internal simulator works on Java and has the purpose of
-implementation of our models. Being designed primarily by researchers from the
-University of La Laguna, one of the main advantages offered by PSIGHOS is its great
-versatility and the functionalities that it contributes in tasks of "redistribution of resources" and
-"process reengineering". Therefore, this project intends to work on these two
-levels of simulation and in the integration of them.
+However, this is only one aspect of the problem. In any type of study, it is also interesting simulate the impact that the implementation of a system would have, in our case of transport autonomous, in certain scenarios. Consequently, it would be necessary to carry out a simulation at a higher level of abstraction. For example, to simulate an autonomous system of public transportation, such as a fleet of taxis or buses, we would have, on the one hand, simulate the behavior of each of the vehicles within the environment and, on the other hand, simulate certain elements of the urban environment, such as the density of vehicles by sections, for analyze the proposed solution in terms of its cost / effectiveness. In the latter case, the tool to use will be PSIGHOS. This library implements a discrete event simulator process oriented The internal simulator works on Java and has the purpose of implementation of our models. Being designed primarily by researchers from the
+University of La Laguna, one of the main advantages offered by PSIGHOS is its great versatility and the functionalities that it contributes in tasks of "redistribution of resources" and "process reengineering". Therefore, this project intends to work on these two levels of simulation and in the integration of them.
 
 ## Status:
 
@@ -113,26 +89,29 @@ roslaunch rosbridge_server rosbridge_websocket.launch
 
 * Install **MongoDB** to provide persistence to our simulation system. This will help us to manipulate the data and draw conclusions:
 
-	* Install mongodb **package** via apt-get:
+Install mongodb **package** via apt-get:
+
 ```
 sudo apt-get install mongodb
 ```
 
-	* To **start** the mongdb service:
+To **start** the mongdb service:
+
 ```
 sudo service mongodb start
 ```
 
-	* To **stop** the mongdb service:
+To **stop** the mongdb service:
+
 ```
 sudo service mongodb stop
 ```
 
-	* The high level simulation needs the following dependencies for the proper functioning of MongoDB with **Java**:
+The high level simulation needs the following dependencies for the proper functioning of MongoDB with **Java**:
 
-		* mongodb-driver-3.0.2.jar ([mongodb-driver](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver/3.0.2/))
-		* bson-3.0.2.jar ([bson](https://oss.sonatype.org/content/repositories/releases/org/mongodb/bson/3.0.2/))
-		* mongodb-driver-core-3.0.2.jar ([mongodb-driver-core](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver-core/3.0.2/))
+**1.** mongodb-driver-3.0.2.jar ([mongodb-driver](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver/3.0.2/))
+**2.** bson-3.0.2.jar ([bson](https://oss.sonatype.org/content/repositories/releases/org/mongodb/bson/3.0.2/))
+**3.** mongodb-driver-core-3.0.2.jar ([mongodb-driver-core](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver-core/3.0.2/))
 
 
 ## Authors:
