@@ -11,7 +11,7 @@ import es.ull.iis.function.TimeFunctionParams;
 
 /**
  * Defines the way a generator creates elements when it's time to create them.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public abstract class Generator<INF extends Generator.GenerationInfo> extends SimulationObject implements TimeFunctionParams {
 	/** Number of objects created each time this creator is invoked. */
@@ -37,7 +37,7 @@ public abstract class Generator<INF extends Generator.GenerationInfo> extends Si
 		this(model, id, TimeFunctionFactory.getInstance("ConstantVariate", nElem));
 	}
 	
-	@Override
+	//@Override
 	public double getTime() {
 		return getTs();
 	}
@@ -106,7 +106,7 @@ public abstract class Generator<INF extends Generator.GenerationInfo> extends Si
 
 	/**
 	 * Description of a set of elements a generator can create.
-	 * @author Iván Castilla Rodríguez
+	 * @author Ivï¿½n Castilla Rodrï¿½guez
 	 */
     public static class GenerationInfo {
 		/** Proportion of elements corresponding to this flow. */

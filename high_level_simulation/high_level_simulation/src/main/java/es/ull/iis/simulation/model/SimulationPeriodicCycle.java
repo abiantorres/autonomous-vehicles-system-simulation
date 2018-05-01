@@ -10,7 +10,7 @@ import es.ull.iis.util.PeriodicCycle;
 /**
  * A wrapper class for {@link es.ull.iis.util.PeriodicCycle PeriodicCycle} to be used inside a simulation. 
  * Thus {@link TimeStamp} can be used to define the cycle parameters.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  *
  */
 public class SimulationPeriodicCycle implements SimulationCycle {
@@ -114,7 +114,7 @@ public class SimulationPeriodicCycle implements SimulationCycle {
 		this(unit, new TimeStamp(unit, startTs), period, iterations, subCycle);
 	}
 
-	@Override
+	//@Override
 	public Cycle getCycle() {
 		return cycle;
 	}

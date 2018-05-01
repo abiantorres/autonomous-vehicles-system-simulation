@@ -18,7 +18,7 @@ import es.ull.iis.simulation.model.flow.ResourceHandlerFlow;
  * becomes unavailable at other simulation time. The availability of a resource is controlled
  * by means of timetable entries, which define a resource type and an availability cycle.
  * A resource finishes its execution when it has no longer valid timetable entries.
- * @author Carlos Martín Galán
+ * @author Carlos Martï¿½n Galï¿½n
  */
 public class ResourceEngine extends EngineObject implements es.ull.iis.simulation.model.engine.ResourceEngine {
     /** If true, indicates that this resource is being used after its availability time has expired */
@@ -61,7 +61,7 @@ public class ResourceEngine extends EngineObject implements es.ull.iis.simulatio
 	 * @param role New resource type added
 	 * @param ts Timestamp when the availability of this resource finishes for this resource type. 
 	 */
-	@Override
+	//@Override
 	public void addRole(ResourceType role, long ts) {
 		Long avEnd = currentRoles.get(role);
 		if ((avEnd == null) || (ts > avEnd))
@@ -77,7 +77,7 @@ public class ResourceEngine extends EngineObject implements es.ull.iis.simulatio
 	 * one entry per role). However, checks if it's time for removing the role before doing it.
 	 * @param role Resource type removed
 	 */
-	@Override
+	//@Override
 	public void removeRole(ResourceType role) {
 		Long avEnd = currentRoles.get(role);
 		if (avEnd != null)
@@ -89,7 +89,7 @@ public class ResourceEngine extends EngineObject implements es.ull.iis.simulatio
 	 * Builds a list of activity managers referenced by the roles of the resource. 
 	 * @return Returns the currentManagers.
 	 */
-	@Override
+	//@Override
 	public ArrayList<ActivityManager> getCurrentManagers() {
 		ArrayList <ActivityManager> currentManagers = new ArrayList<ActivityManager>();
 		for (ResourceType role : currentRoles.keySet())
@@ -130,12 +130,12 @@ public class ResourceEngine extends EngineObject implements es.ull.iis.simulatio
         return true;
     }
     
- 	@Override
+    //@Override
 	public Element getCurrentElement() {
 		return currentElem;
 	}
  	
-	@Override
+	//@Override
 	public void notifyCurrentManagers() {
 		for (ActivityManager am : getCurrentManagers()) {
 			// The activity manger is informed of new available resources
@@ -157,17 +157,17 @@ public class ResourceEngine extends EngineObject implements es.ull.iis.simulatio
 		return currentRoles;
 	}
 
-	@Override
+	//@Override
 	public int incValidTimeTableEntries() {
 		return ++validTTEs;
 	}
 
-	@Override
+	//@Override
 	public int decValidTimeTableEntries() {
 		return --validTTEs;
 	}
 
-	@Override
+	//@Override
 	public int getValidTimeTableEntries() {
 		return validTTEs;
 	}
@@ -177,7 +177,7 @@ public class ResourceEngine extends EngineObject implements es.ull.iis.simulatio
 	 * using a resource when it's becoming unavailable right at this timestamp. 
 	 * @return True if the resource is available.
 	 */
-	@Override
+	//@Override
 	public boolean isAvailable(ResourceType rt) {
 		return ((currentElem == null) && (notCanceled) && (getAvailability(rt) > simul.getTs()));
 	}
@@ -186,12 +186,12 @@ public class ResourceEngine extends EngineObject implements es.ull.iis.simulatio
 	 * Sets the available flag of a resource.
 	 * @param available The availability state of the resource.
 	 */
-	@Override
+	//@Override
 	public void setNotCanceled(boolean available) {
 		notCanceled = available;
 	}
 
-	@Override
+	//@Override
 	public boolean add2Solution(ArrayDeque<Resource> solution, ResourceType rt, ElementInstance ei) {
         // Checks if the resource is busy (taken by other element or conflict in the same activity)
 		// TODO: Check if "isAvailable" is required in this condition
@@ -204,13 +204,13 @@ public class ResourceEngine extends EngineObject implements es.ull.iis.simulatio
 		return false;
 	}
 
-	@Override
+	//@Override
 	public void removeFromSolution(ArrayDeque<Resource> solution, ElementInstance ei) {
 		modelRes.setCurrentResourceType(null);
 		solution.remove(modelRes);
 	}
 	
-	@Override
+	//@Override
     public void notifyEnd() {
         simul.addEvent(modelRes.onDestroy(simul.getTs()));
     }

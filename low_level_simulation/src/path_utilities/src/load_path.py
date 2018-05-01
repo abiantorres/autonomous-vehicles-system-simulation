@@ -15,13 +15,18 @@ import time
 from costum_msgs.msg import RouteTimes, GoalInfo, PathInfo
 
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseActionFeedback
-from geometry_msgs.msg import PoseWithCovarianceStamped, PoseArray, Pose
+from geometry_msgs.msg import PoseWithCovarianceStamped, PoseArray, Pose, Quaternion, Point
 from std_msgs.msg import Empty
 from std_srvs.srv import Empty
-from gazebo_msgs.srv import SetModelState
+from gazebo_msgs.srv import SetModelState, SpawnModel
 from gazebo_msgs.msg import ModelState
 from nav_msgs.msg import Odometry
 import rosbag
+import rospkg,tf
+
+# Initilize a rospack client
+rospack = rospkg.RosPack()
+gazebo_simulation_pkg_path = str(rospack.get_path('gazebo_simulation'))
 
 # Path planning goals
 waypoints = []
@@ -151,6 +156,15 @@ def set_vehicle_model_state():
     # publish the message
     odom_pub.publish(odom)
 
+def spawn_gazebo_obstacles():
+    rospy.wait_for_service("gazebo/spawn_sdf_model")
+    spawn_model = rospy.ServiceProxy("gazebo/spawn_sdf_model", SpawnModel)
+    with open(gazebo_simulation_pkg_path + "/worlds/population.sdf", "r") as f:
+        obstacle_xml = f.read()
+    rospy.loginfo(obstacle_xml)
+    orient = Quaternion(0, 0, 0, 0)
+    item_pose = Pose(Point(x=3, y=3, z=0), orient)
+    spawn_model("population", obstacle_xml, "", item_pose, "world")
 
 def convert_PoseWithCovArray_to_PoseArray(waypoints):
     """Used to publish waypoints as pose array so that you can see them in rviz, etc."""
@@ -183,6 +197,8 @@ def run(n_simulations):
     """
     global waypoints, time_average_by_section, failures_by_section, traveled_distance_average_by_section, velocity_average_by_section, last_x_position, last_y_position, current_traveled_distance, compute_distance, global_time_average, global_failures, global_traveled_distance_average, global_velocity_average, maximum_linear_velocity_by_section, linear_velocity_average_by_section, global_linear_velocity_average, max_linear_velocity, current_linear_velocity, compute_linear_velocity
     
+
+
     # configure needed topics and move_base client
     path_plan_info_pub = rospy.Publisher('/path_plan_info', PathInfo, queue_size=1)
     poseArray_publisher = rospy.Publisher('/waypoints', PoseArray, queue_size=1)
@@ -224,6 +240,8 @@ def run(n_simulations):
     max_linear_velocity = -1.0
     current_linear_velocity = 0.0
     
+    spawn_gazebo_obstacles()
+
     # Run the n simulations
     for x in range(0, n_simulations):        
         # Print in Rviz the visual end point icons
@@ -352,8 +370,9 @@ def run(n_simulations):
     rospy.loginfo(plan_results)
 
 if __name__ == '__main__':
-    global file_name
+    global file_name, simulations
     rospy.init_node('load_path')
     # get input file name
     file_name = rospy.get_param('~input_file')
-    run(1)
+    simulations = int(rospy.get_param('~simulations'))
+    run(simulations)

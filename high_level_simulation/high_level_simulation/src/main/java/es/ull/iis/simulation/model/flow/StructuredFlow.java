@@ -23,11 +23,11 @@ public abstract class StructuredFlow extends SingleSuccessorFlow implements Task
 		super(model);
 	}
 
-	@Override
+	//@Override
 	public void addPredecessor(Flow newFlow) {
 	}
 
-	@Override
+	//@Override
 	public void afterFinalize(ElementInstance fe) {
 	}
 

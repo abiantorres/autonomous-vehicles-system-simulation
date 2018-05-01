@@ -14,7 +14,7 @@ import es.ull.iis.simulation.model.Simulation;
  * works as a single successor flow, but functionally as a parallel flow. It should
  * be use with its counterpart Thread Merge pattern (WFP 41).
  * Meets the Thread Split pattern (WFP 42).
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  *
  */
 public class ThreadSplitFlow extends BasicFlow implements SplitFlow {
@@ -39,18 +39,18 @@ public class ThreadSplitFlow extends BasicFlow implements SplitFlow {
 		return successor;
 	}
 
-	@Override
+	//@Override
 	public void addPredecessor(Flow predecessor) {
 	}
 
-	@Override
+	//@Override
 	public Flow link(Flow successor) {
 		this.successor = (Flow)successor;
 		successor.addPredecessor(this);
 		return successor;
 	}
 
-	@Override
+	//@Override
 	public void setRecursiveStructureLink(StructuredFlow parent, Set<Flow> visited) {
 		setParent(parent);
 		visited.add(this);

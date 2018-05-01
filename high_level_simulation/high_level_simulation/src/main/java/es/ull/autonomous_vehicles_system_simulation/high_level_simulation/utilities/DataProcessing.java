@@ -2,7 +2,10 @@ package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utili
 
 //JSON tree structures handling 
 import com.fasterxml.jackson.databind.JsonNode;
-// Ros simulation results components
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
+
+// ROS simulation results components
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results.OfflineResults;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results.PathSection;
 
@@ -31,6 +34,7 @@ final public class DataProcessing {
 				data.get("msg").get("global_linear_velocity_average").doubleValue());
 		results.setGlobalMaximumLinearVelocity(
 				data.get("msg").get("global_maximum_linear_velocity").doubleValue());
+		// Travel over the array searching for each section information
 		final JsonNode sections = data.get("msg").get("sections");
 		if(sections.isArray()) {
 			for(final JsonNode sectionNode : sections) {
@@ -48,5 +52,9 @@ final public class DataProcessing {
 			}
 		}
 		return results;
+	}
+	
+	public static DBObject getOfflineResultsDbObject(JsonNode data) {
+		return (DBObject)JSON.parse(data.get("msg").asText());
 	}
 }

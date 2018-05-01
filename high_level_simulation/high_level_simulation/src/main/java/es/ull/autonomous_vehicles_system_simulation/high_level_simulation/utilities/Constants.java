@@ -13,7 +13,8 @@ public final class Constants {
 	 * time message format. 
 	 * - ROS_URI: URI connection for ROS.
 	 * - MONGODB_URI: URI connection for MongoDB access. 
-	 * - MONGODB_DB_NAME: UName of the MongoDB database.*/
+	 * - MONGODB_DB_NAME: UName of the MongoDB database.
+	 * - MONGODB_RESULTS_COLLECTION: results MongoDB collection */
 	
 	private final static String 
 			LOW_LEVEL_DATA_TOPIC = "/path_plan_info",

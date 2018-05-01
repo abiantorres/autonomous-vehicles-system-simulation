@@ -44,7 +44,7 @@ import es.ull.iis.util.Prioritizable;
  * the element can perform other activities while it's performing this one; and <code>INTERRUPTIBLE</code>, 
  * when the activity can be interrupted, and later continued, if the resources become unavailable 
  * while the activity is being performed.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public class ActivityFlow extends StructuredFlow implements ResourceHandlerFlow, Prioritizable {
 	private static int resourcesIdCounter = -1;
@@ -106,12 +106,12 @@ public class ActivityFlow extends StructuredFlow implements ResourceHandlerFlow,
         this.interruptible = interruptible;
     }
 
-	@Override
+    //@Override
 	public String getDescription() {
 		return description;
 	}
 
-	@Override
+	//@Override
     public int getPriority() {
         return priority;
     }
@@ -236,7 +236,7 @@ public class ActivityFlow extends StructuredFlow implements ResourceHandlerFlow,
 		
 	}
 
-	@Override
+	//@Override
 	public int getResourcesId() {
 		return resourcesId;
 	}

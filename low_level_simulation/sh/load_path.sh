@@ -1,9 +1,9 @@
 #!/bin/bash                                                                                                                                                                                 
-if [ $# -eq 1 ]; then
+if [ $# -eq 2 ]; then
 	echo "OK"
-	roslaunch path_utilities load_path.launch input_file:=$1
+	roslaunch path_utilities load_path.launch input_file:=$1 simulations:=$2
 	exit 1
 else
-    echo "file name parameter is needed"
+    echo "file name and simulation parameters are needed"
     exit 0
 fi

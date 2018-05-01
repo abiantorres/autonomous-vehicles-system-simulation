@@ -59,7 +59,7 @@ import es.ull.iis.util.Output;
  * <p>
  * For debugging purposes, an {@link Output} can be associated to this simulation, thus
  * defining the destination for error and debug messages.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public abstract class SimulationEngine implements Identifiable, Debuggable {
 	/** Simulation's identifier */
@@ -88,22 +88,22 @@ public abstract class SimulationEngine implements Identifiable, Debuggable {
 		return simul;
 	}
 
-	@Override
+	//@Override
 	public int getIdentifier() {
 		return id;
 	}
 
-	@Override
+	//@Override
 	public void debug(String description) {
 		Simulation.debug(description);
 	}
 
-	@Override
+	//@Override
 	public void error(String description) {
 		Simulation.error(description);
 	}
 
-	@Override
+	//@Override
 	public boolean isDebugEnabled() {
 		return Simulation.isDebugEnabled();
 	}

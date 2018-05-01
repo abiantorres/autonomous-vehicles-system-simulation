@@ -16,7 +16,7 @@ import es.ull.iis.simulation.model.flow.RequestResourcesFlow;
  * so it must be controlled by the user by means of a semaphore. When the user wants to modify an object 
  * belonging to this AM, it's required to invoke the <code>waitSemaphore</code> method. When the modification 
  * finishes, the <code>signalSemaphore()</code> method must be invoked.  
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public class ActivityManagerEngine extends EngineObject implements es.ull.iis.simulation.model.engine.ActivityManagerEngine {
     /** True if there is at least one new resource available the current timestamp */ 
@@ -46,7 +46,7 @@ public class ActivityManagerEngine extends EngineObject implements es.ull.iis.si
     	return modelAM;
     }
 
-	@Override
+    //@Override
 	public void processAvailableResources() {
         // A count of the useless single flows 
     	int uselessSF = 0;
@@ -89,7 +89,7 @@ public class ActivityManagerEngine extends EngineObject implements es.ull.iis.si
 		currentQueue.clear();
 	} 
 
-	@Override
+	//@Override
 	public void processAvailableElements() {
 		// Checks if there are pending activities that haven't noticed the
 		// element availability
@@ -117,27 +117,27 @@ public class ActivityManagerEngine extends EngineObject implements es.ull.iis.si
 		currentQueue.clear();
 	}
 
-	@Override
+	//@Override
 	public void notifyAvailableResource() {
 		availableResource = true;
 	}
 
-	@Override
+	//@Override
 	public boolean getAvailableResource() {
 		return availableResource;
 	}
 
-    @Override
+	//@Override
     public void queueAdd(ElementInstance fe) {
     	waitingQueue.add(fe);
     }
 
-    @Override
+    //@Override
     public void queueRemove(ElementInstance fe) {
     	waitingQueue.remove(fe);
     }
     
-    @Override
+    //@Override
     public void notifyAvailableElement(ElementInstance fe) {
     	currentQueue.add(fe);
     }

@@ -10,7 +10,7 @@ import es.ull.iis.simulation.model.ElementInstance;
 import es.ull.iis.simulation.model.Simulation;
 
 /**
- * @author Iván Castilla
+ * @author Ivï¿½n Castilla
  *
  */
 public class DelayFlow extends SingleSuccessorFlow implements TaskFlow, ActionFlow {
@@ -35,7 +35,7 @@ public class DelayFlow extends SingleSuccessorFlow implements TaskFlow, ActionFl
 		this(model, description, TimeFunctionFactory.getInstance("ConstantVariate", duration));
 	}
 
-	@Override
+	//@Override
 	public String getDescription() {
 		return description;
 	}
@@ -60,15 +60,15 @@ public class DelayFlow extends SingleSuccessorFlow implements TaskFlow, ActionFl
 	/* (non-Javadoc)
 	 * @see es.ull.iis.simulation.model.flow.Flow#addPredecessor(es.ull.iis.simulation.model.flow.Flow)
 	 */
-	@Override
+	//@Override
 	public void addPredecessor(Flow predecessor) {
 	}
 
-	@Override
+	//@Override
 	public void afterFinalize(ElementInstance fe) {
 	}
 
-	@Override
+	//@Override
 	public void request(ElementInstance wThread) {
 		if (!wThread.wasVisited(this)) {
 			if (wThread.isExecutable()) {
@@ -92,7 +92,7 @@ public class DelayFlow extends SingleSuccessorFlow implements TaskFlow, ActionFl
 			wThread.notifyEnd();
 	}
 
-	@Override
+	//@Override
 	public void finish(ElementInstance wThread) {
 		simul.notifyInfo(new ElementActionInfo(simul, wThread, wThread.getElement(), this, wThread.getExecutionWG(), null, ElementActionInfo.Type.END, simul.getTs()));
 		if (wThread.getElement().isDebugEnabled())

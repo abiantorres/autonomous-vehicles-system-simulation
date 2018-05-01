@@ -11,7 +11,7 @@ import es.ull.iis.util.Prioritizable;
  * A set of resources needed for carrying out an basicStep. A workgroup (WG) consists on a 
  * set of (resource type, #needed resources) pairs, a condition which determines if the 
  * workgroup can be used or not, and the priority of the workgroup inside the basicStep.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public class ActivityWorkGroup implements Prioritizable, Identifiable, Describable {
     /**
@@ -61,12 +61,12 @@ public class ActivityWorkGroup implements Prioritizable, Identifiable, Describab
         return priority;
     }
 
-	@Override
+	//@Override
 	public int getIdentifier() {
 		return wg.getIdentifier();
 	}
 
-	@Override
+	//@Override
 	public String getDescription() {
 		return wg.getDescription();
 	}

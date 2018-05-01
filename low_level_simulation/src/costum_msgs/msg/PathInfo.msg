@@ -7,4 +7,5 @@ float64 global_velocity_average
 float64 global_linear_velocity_average
 float64 global_maximum_linear_velocity
 int16 global_failures
+float64 obstacles_density
 GoalInfo[] sections

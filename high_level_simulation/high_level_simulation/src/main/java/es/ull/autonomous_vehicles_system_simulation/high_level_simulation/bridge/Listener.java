@@ -74,8 +74,8 @@ public class Listener /*extends Experiment*/ {
 				public void receive(JsonNode data, String stringRep) {	
 					// Parses the information in such a way that it can
 					// be used by high-level simulation
-					//System.out.println(data);
-					DataProcessing.parseOfflineResultsJson(data).toString();
+					System.out.println(
+							DataProcessing.parseOfflineResultsJson(data).toString());
 				}});
 	}
 

@@ -9,7 +9,7 @@ import es.ull.iis.util.TableCycle;
 /**
  * A wrapper class for {@link es.ull.iis.util.TableCycle TableCycle} to be used inside a simulation. 
  * Thus {@link TimeStamp} can be used to define the cycle parameters.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  *
  */
 public class SimulationTableCycle implements SimulationCycle {
@@ -50,7 +50,7 @@ public class SimulationTableCycle implements SimulationCycle {
 		return times;
 	}
 
-	@Override
+	//@Override
 	public Cycle getCycle() {
 		return cycle;
 	}

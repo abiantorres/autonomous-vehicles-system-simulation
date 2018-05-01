@@ -12,7 +12,7 @@ import es.ull.iis.simulation.model.engine.SimulationEngine;
  * from each type are required to do something (typically an {@link ActivityFlow}).
  * Contains several methods to help the simulation find a suitable solution with the currently available
  * resources.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public class WorkGroup extends SimulationObject implements Describable {
 	/** List of resource types required to do something */
@@ -173,7 +173,7 @@ public class WorkGroup extends SimulationObject implements Describable {
         return findSolution(solution, pos, ned, fe);        
     }
 
-    @Override
+    //@Override
 	public String getDescription() {
 		StringBuilder str = new StringBuilder("WG" + id);
 		for (int i = 0; i < resourceTypes.length; i++)

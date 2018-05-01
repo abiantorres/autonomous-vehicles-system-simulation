@@ -14,7 +14,7 @@ import es.ull.iis.simulation.model.Simulation;
 /**
  * A flow with multiple successors. Multiple successors are split nodes, that is,
  * new work threads are created from this flow on, when it's requested.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public abstract class MultipleSuccessorFlow extends BasicFlow implements SplitFlow {
 	/** Successor list */
@@ -29,11 +29,11 @@ public abstract class MultipleSuccessorFlow extends BasicFlow implements SplitFl
 		successorList = new ArrayList<Flow>();
 	}
 
-	@Override
+	//@Override
 	public void addPredecessor(Flow newFlow) {
 	}
 
-	@Override
+	//@Override
 	public Flow link(Flow successor) {
 		successorList.add(successor);
     	successor.addPredecessor(this);
@@ -52,7 +52,7 @@ public abstract class MultipleSuccessorFlow extends BasicFlow implements SplitFl
         }		
 	}
 
-	@Override
+	//@Override
 	public void setRecursiveStructureLink(StructuredFlow parent, Set<Flow> visited) {
 		 setParent(parent);
 		 visited.add(this);

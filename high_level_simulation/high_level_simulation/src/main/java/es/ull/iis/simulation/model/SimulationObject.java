@@ -49,7 +49,7 @@ public abstract class SimulationObject implements Comparable<SimulationObject>, 
 		return objectTypeId;
 	}
 
-	@Override
+	//@Override
 	public int compareTo(SimulationObject o) {
 		if (id < o.id)
 			return -1;
@@ -58,7 +58,7 @@ public abstract class SimulationObject implements Comparable<SimulationObject>, 
 		return 0;
 	}
 
-	@Override
+	//@Override
 	public int getIdentifier() {
 		return id;
 	}

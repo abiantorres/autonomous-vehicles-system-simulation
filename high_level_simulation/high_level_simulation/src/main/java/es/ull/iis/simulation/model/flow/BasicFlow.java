@@ -11,7 +11,7 @@ import es.ull.iis.simulation.model.engine.SimulationEngine;
 
 /**
  * Basic implementation of a flow. Defines the default behavior of most methods. 
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public abstract class BasicFlow extends SimulationObject implements Flow {
 	/** The structured flow containing this flow. */
@@ -26,12 +26,12 @@ public abstract class BasicFlow extends SimulationObject implements Flow {
 		model.add(this);
 	}
 	
-	@Override
+	//@Override
 	public StructuredFlow getParent() {
 		return parent;
 	}
 	
-	@Override
+	//@Override
 	public void setParent(StructuredFlow parent) {
 		this.parent = (StructuredFlow)parent;
 	}
@@ -40,7 +40,7 @@ public abstract class BasicFlow extends SimulationObject implements Flow {
 	 * By default, returns true.
 	 * @return True by default.
 	 */
-	@Override
+	//@Override
 	public boolean beforeRequest(ElementInstance fe) {
 		return true;
 	}

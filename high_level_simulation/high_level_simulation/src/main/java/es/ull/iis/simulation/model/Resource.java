@@ -17,7 +17,7 @@ import es.ull.iis.util.DiscreteCycleIterator;
  * Timetable entries can overlap in time, thus allowing the resource for being potentially available for
  * different resource types simultaneously.
  * A resource finishes its execution when it has no longer valid timetable entries.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  *
  */
 public class Resource extends VariableStoreSimulationObject implements Describable, EventSource {
@@ -56,7 +56,7 @@ public class Resource extends VariableStoreSimulationObject implements Describab
 		return engine;
 	}
 
-	@Override
+	//@Override
 	public String getDescription() {
 		return description;
 	}
@@ -178,12 +178,12 @@ public class Resource extends VariableStoreSimulationObject implements Describab
     	addCancelTableEntry(cycle, new TimeStamp(simul.getTimeUnit(), dur), roleList);
     }
 
-	@Override
+	//@Override
 	public DiscreteEvent onCreate(long ts) {
 		return new CreateResourceEvent(ts);
 	}
 
-	@Override
+	//@Override
 	public DiscreteEvent onDestroy(long ts) {
 		return new DiscreteEvent.DefaultFinalizeEvent(this, ts);
 	}
@@ -309,7 +309,7 @@ public class Resource extends VariableStoreSimulationObject implements Describab
     
     /**
      * The event in charge of initializing the resource
-     * @author Iván Castilla Rodríguez
+     * @author Ivï¿½n Castilla Rodrï¿½guez
      *
      */
     public class CreateResourceEvent extends DiscreteEvent {

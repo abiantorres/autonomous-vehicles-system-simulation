@@ -15,7 +15,7 @@ import es.ull.iis.simulation.model.WorkGroup;
 import es.ull.iis.simulation.model.ResourceType;
 
 /**
- * @author Iván Castilla
+ * @author Ivï¿½n Castilla
  *
  */
 public class ReleaseResourcesFlow extends SingleSuccessorFlow implements ResourceHandlerFlow, FinalizerFlow {
@@ -74,7 +74,7 @@ public class ReleaseResourcesFlow extends SingleSuccessorFlow implements Resourc
 		return resourcesId;
 	}
 
-	@Override
+	//@Override
 	public String getDescription() {
 		return description;
 	}
@@ -131,10 +131,10 @@ public class ReleaseResourcesFlow extends SingleSuccessorFlow implements Resourc
 		return "REL";
 	}
 	
-	@Override
+	//@Override
 	public void addPredecessor(Flow newFlow) {}
 
-	@Override
+	//@Override
 	public void afterFinalize(ElementInstance fe) {}
 
     /**

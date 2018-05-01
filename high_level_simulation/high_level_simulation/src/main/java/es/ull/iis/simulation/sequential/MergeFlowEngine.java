@@ -16,7 +16,7 @@ import es.ull.iis.simulation.model.flow.MergeFlow;
 import es.ull.iis.simulation.model.flow.MergeFlowControl;
 
 /**
- * @author Iván Castilla
+ * @author Ivï¿½n Castilla
  *
  */
 public class MergeFlowEngine extends EngineObject implements es.ull.iis.simulation.model.engine.MergeFlowEngine {
@@ -41,12 +41,12 @@ public class MergeFlowEngine extends EngineObject implements es.ull.iis.simulati
 	/* (non-Javadoc)
 	 * @see es.ull.iis.simulation.model.engine.MergeFlowEngine#getControlStructureInstance()
 	 */
-	@Override
+	//@Override
 	public Map<Element, MergeFlowControl> getControlStructureInstance() {
 		return new TreeMap<Element, MergeFlowControl>();
 	}
 
-	@Override
+	//@Override
 	public Map<Flow, LinkedList<WorkToken>> getGeneralizedBranchesControlInstance() {
 		return new TreeMap<Flow, LinkedList<WorkToken>>();
 	}

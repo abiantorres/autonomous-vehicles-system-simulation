@@ -12,7 +12,7 @@ import es.ull.iis.simulation.model.engine.EngineObject;
 import es.ull.iis.simulation.model.flow.RequestResourcesFlow;
 
 /**
- * @author Iván Castilla
+ * @author Ivï¿½n Castilla
  *
  */
 public class RequestResourcesEngine extends EngineObject implements es.ull.iis.simulation.model.engine.RequestResourcesEngine {
@@ -34,7 +34,7 @@ public class RequestResourcesEngine extends EngineObject implements es.ull.iis.s
 		return modelReq;
 	}
 	
-	@Override
+	//@Override
 	public void queueAdd(ElementInstance fe) {
         modelReq.getManager().queueAdd(fe);
     	queueSize++;
@@ -42,7 +42,7 @@ public class RequestResourcesEngine extends EngineObject implements es.ull.iis.s
 		modelReq.inqueue(fe);
     }
     
-	@Override
+	//@Override
     public void queueRemove(ElementInstance fe) {
 		modelReq.getManager().queueRemove(fe);
     	queueSize--;
@@ -57,7 +57,7 @@ public class RequestResourcesEngine extends EngineObject implements es.ull.iis.s
     	return queueSize;    	
     }
 
-	@Override
+    //@Override
 	public boolean checkWorkGroup(ArrayDeque<Resource> solution, ActivityWorkGroup wg, ElementInstance ei) {
     	if (!wg.getCondition().check(ei))
     		return false;

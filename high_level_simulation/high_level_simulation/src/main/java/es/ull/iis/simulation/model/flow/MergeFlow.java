@@ -46,7 +46,7 @@ public abstract class MergeFlow extends SingleSuccessorFlow implements JoinFlow 
 		this.safe = safe;
 	}
 
-	@Override
+	//@Override
 	public void addPredecessor(Flow newFlow) {
 		incomingBranches++;
 	}
@@ -67,7 +67,7 @@ public abstract class MergeFlow extends SingleSuccessorFlow implements JoinFlow 
 		return safe;
 	}
 
-	@Override
+	//@Override
 	public void afterFinalize(ElementInstance fe) {}
 
 	/**

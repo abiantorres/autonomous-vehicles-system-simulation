@@ -12,7 +12,7 @@ import es.ull.iis.simulation.model.flow.RequestResourcesFlow;
  * Represents case instances that make use of activity flows in order to carry out
  * their events.
  * 
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public class ElementEngine extends EngineObject implements es.ull.iis.simulation.model.engine.ElementEngine {
 	/** Activity queues in which this element is. This list is used to notify the activities
@@ -40,17 +40,17 @@ public class ElementEngine extends EngineObject implements es.ull.iis.simulation
 		return modelElem;
 	}
 
-	@Override
+	//@Override
 	public void incInQueue(ElementInstance fe) {
 		inQueue.add(fe);
 	}
 
-	@Override
+	//@Override
 	public void decInQueue(ElementInstance fe) {
 		inQueue.remove(fe);
 	}
 
-	@Override
+	//@Override
 	public void notifyAvailableElement() {
 		for (final ElementInstance fe : inQueue) {
             final RequestResourcesFlow act = (RequestResourcesFlow) fe.getCurrentFlow();
@@ -60,22 +60,22 @@ public class ElementEngine extends EngineObject implements es.ull.iis.simulation
 		}
 	}
 
-	@Override
+	//@Override
     public void notifyEnd() {
         simul.addEvent(modelElem.onDestroy(simul.getTs()));
     }
 
-	@Override
+    //@Override
 	public void waitProtectedFlow(Flow flow) {
 		// Nothing to do		
 	}
 
-	@Override
+	//@Override
 	public void signalProtectedFlow(Flow flow) {
 		// Nothing to do		
 	}
 
-	@Override
+	//@Override
 	public ElementInstanceEngine getElementInstance(ElementInstance ei) {
 		return new ElementInstanceEngine((SequentialSimulationEngine) simul, ei);
 	}

@@ -19,7 +19,7 @@ import es.ull.iis.simulation.variable.EnumVariable;
 import es.ull.iis.util.Prioritizable;
 
 /**
- * @author Iván Castilla
+ * @author Ivï¿½n Castilla
  *
  */
 public class Element extends VariableStoreSimulationObject implements Prioritizable, EventSource {
@@ -183,7 +183,7 @@ public class Element extends VariableStoreSimulationObject implements Prioritiza
 	 * Initializes the element by requesting the <code>initialFlow</code>. If there's no initial flow
 	 * the element finishes immediately.
 	 */
-	@Override
+	//@Override
 	public DiscreteEvent onCreate(long ts) {
 		simul.notifyInfo(new ElementInfo(simul, this, elementType, ElementInfo.Type.START, getTs()));
 		if (initialFlow != null) {
@@ -194,7 +194,7 @@ public class Element extends VariableStoreSimulationObject implements Prioritiza
 			return onDestroy(ts);
 	}
 
-	@Override
+	//@Override
 	public DiscreteEvent onDestroy(long ts) {
 		simul.notifyInfo(new ElementInfo(simul, this, elementType, ElementInfo.Type.FINISH, getTs()));
 		return new DiscreteEvent.DefaultFinalizeEvent(this, ts);
@@ -220,7 +220,7 @@ public class Element extends VariableStoreSimulationObject implements Prioritiza
 	
 	/**
 	 * Requests a flow.
-	 * @author Iván Castilla Rodríguez
+	 * @author Ivï¿½n Castilla Rodrï¿½guez
 	 */
 	public class RequestFlowEvent extends DiscreteEvent {
 		/** The work thread that executes the request */
@@ -243,7 +243,7 @@ public class Element extends VariableStoreSimulationObject implements Prioritiza
 	
 	/**
 	 * Finishes a flow. 
-	 * @author Iván Castilla Rodríguez
+	 * @author Ivï¿½n Castilla Rodrï¿½guez
 	 */
 	public class FinishFlowEvent extends DiscreteEvent {
 		/** The work thread that executes the finish */
@@ -279,7 +279,7 @@ public class Element extends VariableStoreSimulationObject implements Prioritiza
 	 * A collection of resources that have been seized by this element. They are arranged in two levels: the
 	 * first level represents resource groups, as logically defined by the modeler; the second level represents
 	 * resource types.
-	 * @author Iván Castilla
+	 * @author Ivï¿½n Castilla
 	 *
 	 */
 	protected final class SeizedResourcesCollection {

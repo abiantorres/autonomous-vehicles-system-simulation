@@ -15,7 +15,7 @@ import es.ull.iis.simulation.model.engine.SimulationEngine;
  * <li>When a resource is activated for this type: {@link #beforeRoleOn()}, {@link #afterRoleOn()}</li>
  * <li>When a resource is deactivated for this type: {@link #beforeRoleOff()}, {@link #afterRoleOff()}</li>
  * </ul>
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  * @author Carlos Martin Galan
  */
 public class ResourceType extends SimulationObject implements Describable {
@@ -40,7 +40,7 @@ public class ResourceType extends SimulationObject implements Describable {
 		availableResourceList = simul.getResourceListInstance();
 	}
 	
-	@Override
+	//@Override
 	public String getDescription() {
 		return description;
 	}

@@ -11,7 +11,7 @@ import es.ull.iis.simulation.model.Simulation;
 
 /**
  * A flow with a unique successor.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public abstract class SingleSuccessorFlow extends BasicFlow {
 	/** The unique successor of this flow */
@@ -24,7 +24,7 @@ public abstract class SingleSuccessorFlow extends BasicFlow {
 		super(model);
 	}
 	
-	@Override
+	//@Override
 	public void setRecursiveStructureLink(StructuredFlow parent, Set<Flow> visited) {
 		setParent(parent);
 		visited.add(this);
@@ -33,7 +33,7 @@ public abstract class SingleSuccessorFlow extends BasicFlow {
 				successor.setRecursiveStructureLink(parent, visited);			
 	}	
 
-	@Override
+	//@Override
 	public Flow link(Flow succ) {
 		if (successor != null) {
 			Simulation.error("Trying to link already linked flow " + this.getClass() + " " + this);

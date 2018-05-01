@@ -130,7 +130,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 		this.endTs = endTs;
 	}
 	
-	@Override
+	//@Override
 	public int getIdentifier() {
 		return id;
 	}
@@ -151,7 +151,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 		return unit;
 	}
 	
-	@Override
+	//@Override
 	public String getDescription() {
 		return description;
 	}
@@ -288,7 +288,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 	 * <li>The user defined method {@link #end()} is invoked.</li>
 	 * </ol>
      */ 
-	@Override
+	//@Override
 	public void run() {
 		debug("SIMULATION MODEL CREATED");
 		// Sets default AM creator
@@ -509,17 +509,17 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 		return description;
 	}
 
-	@Override
+	//@Override
 	public Variable getVar(String varName) {
 		return varCollection.get(varName);
 	}
 	
-	@Override
+	//@Override
 	public void putVar(String varName, Variable value) {
 		varCollection.put(varName, value);
 	}
 	
-	@Override
+	//@Override
 	public void putVar(String varName, double value) {
 		UserVariable v = (UserVariable) varCollection.get(varName);
 		if (v != null) {
@@ -529,7 +529,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 			varCollection.put(varName, new DoubleVariable(value));
 	}
 	
-	@Override
+	//@Override
 	public void putVar(String varName, int value) {
 		UserVariable v = (UserVariable) varCollection.get(varName);
 		if (v != null) {
@@ -539,7 +539,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 			varCollection.put(varName, new IntVariable(value));
 	}
 
-	@Override
+	//@Override
 	public void putVar(String varName, boolean value) {
 		UserVariable v = (UserVariable) varCollection.get(varName);
 		if (v != null) {
@@ -549,7 +549,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 			varCollection.put(varName, new BooleanVariable(value));
 	}
 
-	@Override
+	//@Override
 	public void putVar(String varName, char value) {
 		UserVariable v = (UserVariable) varCollection.get(varName);
 		if (v != null) {
@@ -559,7 +559,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 			varCollection.put(varName, new CharacterVariable(value));
 	}
 	
-	@Override
+	//@Override
 	public void putVar(String varName, byte value) {
 		UserVariable v = (UserVariable) varCollection.get(varName);
 		if (v != null) {
@@ -569,7 +569,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 			varCollection.put(varName, new ByteVariable(value));
 	}
 
-	@Override
+	//@Override
 	public void putVar(String varName, float value) {
 		UserVariable v = (UserVariable) varCollection.get(varName);
 		if (v != null) {
@@ -579,7 +579,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 			varCollection.put(varName, new FloatVariable(value));
 	}
 	
-	@Override
+	//@Override
 	public void putVar(String varName, long value) {
 		UserVariable v = (UserVariable) varCollection.get(varName);
 		if (v != null) {
@@ -589,7 +589,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 			varCollection.put(varName, new LongVariable(value));
 	}
 	
-	@Override
+	//@Override
 	public void putVar(String varName, short value) {
 		UserVariable v = (UserVariable) varCollection.get(varName);
 		if (v != null) {
@@ -677,7 +677,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 	/**
 	 * A basic event which facilitates the control of the end of the simulation. Scheduling this event
 	 * ensures that there's always at least one event in the simulation. 
-	 * @author Iván Castilla Rodríguez
+	 * @author Ivï¿½n Castilla Rodrï¿½guez
 	 */
     class SimulationEndEvent extends DiscreteEvent {
     	/**

@@ -11,7 +11,7 @@ import es.ull.iis.util.Prioritizable;
 /**
  * Describes a set of elements which have something in common. This is simply a descriptive attribute
  * and is used for statistic issues.
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  */
 public class ElementType extends VariableStoreSimulationObject implements Describable, Prioritizable {
 	/** Element's priority in an activity queue. Minimum value: 0. */
@@ -40,12 +40,12 @@ public class ElementType extends VariableStoreSimulationObject implements Descri
 		model.add(this);
 	}
 
-	@Override
+	//@Override
 	public String getDescription() {
 		return description;
 	}
 
-	@Override
+	//@Override
 	public int getPriority() {
 		return priority;
 	}

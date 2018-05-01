@@ -7,7 +7,7 @@ import es.ull.iis.function.TimeFunction;
 import es.ull.iis.util.DiscreteCycleIterator;
 
 /**
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  *
  */
 public abstract class TimeDrivenGenerator<INF extends Generator.GenerationInfo> extends Generator<INF> implements EventSource {
@@ -44,7 +44,7 @@ public abstract class TimeDrivenGenerator<INF extends Generator.GenerationInfo> 
 		return cycleIter.next();
 	}
 
-	@Override
+	//@Override
 	public DiscreteEvent onDestroy(long ts) {
 		return new DiscreteEvent.DefaultFinalizeEvent(this, ts);
 	}
@@ -53,7 +53,7 @@ public abstract class TimeDrivenGenerator<INF extends Generator.GenerationInfo> 
         simul.addEvent(onDestroy(getTs()));
     }
     
-	@Override
+	//@Override
 	public DiscreteEvent onCreate(long ts) {
 		cycleIter = cycle.getCycle().iterator(simul.getStartTs(), Long.MAX_VALUE);
     	final long newTs = nextEvent();

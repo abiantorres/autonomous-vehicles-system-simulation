@@ -7,7 +7,7 @@ import es.ull.iis.simulation.model.ElementInstance;
 import es.ull.iis.simulation.model.engine.EngineObject;
 
 /**
- * @author Iván Castilla
+ * @author Ivï¿½n Castilla
  *
  */
 public class ElementInstanceEngine extends EngineObject
@@ -35,7 +35,7 @@ public class ElementInstanceEngine extends EngineObject
 		return modelInstance;
 	}
 
-	@Override
+	//@Override
 	public void notifyResourcesAcquired() {
 		// Nothing to do
 	}

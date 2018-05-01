@@ -23,7 +23,7 @@ import es.ull.iis.util.Prioritizable;
 import es.ull.iis.util.PrioritizedTable;
 
 /**
- * @author Iván Castilla
+ * @author Ivï¿½n Castilla
  *
  */
 public class RequestResourcesFlow extends SingleSuccessorFlow implements TaskFlow, ResourceHandlerFlow, Prioritizable {
@@ -90,12 +90,12 @@ public class RequestResourcesFlow extends SingleSuccessorFlow implements TaskFlo
         workGroupTable = new PrioritizedTable<ActivityWorkGroup>();
 	}
 
-	@Override
+	//@Override
 	public String getDescription() {
 		return description;
 	}
 
-	@Override
+	//@Override
     public int getPriority() {
         return priority;
     }
@@ -256,7 +256,7 @@ public class RequestResourcesFlow extends SingleSuccessorFlow implements TaskFlo
     	return workGroupTable.iterator();
     }
 
-	@Override
+	//@Override
 	public void addPredecessor(Flow newFlow) {}
     
 	/**
@@ -289,7 +289,7 @@ public class RequestResourcesFlow extends SingleSuccessorFlow implements TaskFlo
 	 */
 	public void inqueue(ElementInstance ei) {}
 	
-	@Override
+	//@Override
 	public void afterFinalize(ElementInstance ei) {}
 
 	/**

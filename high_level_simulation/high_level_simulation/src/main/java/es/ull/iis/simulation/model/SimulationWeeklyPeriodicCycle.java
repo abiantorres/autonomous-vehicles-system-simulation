@@ -10,7 +10,7 @@ import es.ull.iis.util.WeeklyPeriodicCycle;
 import es.ull.iis.util.WeeklyPeriodicCycle.WeekDays;
 
 /**
- * @author Iván Castilla Rodríguez
+ * @author Ivï¿½n Castilla Rodrï¿½guez
  *
  */
 public class SimulationWeeklyPeriodicCycle implements SimulationCycle {
@@ -71,7 +71,7 @@ public class SimulationWeeklyPeriodicCycle implements SimulationCycle {
 		return daySet;
 	}
 
-	@Override
+	//@Override
 	public Cycle getCycle() {
 		return cycle;
 	}

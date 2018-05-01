@@ -90,7 +90,7 @@ public class ElementInstance implements TimeFunctionParams, Prioritizable, Compa
 		return engine;
 	}
 
-	@Override
+	//@Override
 	public int getIdentifier() {
 		return engine.getIdentifier();
 	}
@@ -99,7 +99,7 @@ public class ElementInstance implements TimeFunctionParams, Prioritizable, Compa
      * Returns the priority of the element owner of this flow
      * @return The priority of the associated element.
      */
-    @Override
+    //@Override
     public int getPriority() {
     	return elem.getPriority();
     }
@@ -319,7 +319,7 @@ public class ElementInstance implements TimeFunctionParams, Prioritizable, Compa
 		this.arrivalTs = arrivalTs;
 	}
 
-	@Override
+	//@Override
 	public double getTime() {
 		return elem.getTs();
 	}
@@ -439,7 +439,7 @@ public class ElementInstance implements TimeFunctionParams, Prioritizable, Compa
 		return (remainingTask > 0.0);    	
     }
 
-	@Override
+	//@Override
 	public int compareTo(ElementInstance o) {
 		final int id1 = engine.getIdentifier();
 		final int id2 = o.engine.getIdentifier();
