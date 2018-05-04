@@ -7,9 +7,10 @@ from actionlib_msgs.msg import *
 import roslib
 import numpy as np
 import os
-from math import pow, sqrt
+from math import pow, sqrt, ceil
 from datetime import datetime
 import time
+from random import randint
 
 # Path information messages
 from costum_msgs.msg import RouteTimes, GoalInfo, PathInfo
@@ -18,9 +19,9 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseActionFeedb
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseArray, Pose, Quaternion, Point
 from std_msgs.msg import Empty
 from std_srvs.srv import Empty
-from gazebo_msgs.srv import SetModelState, SpawnModel
+from gazebo_msgs.srv import SetModelState, SpawnModel, GetWorldProperties, GetModelState
 from gazebo_msgs.msg import ModelState
-from nav_msgs.msg import Odometry
+from nav_msgs.msg import Odometry, MapMetaData, OccupancyGrid
 import rosbag
 import rospkg,tf
 
@@ -81,8 +82,19 @@ simulations = 1
 # Path planning input file 
 file_name = ""
 
+# Map metadata variables:
+
+map_metadata = {}
+# Avoid unnecessaries operations in map metadata callback
+get_map_metadata = False  
+
+occupancy_grid = OccupancyGrid()
+# Avoid unnecessaries operations in occupancy grid callback
+get_occupancy_grid = True
+
 odom_pub = rospy.Publisher("odom", Odometry, queue_size=50)
 
+points_2d = []
 
 # Compute the euclidean distance
 def callback_move_base(data):
@@ -110,6 +122,152 @@ def callback_odom(msg):
   
 rospy.Subscriber('odom', Odometry, callback_odom)
 
+def callback_map_metadata(msg):
+    global map_metadata, get_map_metadata
+    if(get_map_metadata):
+        map_metadata = {"resolution": msg.resolution, "width": msg.width, "height": msg.height, "origin": msg.origin}
+
+rospy.Subscriber('map_metadata', MapMetaData, callback_map_metadata)
+
+
+"""
+
+class Point2d:
+    # Point class represents and manipulates x,y coords. 
+    def __init__(self, x = 0, y = 0):
+        # Create a new point at the origin 
+        self.x = x
+        self.y = y
+        if(x != 0 or y != 0):
+            self.ceil_point()
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y  
+    def ceil_point(self):
+        self.x = int(ceil(self.x))
+        self.y = int(ceil(self.y))
+
+# Occupancy grid variables
+
+occupancy_grid = OccupancyGrid()
+occupancy_grid_flag = True
+
+def callback_occupancy_grid(msg):
+    # This represents a 2-D grid map, in which each cell represents the probability of
+    # occupancy.
+    # Header header 
+    # MetaData for the map
+    # MapMetaData info
+    # The map data, in row-major order, starting with (0,0).  Occupancy
+    # probabilities are in the range [0,100].  Unknown is -1.
+    # int8[] data
+    
+    global occupancy_grid, occupancy_grid_flag
+    if(occupancy_grid_flag):
+        occupancy_grid = msg
+
+rospy.Subscriber('map', OccupancyGrid, callback_occupancy_grid)
+
+def polygon_centroid(points):
+    centroid = Point2d()
+    n_points = len(points)
+    point = Point2d()
+    for i in range(0, n_points):
+        point = points[i]
+        centroid.x += point.x
+        centroid.y += point.y
+    centroid.x /= n_points
+    centroid.y /= n_points
+    centroid.ceil_point()
+    return centroid
+
+def max_distance(points, centroid):
+    n_points = len(points)
+    distances = [0]*n_points
+    for i in range(0, n_points):
+        distances[i] = int(ceil(sqrt(pow(points[i].x - centroid.x, 2) + pow(points[i].y - centroid.y, 2))))
+    return max(distances)
+
+def get_interest_zone_points(centroid, radius):
+    points = []
+    for x in range(centroid.x - radius, centroid.x):
+        for y in range(centroid.y - radius, centroid.y):
+        # we don't have to take the square root, it's slow
+            if (pow(x - centroid.x, 2) + pow(y - centroid.y, 2) <= pow(radius, 2)): 
+            # (x, y), (x, y_sym), (x_sym , y), (x_sym, y_sym) are in the circle
+                x_sym = centroid.x - (x - centroid.x)
+                y_sym = centroid.y - (y - centroid.y)
+                points.append(Point2d(x, y))
+                points.append(Point2d(x, y_sym))
+                points.append(Point2d(x_sym, y))
+                points.append(Point2d(x_sym, y_sym))
+    return points
+
+def get_row_major_order_index(i, j, height):
+    return i*height + j
+
+def get_obstacles_points(points, free_thresh = 0.196, density = 0.25):
+    
+    # number of obstacles = ceil(number of points * density)
+    # density should be between [0, 1]
+    
+    # occupancy grid map
+    global occupancy_grid, occupancy_grid_flag 
+    occupancy_grid_flag = True
+    # get the number of obstacles
+    n_obstacles = int(ceil(len(points)*density))
+    # get an integer value in the scale [0,100]
+    free_thresh = int(ceil(free_thresh*100))
+    # get map width and height 
+    height = occupancy_grid.info.height
+    width = occupancy_grid.info.width
+    data = occupancy_grid.data
+    # get polygon centroid formed by goal points
+    centroid = polygon_centroid(points)
+
+    # get all point in the interest point (circle formed by the polygon centroid and
+    # the maximun distance of a goal point to the centroid)
+    interest_zone_points = get_interest_zone_points(centroid, max_distance(points, centroid))
+
+    # generate n random obstacles
+    #interest_zone_points = list(filter(lambda point: data[get_row_major_order_index(point.x, point.y, height)] > 0 and data[get_row_major_order_index(point.x, point.y, height)] < free_thresh , interest_zone_points))
+
+    obstacles_points = []
+    for i in range(0, n_obstacles):
+        index = randint(0, len(interest_zone_points))
+        obstacles_points.append(interest_zone_points[index])
+        #interest_zone_points = list(filter(lambda point: data[get_row_major_order_index(point.x, point.y, height)] > 0 and data[get_row_major_order_index(point.x, point.y, height)] < free_thresh , interest_zone_points))
+    occupancy_grid_flag = False
+    return obstacles_points
+
+def spawn_gazebo_obstacles(points):
+    rospy.wait_for_service("gazebo/spawn_sdf_model")
+    spawn_model = rospy.ServiceProxy("gazebo/spawn_sdf_model", SpawnModel)
+    with open(gazebo_simulation_pkg_path + "/worlds/obstacle01.sdf", "r") as f:
+        obstacle_xml = f.read()
+    orient = Quaternion(0, 0, 0, 0)
+    for i in range(0, len(points)):
+        item_pose = Pose(Point(x=points[i].x, y=points[i].y, z=0), orient)
+        spawn_model("obstacle_" + str(i), obstacle_xml, "", item_pose, "world")
+
+def generate_obstacles(points, free_thresh = 0.196, density = 0.25):
+    spawn_gazebo_obstacles(get_obstacles_points(points, free_thresh, density))
+
+def delete_obstacles():
+    rospy.wait_for_service("gazebo/delete_model")
+    delete_model = rospy.ServiceProxy("gazebo/delete_model", DeleteModel)
+    for i in range(0, len(points)):
+        delete_model("obstacle_" + i, "")
+
+
+
+
+"""
+
+
+
+
+
+
 def reset_gazebo_world():
     rospy.wait_for_service('/gazebo/reset_world')
     reset_world = rospy.ServiceProxy('/gazebo/reset_world', Empty)
@@ -136,7 +294,6 @@ def clear_costmaps():
 
 def set_vehicle_model_state():
     global initial_state, odom_pub
-   
     rospy.wait_for_service('gazebo/set_model_state')
     set_model_state = rospy.ServiceProxy('gazebo/set_model_state', SetModelState)
     try:
@@ -156,15 +313,39 @@ def set_vehicle_model_state():
     # publish the message
     odom_pub.publish(odom)
 
+"""
 def spawn_gazebo_obstacles():
     rospy.wait_for_service("gazebo/spawn_sdf_model")
     spawn_model = rospy.ServiceProxy("gazebo/spawn_sdf_model", SpawnModel)
-    with open(gazebo_simulation_pkg_path + "/worlds/population.sdf", "r") as f:
+    with open(gazebo_simulation_pkg_path + "/worlds/obstacle01.sdf", "r") as f:
         obstacle_xml = f.read()
     rospy.loginfo(obstacle_xml)
     orient = Quaternion(0, 0, 0, 0)
-    item_pose = Pose(Point(x=3, y=3, z=0), orient)
-    spawn_model("population", obstacle_xml, "", item_pose, "world")
+    item_pose = Pose(Point(x=1, y=3, z=0), orient)
+    spawn_model("obstacle01", obstacle_xml, "", item_pose, "world")
+"""
+
+def get_all_world_models():
+    rospy.wait_for_service("gazebo/get_world_properties")
+    world_properties = rospy.ServiceProxy("gazebo/get_world_properties", GetWorldProperties)
+    return world_properties().model_names
+
+def get_model_position(model):
+    rospy.wait_for_service("gazebo/get_model_state")
+    model_state = rospy.ServiceProxy("gazebo/get_model_state", GetModelState)
+    return model_state(model, "").pose.position
+
+def get_model_state(model):
+    rospy.wait_for_service("gazebo/get_model_state")
+    model_state = rospy.ServiceProxy("gazebo/get_model_state", GetModelState)
+    return model_state(model, "")
+
+def get_world_occupied_positions():
+    positions = []
+    world_models = get_all_world_models()
+    for model in world_models:
+        positions.append(get_model_position(model))
+    return positions
 
 def convert_PoseWithCovArray_to_PoseArray(waypoints):
     """Used to publish waypoints as pose array so that you can see them in rviz, etc."""
@@ -178,27 +359,27 @@ def read_route_configuration_from_file():
     Function with allows us to get a path pre-configured from file and
     load it to be used in the simulation.
     """
-    global waypoints, file_name, initial_state
+    global waypoints, file_name, initial_state, points_2d
     waypoints = []
     file_name = rospy.get_param('~input_file')
     bag = rosbag.Bag(file_name)
+    points_2d = []
 
     for topic, msg, t in bag.read_messages(topics=['path_goals_bag']):
         waypoints.append(msg)
+        points_2d.append(Point2d(msg.pose.pose.position.x, msg.pose.pose.position.y))
 
     for topic, msg, t in bag.read_messages(topics=['initial_model_state']):
         initial_state = msg
-
+        points_2d.append(Point2d(msg.pose.position.x, msg.pose.position.y))
     bag.close()
 
 def run(n_simulations):
     """ Low level information publisher. High level should be
     subscribed to the path_plan_info topic.
     """
-    global waypoints, time_average_by_section, failures_by_section, traveled_distance_average_by_section, velocity_average_by_section, last_x_position, last_y_position, current_traveled_distance, compute_distance, global_time_average, global_failures, global_traveled_distance_average, global_velocity_average, maximum_linear_velocity_by_section, linear_velocity_average_by_section, global_linear_velocity_average, max_linear_velocity, current_linear_velocity, compute_linear_velocity
+    global waypoints, time_average_by_section, failures_by_section, traveled_distance_average_by_section, velocity_average_by_section, last_x_position, last_y_position, current_traveled_distance, compute_distance, global_time_average, global_failures, global_traveled_distance_average, global_velocity_average, maximum_linear_velocity_by_section, linear_velocity_average_by_section, global_linear_velocity_average, max_linear_velocity, current_linear_velocity, compute_linear_velocity, points_2d
     
-
-
     # configure needed topics and move_base client
     path_plan_info_pub = rospy.Publisher('/path_plan_info', PathInfo, queue_size=1)
     poseArray_publisher = rospy.Publisher('/waypoints', PoseArray, queue_size=1)
@@ -239,8 +420,9 @@ def run(n_simulations):
     global_linear_velocity_average = 0.0
     max_linear_velocity = -1.0
     current_linear_velocity = 0.0
-    
-    spawn_gazebo_obstacles()
+
+    #generate_obstacles(points_2d)
+    #spawn_gazebo_obstacles()
 
     # Run the n simulations
     for x in range(0, n_simulations):        
