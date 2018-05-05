@@ -75,9 +75,10 @@ public class OfflineResults {
 	 */
 	public void addSection(String id, Integer failures, Double timeAverage, 
 			Double distanceAverage,Double velocityAverage, Double linearVelocityAverage, 
-			Double maximumLinearVelocity, Double globalDistanceAverage) {
+			Double maximumLinearVelocity, Double density, Double obstacleLength, Double maxObstacleShiftment) {
 		getSections().add(new PathSection(id, failures, timeAverage, distanceAverage, 
-				velocityAverage, linearVelocityAverage, maximumLinearVelocity));
+				velocityAverage, linearVelocityAverage, maximumLinearVelocity, density, obstacleLength,
+				maxObstacleShiftment));
 	}
 
 	/***************
@@ -184,16 +185,13 @@ public class OfflineResults {
 	 */
 	@Override
 	public String toString() {
-		return "OfflineResults [planFile=" + planFile + ", date=" + date + 
-				", simulations=" + simulations
-				+ ", globalFailures=" + globalFailures + ", globalTimeAverage=" + 
-				globalTimeAverage
-				+ ", globalVelocityAverage=" + globalVelocityAverage + 
-				", globalLinearVelocityAverage="
-				+ globalLinearVelocityAverage + ", globalMaximumLinearVelocity=" + 
-				globalMaximumLinearVelocity
-				+ ", globalDistanceAverage=" + globalDistanceAverage + ", sections=" + 
-				sections + "]";
+		return "OfflineResults [planFile=" + planFile + ", date=" + date + ", simulations=" + simulations
+				+ ", globalFailures=" + globalFailures + ", globalTimeAverage=" + globalTimeAverage
+				+ ", globalVelocityAverage=" + globalVelocityAverage + ", globalLinearVelocityAverage="
+				+ globalLinearVelocityAverage + ", globalMaximumLinearVelocity=" + globalMaximumLinearVelocity
+				+ ", globalDistanceAverage=" + globalDistanceAverage + ", sections=" + sections + "]";
 	}
+
+
 	
 }

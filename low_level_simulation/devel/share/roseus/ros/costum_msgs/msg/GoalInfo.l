@@ -14,7 +14,7 @@
 
 (defclass costum_msgs::GoalInfo
   :super ros::object
-  :slots (_id _time_average _distance_average _velocity_average _linear_velocity_average _maximum_linear_velocity _failures ))
+  :slots (_id _time_average _distance_average _velocity_average _linear_velocity_average _maximum_linear_velocity _density _max_obstacle_shiftment _obstacle_length _failures ))
 
 (defmethod costum_msgs::GoalInfo
   (:init
@@ -25,6 +25,9 @@
     ((:velocity_average __velocity_average) 0.0)
     ((:linear_velocity_average __linear_velocity_average) 0.0)
     ((:maximum_linear_velocity __maximum_linear_velocity) 0.0)
+    ((:density __density) 0.0)
+    ((:max_obstacle_shiftment __max_obstacle_shiftment) 0.0)
+    ((:obstacle_length __obstacle_length) 0.0)
     ((:failures __failures) 0)
     )
    (send-super :init)
@@ -34,6 +37,9 @@
    (setq _velocity_average (float __velocity_average))
    (setq _linear_velocity_average (float __linear_velocity_average))
    (setq _maximum_linear_velocity (float __maximum_linear_velocity))
+   (setq _density (float __density))
+   (setq _max_obstacle_shiftment (float __max_obstacle_shiftment))
+   (setq _obstacle_length (float __obstacle_length))
    (setq _failures (round __failures))
    self)
   (:id
@@ -54,6 +60,15 @@
   (:maximum_linear_velocity
    (&optional __maximum_linear_velocity)
    (if __maximum_linear_velocity (setq _maximum_linear_velocity __maximum_linear_velocity)) _maximum_linear_velocity)
+  (:density
+   (&optional __density)
+   (if __density (setq _density __density)) _density)
+  (:max_obstacle_shiftment
+   (&optional __max_obstacle_shiftment)
+   (if __max_obstacle_shiftment (setq _max_obstacle_shiftment __max_obstacle_shiftment)) _max_obstacle_shiftment)
+  (:obstacle_length
+   (&optional __obstacle_length)
+   (if __obstacle_length (setq _obstacle_length __obstacle_length)) _obstacle_length)
   (:failures
    (&optional __failures)
    (if __failures (setq _failures __failures)) _failures)
@@ -71,6 +86,12 @@
     ;; float64 _linear_velocity_average
     8
     ;; float64 _maximum_linear_velocity
+    8
+    ;; float64 _density
+    8
+    ;; float64 _max_obstacle_shiftment
+    8
+    ;; float64 _obstacle_length
     8
     ;; int16 _failures
     2
@@ -91,6 +112,12 @@
        (sys::poke _linear_velocity_average (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _maximum_linear_velocity
        (sys::poke _maximum_linear_velocity (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _density
+       (sys::poke _density (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _max_obstacle_shiftment
+       (sys::poke _max_obstacle_shiftment (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _obstacle_length
+       (sys::poke _obstacle_length (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; int16 _failures
        (write-word _failures s)
      ;;
@@ -109,13 +136,19 @@
      (setq _linear_velocity_average (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _maximum_linear_velocity
      (setq _maximum_linear_velocity (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _density
+     (setq _density (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _max_obstacle_shiftment
+     (setq _max_obstacle_shiftment (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _obstacle_length
+     (setq _obstacle_length (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; int16 _failures
      (setq _failures (sys::peek buf ptr- :short)) (incf ptr- 2)
    ;;
    self)
   )
 
-(setf (get costum_msgs::GoalInfo :md5sum-) "3b498f03ccbc82c91ef84003efa1d87e")
+(setf (get costum_msgs::GoalInfo :md5sum-) "c51ce9fa517c0c13de051b9b30a430c3")
 (setf (get costum_msgs::GoalInfo :datatype-) "costum_msgs/GoalInfo")
 (setf (get costum_msgs::GoalInfo :definition-)
       "string id
@@ -124,12 +157,14 @@ float64 distance_average
 float64 velocity_average
 float64 linear_velocity_average
 float64 maximum_linear_velocity
+float64 density
+float64 max_obstacle_shiftment
+float64 obstacle_length
 int16 failures
-
 ")
 
 
 
-(provide :costum_msgs/GoalInfo "3b498f03ccbc82c91ef84003efa1d87e")
+(provide :costum_msgs/GoalInfo "c51ce9fa517c0c13de051b9b30a430c3")
 
 

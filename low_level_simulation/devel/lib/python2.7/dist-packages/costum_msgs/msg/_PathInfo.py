@@ -8,7 +8,7 @@ import struct
 import costum_msgs.msg
 
 class PathInfo(genpy.Message):
-  _md5sum = "406f78da04ae6e0a1419c2646f9bbca9"
+  _md5sum = "7c2655d5b5f75f4be7efb52a24b34d2a"
   _type = "costum_msgs/PathInfo"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """string plan_file
@@ -29,8 +29,10 @@ float64 distance_average
 float64 velocity_average
 float64 linear_velocity_average
 float64 maximum_linear_velocity
-int16 failures
-"""
+float64 density
+float64 max_obstacle_shiftment
+float64 obstacle_length
+int16 failures"""
   __slots__ = ['plan_file','date','simulations','global_time_average','global_distance_average','global_velocity_average','global_linear_velocity_average','global_maximum_linear_velocity','global_failures','sections']
   _slot_types = ['string','string','int16','float64','float64','float64','float64','float64','int16','costum_msgs/GoalInfo[]']
 
@@ -119,7 +121,7 @@ int16 failures
           length = len(_x)
         buff.write(struct.pack('<I%ss'%length, length, _x))
         _x = val1
-        buff.write(_get_struct_5dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures))
+        buff.write(_get_struct_8dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -171,8 +173,8 @@ int16 failures
           val1.id = str[start:end]
         _x = val1
         start = end
-        end += 42
-        (_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures,) = _get_struct_5dh().unpack(str[start:end])
+        end += 66
+        (_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures,) = _get_struct_8dh().unpack(str[start:end])
         self.sections.append(val1)
       return self
     except struct.error as e:
@@ -210,7 +212,7 @@ int16 failures
           length = len(_x)
         buff.write(struct.pack('<I%ss'%length, length, _x))
         _x = val1
-        buff.write(_get_struct_5dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures))
+        buff.write(_get_struct_8dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -263,8 +265,8 @@ int16 failures
           val1.id = str[start:end]
         _x = val1
         start = end
-        end += 42
-        (_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.failures,) = _get_struct_5dh().unpack(str[start:end])
+        end += 66
+        (_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures,) = _get_struct_8dh().unpack(str[start:end])
         self.sections.append(val1)
       return self
     except struct.error as e:
@@ -274,15 +276,15 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_5dh = None
-def _get_struct_5dh():
-    global _struct_5dh
-    if _struct_5dh is None:
-        _struct_5dh = struct.Struct("<5dh")
-    return _struct_5dh
 _struct_h5dh = None
 def _get_struct_h5dh():
     global _struct_h5dh
     if _struct_h5dh is None:
         _struct_h5dh = struct.Struct("<h5dh")
     return _struct_h5dh
+_struct_8dh = None
+def _get_struct_8dh():
+    global _struct_8dh
+    if _struct_8dh is None:
+        _struct_8dh = struct.Struct("<8dh")
+    return _struct_8dh

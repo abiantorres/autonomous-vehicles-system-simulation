@@ -388,6 +388,9 @@ path_utilities_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-
 //Value Computed by CMake
 path_utilities_SOURCE_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/path_utilities
 
+//The directory containing a CMake configuration file for python-sympy.
+python-sympy_DIR:PATH=python-sympy_DIR-NOTFOUND
+
 //Value Computed by CMake
 rosapi_BINARY_DIR:STATIC=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/build/rosbridge_suite/rosapi
 
@@ -447,6 +450,9 @@ smach_DIR:PATH=/opt/ros/kinetic/share/smach/cmake
 
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/kinetic/share/std_msgs/cmake
+
+//The directory containing a CMake configuration file for sympy.
+sympy_DIR:PATH=sympy_DIR-NOTFOUND
 
 //The directory containing a CMake configuration file for xmlrpcpp.
 xmlrpcpp_DIR:PATH=/opt/ros/kinetic/share/xmlrpcpp/cmake

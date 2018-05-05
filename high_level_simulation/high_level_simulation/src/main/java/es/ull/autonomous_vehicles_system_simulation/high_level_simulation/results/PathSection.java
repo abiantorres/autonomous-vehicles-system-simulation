@@ -9,7 +9,7 @@ public class PathSection {
 	private String id;
 	private Integer failures;
 	private Double timeAverage, distanceAverage, velocityAverage,
-		linearVelocityAverage, maximumLinearVelocity;
+		linearVelocityAverage, maximumLinearVelocity, density, obstacleLength, maxObstacleShiftment;
 	
 	/***********************
 	 * DEFAULT CONSTRUCTOR *
@@ -17,7 +17,7 @@ public class PathSection {
 	
 	/** Default constructor */
 	public PathSection() {
-		this("", 0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		this("", 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	}
 	
 	/*************************
@@ -34,7 +34,8 @@ public class PathSection {
 	 * @param maximumLinearVelocity Maximum linear velocity peak for this section
 	 */
 	public PathSection(String id, Integer failures, Double timeAverage, Double distanceAverage,
-			Double velocityAverage, Double linearVelocityAverage, Double maximumLinearVelocity) {
+			Double velocityAverage, Double linearVelocityAverage, Double maximumLinearVelocity, 
+			Double density, Double obstacleLength, Double maxObstacleShiftment) {
 		super();
 		this.id = id;
 		this.failures = failures;
@@ -43,6 +44,9 @@ public class PathSection {
 		this.velocityAverage = velocityAverage;
 		this.linearVelocityAverage = linearVelocityAverage;
 		this.maximumLinearVelocity = maximumLinearVelocity;
+		this.density = density;
+		this.obstacleLength = obstacleLength;
+		this.maxObstacleShiftment = maxObstacleShiftment;
 	}
 	
 	/***************
@@ -118,6 +122,49 @@ public class PathSection {
 	public void setMaximumLinearVelocity(Double maximumLinearVelocity) {
 		this.maximumLinearVelocity = maximumLinearVelocity;
 	}
+
+	/** @return the density */
+	public Double getDensity() {
+		return density;
+	}
+
+	/** @param density the density to set */
+	public void setDensity(Double density) {
+		this.density = density;
+	}
+
+	/** @return the obstacleLength */
+	public Double getObstacleLength() {
+		return obstacleLength;
+	}
+
+	/** @param obstacleLength the obstacleLength to set */
+	public void setObstacleLength(Double obstacleLength) {
+		this.obstacleLength = obstacleLength;
+	}
+
+	/** @return the maxObstacleShiftment */
+	public Double getMaxObstacleShiftment() {
+		return maxObstacleShiftment;
+	}
+
+	/** @param maxObstacleShiftment the maxObstacleShiftment to set */
+	public void setMaxObstacleShiftment(Double maxObstacleShiftment) {
+		this.maxObstacleShiftment = maxObstacleShiftment;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "PathSection [id=" + id + ", failures=" + failures + ", timeAverage=" + timeAverage
+				+ ", distanceAverage=" + distanceAverage + ", velocityAverage=" + velocityAverage
+				+ ", linearVelocityAverage=" + linearVelocityAverage + ", maximumLinearVelocity="
+				+ maximumLinearVelocity + ", density=" + density + ", obstacleLength=" + obstacleLength
+				+ ", maxObstacleShiftment=" + maxObstacleShiftment + "]";
+	}
+	
 	
 
 }

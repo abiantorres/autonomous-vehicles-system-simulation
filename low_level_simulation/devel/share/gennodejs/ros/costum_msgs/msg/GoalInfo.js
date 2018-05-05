@@ -24,6 +24,9 @@ class GoalInfo {
       this.velocity_average = null;
       this.linear_velocity_average = null;
       this.maximum_linear_velocity = null;
+      this.density = null;
+      this.max_obstacle_shiftment = null;
+      this.obstacle_length = null;
       this.failures = null;
     }
     else {
@@ -63,6 +66,24 @@ class GoalInfo {
       else {
         this.maximum_linear_velocity = 0.0;
       }
+      if (initObj.hasOwnProperty('density')) {
+        this.density = initObj.density
+      }
+      else {
+        this.density = 0.0;
+      }
+      if (initObj.hasOwnProperty('max_obstacle_shiftment')) {
+        this.max_obstacle_shiftment = initObj.max_obstacle_shiftment
+      }
+      else {
+        this.max_obstacle_shiftment = 0.0;
+      }
+      if (initObj.hasOwnProperty('obstacle_length')) {
+        this.obstacle_length = initObj.obstacle_length
+      }
+      else {
+        this.obstacle_length = 0.0;
+      }
       if (initObj.hasOwnProperty('failures')) {
         this.failures = initObj.failures
       }
@@ -86,6 +107,12 @@ class GoalInfo {
     bufferOffset = _serializer.float64(obj.linear_velocity_average, buffer, bufferOffset);
     // Serialize message field [maximum_linear_velocity]
     bufferOffset = _serializer.float64(obj.maximum_linear_velocity, buffer, bufferOffset);
+    // Serialize message field [density]
+    bufferOffset = _serializer.float64(obj.density, buffer, bufferOffset);
+    // Serialize message field [max_obstacle_shiftment]
+    bufferOffset = _serializer.float64(obj.max_obstacle_shiftment, buffer, bufferOffset);
+    // Serialize message field [obstacle_length]
+    bufferOffset = _serializer.float64(obj.obstacle_length, buffer, bufferOffset);
     // Serialize message field [failures]
     bufferOffset = _serializer.int16(obj.failures, buffer, bufferOffset);
     return bufferOffset;
@@ -107,6 +134,12 @@ class GoalInfo {
     data.linear_velocity_average = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [maximum_linear_velocity]
     data.maximum_linear_velocity = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [density]
+    data.density = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [max_obstacle_shiftment]
+    data.max_obstacle_shiftment = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [obstacle_length]
+    data.obstacle_length = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [failures]
     data.failures = _deserializer.int16(buffer, bufferOffset);
     return data;
@@ -115,7 +148,7 @@ class GoalInfo {
   static getMessageSize(object) {
     let length = 0;
     length += object.id.length;
-    return length + 46;
+    return length + 70;
   }
 
   static datatype() {
@@ -125,7 +158,7 @@ class GoalInfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '3b498f03ccbc82c91ef84003efa1d87e';
+    return 'c51ce9fa517c0c13de051b9b30a430c3';
   }
 
   static messageDefinition() {
@@ -137,8 +170,10 @@ class GoalInfo {
     float64 velocity_average
     float64 linear_velocity_average
     float64 maximum_linear_velocity
+    float64 density
+    float64 max_obstacle_shiftment
+    float64 obstacle_length
     int16 failures
-    
     `;
   }
 
@@ -188,6 +223,27 @@ class GoalInfo {
     }
     else {
       resolved.maximum_linear_velocity = 0.0
+    }
+
+    if (msg.density !== undefined) {
+      resolved.density = msg.density;
+    }
+    else {
+      resolved.density = 0.0
+    }
+
+    if (msg.max_obstacle_shiftment !== undefined) {
+      resolved.max_obstacle_shiftment = msg.max_obstacle_shiftment;
+    }
+    else {
+      resolved.max_obstacle_shiftment = 0.0
+    }
+
+    if (msg.obstacle_length !== undefined) {
+      resolved.obstacle_length = msg.obstacle_length;
+    }
+    else {
+      resolved.obstacle_length = 0.0
     }
 
     if (msg.failures !== undefined) {

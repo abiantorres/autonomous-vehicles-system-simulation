@@ -87,6 +87,15 @@ source /opt/ros/kinetic/setup.bash
 roslaunch rosbridge_server rosbridge_websocket.launch
 ```
 
+* Install obstacles algorithm generation dependencies:
+
+```
+# Install sympy for geometry operations:
+sudo pip install sympy
+# Install pyproj for points generation:
+sudo pip install pyproj
+```
+
 * Install **MongoDB** to provide persistence to our simulation system. This will help us to manipulate the data and draw conclusions:
 
 Install mongodb **package** via apt-get:

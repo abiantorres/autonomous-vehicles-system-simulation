@@ -4,4 +4,7 @@ float64 distance_average
 float64 velocity_average
 float64 linear_velocity_average
 float64 maximum_linear_velocity
+float64 density
+float64 max_obstacle_shiftment
+float64 obstacle_length
 int16 failures

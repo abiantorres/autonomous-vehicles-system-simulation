@@ -160,12 +160,12 @@ struct MD5Sum< ::costum_msgs::PathInfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "406f78da04ae6e0a1419c2646f9bbca9";
+    return "7c2655d5b5f75f4be7efb52a24b34d2a";
   }
 
   static const char* value(const ::costum_msgs::PathInfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x406f78da04ae6e0aULL;
-  static const uint64_t static_value2 = 0x1419c2646f9bbca9ULL;
+  static const uint64_t static_value1 = 0x7c2655d5b5f75f4bULL;
+  static const uint64_t static_value2 = 0xe7efb52a24b34d2aULL;
 };
 
 template<class ContainerAllocator>
@@ -202,6 +202,9 @@ float64 distance_average\n\
 float64 velocity_average\n\
 float64 linear_velocity_average\n\
 float64 maximum_linear_velocity\n\
+float64 density\n\
+float64 max_obstacle_shiftment\n\
+float64 obstacle_length\n\
 int16 failures\n\
 ";
   }

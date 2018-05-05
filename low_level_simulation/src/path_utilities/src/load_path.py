@@ -25,6 +25,8 @@ from nav_msgs.msg import Odometry, MapMetaData, OccupancyGrid
 import rosbag
 import rospkg,tf
 
+from obstacles_util import ObstaclesModelGenerator
+
 # Initilize a rospack client
 rospack = rospkg.RosPack()
 gazebo_simulation_pkg_path = str(rospack.get_path('gazebo_simulation'))
@@ -130,144 +132,6 @@ def callback_map_metadata(msg):
 rospy.Subscriber('map_metadata', MapMetaData, callback_map_metadata)
 
 
-"""
-
-class Point2d:
-    # Point class represents and manipulates x,y coords. 
-    def __init__(self, x = 0, y = 0):
-        # Create a new point at the origin 
-        self.x = x
-        self.y = y
-        if(x != 0 or y != 0):
-            self.ceil_point()
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y  
-    def ceil_point(self):
-        self.x = int(ceil(self.x))
-        self.y = int(ceil(self.y))
-
-# Occupancy grid variables
-
-occupancy_grid = OccupancyGrid()
-occupancy_grid_flag = True
-
-def callback_occupancy_grid(msg):
-    # This represents a 2-D grid map, in which each cell represents the probability of
-    # occupancy.
-    # Header header 
-    # MetaData for the map
-    # MapMetaData info
-    # The map data, in row-major order, starting with (0,0).  Occupancy
-    # probabilities are in the range [0,100].  Unknown is -1.
-    # int8[] data
-    
-    global occupancy_grid, occupancy_grid_flag
-    if(occupancy_grid_flag):
-        occupancy_grid = msg
-
-rospy.Subscriber('map', OccupancyGrid, callback_occupancy_grid)
-
-def polygon_centroid(points):
-    centroid = Point2d()
-    n_points = len(points)
-    point = Point2d()
-    for i in range(0, n_points):
-        point = points[i]
-        centroid.x += point.x
-        centroid.y += point.y
-    centroid.x /= n_points
-    centroid.y /= n_points
-    centroid.ceil_point()
-    return centroid
-
-def max_distance(points, centroid):
-    n_points = len(points)
-    distances = [0]*n_points
-    for i in range(0, n_points):
-        distances[i] = int(ceil(sqrt(pow(points[i].x - centroid.x, 2) + pow(points[i].y - centroid.y, 2))))
-    return max(distances)
-
-def get_interest_zone_points(centroid, radius):
-    points = []
-    for x in range(centroid.x - radius, centroid.x):
-        for y in range(centroid.y - radius, centroid.y):
-        # we don't have to take the square root, it's slow
-            if (pow(x - centroid.x, 2) + pow(y - centroid.y, 2) <= pow(radius, 2)): 
-            # (x, y), (x, y_sym), (x_sym , y), (x_sym, y_sym) are in the circle
-                x_sym = centroid.x - (x - centroid.x)
-                y_sym = centroid.y - (y - centroid.y)
-                points.append(Point2d(x, y))
-                points.append(Point2d(x, y_sym))
-                points.append(Point2d(x_sym, y))
-                points.append(Point2d(x_sym, y_sym))
-    return points
-
-def get_row_major_order_index(i, j, height):
-    return i*height + j
-
-def get_obstacles_points(points, free_thresh = 0.196, density = 0.25):
-    
-    # number of obstacles = ceil(number of points * density)
-    # density should be between [0, 1]
-    
-    # occupancy grid map
-    global occupancy_grid, occupancy_grid_flag 
-    occupancy_grid_flag = True
-    # get the number of obstacles
-    n_obstacles = int(ceil(len(points)*density))
-    # get an integer value in the scale [0,100]
-    free_thresh = int(ceil(free_thresh*100))
-    # get map width and height 
-    height = occupancy_grid.info.height
-    width = occupancy_grid.info.width
-    data = occupancy_grid.data
-    # get polygon centroid formed by goal points
-    centroid = polygon_centroid(points)
-
-    # get all point in the interest point (circle formed by the polygon centroid and
-    # the maximun distance of a goal point to the centroid)
-    interest_zone_points = get_interest_zone_points(centroid, max_distance(points, centroid))
-
-    # generate n random obstacles
-    #interest_zone_points = list(filter(lambda point: data[get_row_major_order_index(point.x, point.y, height)] > 0 and data[get_row_major_order_index(point.x, point.y, height)] < free_thresh , interest_zone_points))
-
-    obstacles_points = []
-    for i in range(0, n_obstacles):
-        index = randint(0, len(interest_zone_points))
-        obstacles_points.append(interest_zone_points[index])
-        #interest_zone_points = list(filter(lambda point: data[get_row_major_order_index(point.x, point.y, height)] > 0 and data[get_row_major_order_index(point.x, point.y, height)] < free_thresh , interest_zone_points))
-    occupancy_grid_flag = False
-    return obstacles_points
-
-def spawn_gazebo_obstacles(points):
-    rospy.wait_for_service("gazebo/spawn_sdf_model")
-    spawn_model = rospy.ServiceProxy("gazebo/spawn_sdf_model", SpawnModel)
-    with open(gazebo_simulation_pkg_path + "/worlds/obstacle01.sdf", "r") as f:
-        obstacle_xml = f.read()
-    orient = Quaternion(0, 0, 0, 0)
-    for i in range(0, len(points)):
-        item_pose = Pose(Point(x=points[i].x, y=points[i].y, z=0), orient)
-        spawn_model("obstacle_" + str(i), obstacle_xml, "", item_pose, "world")
-
-def generate_obstacles(points, free_thresh = 0.196, density = 0.25):
-    spawn_gazebo_obstacles(get_obstacles_points(points, free_thresh, density))
-
-def delete_obstacles():
-    rospy.wait_for_service("gazebo/delete_model")
-    delete_model = rospy.ServiceProxy("gazebo/delete_model", DeleteModel)
-    for i in range(0, len(points)):
-        delete_model("obstacle_" + i, "")
-
-
-
-
-"""
-
-
-
-
-
-
 def reset_gazebo_world():
     rospy.wait_for_service('/gazebo/reset_world')
     reset_world = rospy.ServiceProxy('/gazebo/reset_world', Empty)
@@ -313,18 +177,6 @@ def set_vehicle_model_state():
     # publish the message
     odom_pub.publish(odom)
 
-"""
-def spawn_gazebo_obstacles():
-    rospy.wait_for_service("gazebo/spawn_sdf_model")
-    spawn_model = rospy.ServiceProxy("gazebo/spawn_sdf_model", SpawnModel)
-    with open(gazebo_simulation_pkg_path + "/worlds/obstacle01.sdf", "r") as f:
-        obstacle_xml = f.read()
-    rospy.loginfo(obstacle_xml)
-    orient = Quaternion(0, 0, 0, 0)
-    item_pose = Pose(Point(x=1, y=3, z=0), orient)
-    spawn_model("obstacle01", obstacle_xml, "", item_pose, "world")
-"""
-
 def get_all_world_models():
     rospy.wait_for_service("gazebo/get_world_properties")
     world_properties = rospy.ServiceProxy("gazebo/get_world_properties", GetWorldProperties)
@@ -365,20 +217,27 @@ def read_route_configuration_from_file():
     bag = rosbag.Bag(file_name)
     points_2d = []
 
-    for topic, msg, t in bag.read_messages(topics=['path_goals_bag']):
-        waypoints.append(msg)
-        points_2d.append(Point2d(msg.pose.pose.position.x, msg.pose.pose.position.y))
-
     for topic, msg, t in bag.read_messages(topics=['initial_model_state']):
         initial_state = msg
-        points_2d.append(Point2d(msg.pose.position.x, msg.pose.position.y))
+        points_2d.append((round(float(msg.pose.position.x),2), round(float(msg.pose.position.y),2)))
+
+    for topic, msg, t in bag.read_messages(topics=['path_goals_bag']):
+        waypoints.append(msg)
+        points_2d.append((round(float(msg.pose.pose.position.x), 2), round(float(msg.pose.pose.position.y),2)))
+
     bag.close()
 
-def run(n_simulations):
+def run(n_simulations, density):
     """ Low level information publisher. High level should be
     subscribed to the path_plan_info topic.
     """
-    global waypoints, time_average_by_section, failures_by_section, traveled_distance_average_by_section, velocity_average_by_section, last_x_position, last_y_position, current_traveled_distance, compute_distance, global_time_average, global_failures, global_traveled_distance_average, global_velocity_average, maximum_linear_velocity_by_section, linear_velocity_average_by_section, global_linear_velocity_average, max_linear_velocity, current_linear_velocity, compute_linear_velocity, points_2d
+    global waypoints, time_average_by_section, failures_by_section, \
+    traveled_distance_average_by_section, velocity_average_by_section, last_x_position, \
+    last_y_position, current_traveled_distance, compute_distance, global_time_average, \
+    global_failures, global_traveled_distance_average, global_velocity_average, \
+    maximum_linear_velocity_by_section, linear_velocity_average_by_section, \
+    global_linear_velocity_average, max_linear_velocity, current_linear_velocity, \
+    compute_linear_velocity, points_2d
     
     # configure needed topics and move_base client
     path_plan_info_pub = rospy.Publisher('/path_plan_info', PathInfo, queue_size=1)
@@ -392,6 +251,16 @@ def run(n_simulations):
 
     # read path plan from file
     read_route_configuration_from_file()
+    
+    # Build an obstacles model generator
+    obstacles_model_generator = ObstaclesModelGenerator("my simulation", 0.1, 0.4, \
+        points_2d[0][0], points_2d[0][1], density, 0.1)
+    
+    i = 1
+    for point in points_2d:
+        if(i != 1):
+            obstacles_model_generator.append_point(str(i), point[0], point[1])
+        i += 1
 
     # Make sure we have an empty array of average times.
     # The lenght of the array is equal to the number of end points (path sections)
@@ -421,8 +290,7 @@ def run(n_simulations):
     max_linear_velocity = -1.0
     current_linear_velocity = 0.0
 
-    #generate_obstacles(points_2d)
-    #spawn_gazebo_obstacles()
+    obstacles_model_generator.spawn_obstacles()
 
     # Run the n simulations
     for x in range(0, n_simulations):        
@@ -483,6 +351,7 @@ def run(n_simulations):
                     # Increase the failures count for the current section
                     failures_by_section[i] += 1
                     break
+
             # Computes section statistics
             time_average_by_section[i] += (rospy.get_time() - start_time)
             traveled_distance_average_by_section[i] = current_traveled_distance
@@ -490,14 +359,15 @@ def run(n_simulations):
             linear_velocity_average_by_section[i] = current_linear_velocity_average
             maximum_linear_velocity_by_section[i] = max_linear_velocity
             i += 1 
+        
         # Reset gazebo word to avoid posible modifications in the last simulation
-        #reset_gazebo_world()
+        reset_gazebo_world()
+        
+        #obstacles_model_generator.delete_obstacles()
+        
         # Set the initial vehicle model state
         set_vehicle_model_state()
-        # Clear costmaps to avoid problems when we "teletransport" our vehicle
-        #clear_costmaps()
-        # Wait for AMCL algorithm does its work (relocate robot)
-        time.sleep(time_to_relocation)
+
         rospy.loginfo("###### Simulation " + str(x+1) + " finished ######")
 
     # Compute local statistics for each section
@@ -521,6 +391,8 @@ def run(n_simulations):
     global_linear_velocity_average = sum(linear_velocity_average_by_section) / float(len(waypoints))
     rospy.loginfo("###### Global -> linear velocity  " + str(global_linear_velocity_average) + "  ######")
 
+    #rospy.loginfo(rospy.get_param('~base_global_planner'))
+    #rospy.loginfo(rospy.get_param('~base_local_planner'))
 
     # Build plan results message
     plan_results = PathInfo()
@@ -545,6 +417,9 @@ def run(n_simulations):
         section.failures = failures_by_section[i]
         section.linear_velocity_average = linear_velocity_average_by_section[i]
         section.maximum_linear_velocity = maximum_linear_velocity_by_section[i]
+        section.density = obstacles_model_generator.segments[i].density
+        section.max_obstacle_shiftment = obstacles_model_generator.segments[i].max_obstacle_shiftment
+        section.obstacle_length = obstacles_model_generator.segments[i].obstacle_length
         sections.append(section)
     
     plan_results.sections = sections
@@ -557,4 +432,5 @@ if __name__ == '__main__':
     # get input file name
     file_name = rospy.get_param('~input_file')
     simulations = int(rospy.get_param('~simulations'))
-    run(simulations)
+    density = float(rospy.get_param('~density'))
+    run(simulations, density)

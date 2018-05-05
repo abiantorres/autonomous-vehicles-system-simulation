@@ -48,6 +48,9 @@ final public class DataProcessing {
 				section.setMaximumLinearVelocity(
 						sectionNode.get("maximum_linear_velocity").doubleValue());
 				section.setFailures(sectionNode.get("failures").intValue());
+				section.setDensity(sectionNode.get("density").doubleValue());
+				section.setMaxObstacleShiftment(sectionNode.get("max_obstacle_shiftment").doubleValue());
+				section.setObstacleLength(sectionNode.get("obstacle_length").doubleValue());
 				results.addSection(section);
 			}
 		}

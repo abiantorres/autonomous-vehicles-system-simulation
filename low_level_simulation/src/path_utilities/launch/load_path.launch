@@ -3,9 +3,11 @@
   	<env name="ROSCONSOLE_FORMAT" value="[${severity}][${thread}][${node}/${function}:${line}]: ${message}"/>
 	<arg name="input_file" default="path.bag"/>
 	<arg name="simulations" default="1"/>
+	<arg name="density" default="0.3"/>
   	<node pkg="path_utilities" type="load_path.py" name="load_path" output="screen">
    		<param name="goal_frame_id" value="map"/>
     	<param name="input_file" value="$(arg input_file)" />
     	<param name="simulations" value="$(arg simulations)" />
+    	<param name="density" value="$(arg density)" />
   	</node>
 </launch>

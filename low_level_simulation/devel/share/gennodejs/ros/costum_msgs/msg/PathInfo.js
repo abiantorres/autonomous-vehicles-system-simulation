@@ -172,7 +172,7 @@ class PathInfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '406f78da04ae6e0a1419c2646f9bbca9';
+    return '7c2655d5b5f75f4be7efb52a24b34d2a';
   }
 
   static messageDefinition() {
@@ -196,8 +196,10 @@ class PathInfo {
     float64 velocity_average
     float64 linear_velocity_average
     float64 maximum_linear_velocity
+    float64 density
+    float64 max_obstacle_shiftment
+    float64 obstacle_length
     int16 failures
-    
     `;
   }
 
