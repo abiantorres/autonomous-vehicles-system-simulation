@@ -8,7 +8,7 @@ import struct
 import costum_msgs.msg
 
 class PathInfo(genpy.Message):
-  _md5sum = "7c2655d5b5f75f4be7efb52a24b34d2a"
+  _md5sum = "c8ed68422d316510dcf75afd6187c8cc"
   _type = "costum_msgs/PathInfo"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """string plan_file
@@ -20,6 +20,8 @@ float64 global_velocity_average
 float64 global_linear_velocity_average
 float64 global_maximum_linear_velocity
 int16 global_failures
+string global_planner
+string local_planner
 GoalInfo[] sections
 ================================================================================
 MSG: costum_msgs/GoalInfo
@@ -33,8 +35,8 @@ float64 density
 float64 max_obstacle_shiftment
 float64 obstacle_length
 int16 failures"""
-  __slots__ = ['plan_file','date','simulations','global_time_average','global_distance_average','global_velocity_average','global_linear_velocity_average','global_maximum_linear_velocity','global_failures','sections']
-  _slot_types = ['string','string','int16','float64','float64','float64','float64','float64','int16','costum_msgs/GoalInfo[]']
+  __slots__ = ['plan_file','date','simulations','global_time_average','global_distance_average','global_velocity_average','global_linear_velocity_average','global_maximum_linear_velocity','global_failures','global_planner','local_planner','sections']
+  _slot_types = ['string','string','int16','float64','float64','float64','float64','float64','int16','string','string','costum_msgs/GoalInfo[]']
 
   def __init__(self, *args, **kwds):
     """
@@ -44,7 +46,7 @@ int16 failures"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       plan_file,date,simulations,global_time_average,global_distance_average,global_velocity_average,global_linear_velocity_average,global_maximum_linear_velocity,global_failures,sections
+       plan_file,date,simulations,global_time_average,global_distance_average,global_velocity_average,global_linear_velocity_average,global_maximum_linear_velocity,global_failures,global_planner,local_planner,sections
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -71,6 +73,10 @@ int16 failures"""
         self.global_maximum_linear_velocity = 0.
       if self.global_failures is None:
         self.global_failures = 0
+      if self.global_planner is None:
+        self.global_planner = ''
+      if self.local_planner is None:
+        self.local_planner = ''
       if self.sections is None:
         self.sections = []
     else:
@@ -83,6 +89,8 @@ int16 failures"""
       self.global_linear_velocity_average = 0.
       self.global_maximum_linear_velocity = 0.
       self.global_failures = 0
+      self.global_planner = ''
+      self.local_planner = ''
       self.sections = []
 
   def _get_types(self):
@@ -111,6 +119,18 @@ int16 failures"""
       buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self
       buff.write(_get_struct_h5dh().pack(_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_linear_velocity_average, _x.global_maximum_linear_velocity, _x.global_failures))
+      _x = self.global_planner
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.local_planner
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
       length = len(self.sections)
       buff.write(_struct_I.pack(length))
       for val1 in self.sections:
@@ -159,6 +179,24 @@ int16 failures"""
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.global_planner = str[start:end].decode('utf-8')
+      else:
+        self.global_planner = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.local_planner = str[start:end].decode('utf-8')
+      else:
+        self.local_planner = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
       self.sections = []
       for i in range(0, length):
         val1 = costum_msgs.msg.GoalInfo()
@@ -202,6 +240,18 @@ int16 failures"""
       buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self
       buff.write(_get_struct_h5dh().pack(_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_linear_velocity_average, _x.global_maximum_linear_velocity, _x.global_failures))
+      _x = self.global_planner
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.local_planner
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
       length = len(self.sections)
       buff.write(_struct_I.pack(length))
       for val1 in self.sections:
@@ -248,6 +298,24 @@ int16 failures"""
       start = end
       end += 44
       (_x.simulations, _x.global_time_average, _x.global_distance_average, _x.global_velocity_average, _x.global_linear_velocity_average, _x.global_maximum_linear_velocity, _x.global_failures,) = _get_struct_h5dh().unpack(str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.global_planner = str[start:end].decode('utf-8')
+      else:
+        self.global_planner = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.local_planner = str[start:end].decode('utf-8')
+      else:
+        self.local_planner = str[start:end]
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])

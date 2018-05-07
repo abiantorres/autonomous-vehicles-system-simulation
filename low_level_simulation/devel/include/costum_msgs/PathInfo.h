@@ -34,6 +34,8 @@ struct PathInfo_
     , global_linear_velocity_average(0.0)
     , global_maximum_linear_velocity(0.0)
     , global_failures(0)
+    , global_planner()
+    , local_planner()
     , sections()  {
     }
   PathInfo_(const ContainerAllocator& _alloc)
@@ -46,6 +48,8 @@ struct PathInfo_
     , global_linear_velocity_average(0.0)
     , global_maximum_linear_velocity(0.0)
     , global_failures(0)
+    , global_planner(_alloc)
+    , local_planner(_alloc)
     , sections(_alloc)  {
   (void)_alloc;
     }
@@ -78,6 +82,12 @@ struct PathInfo_
 
    typedef int16_t _global_failures_type;
   _global_failures_type global_failures;
+
+   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _global_planner_type;
+  _global_planner_type global_planner;
+
+   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _local_planner_type;
+  _local_planner_type local_planner;
 
    typedef std::vector< ::costum_msgs::GoalInfo_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::costum_msgs::GoalInfo_<ContainerAllocator> >::other >  _sections_type;
   _sections_type sections;
@@ -160,12 +170,12 @@ struct MD5Sum< ::costum_msgs::PathInfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "7c2655d5b5f75f4be7efb52a24b34d2a";
+    return "c8ed68422d316510dcf75afd6187c8cc";
   }
 
   static const char* value(const ::costum_msgs::PathInfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x7c2655d5b5f75f4bULL;
-  static const uint64_t static_value2 = 0xe7efb52a24b34d2aULL;
+  static const uint64_t static_value1 = 0xc8ed68422d316510ULL;
+  static const uint64_t static_value2 = 0xdcf75afd6187c8ccULL;
 };
 
 template<class ContainerAllocator>
@@ -193,6 +203,8 @@ float64 global_velocity_average\n\
 float64 global_linear_velocity_average\n\
 float64 global_maximum_linear_velocity\n\
 int16 global_failures\n\
+string global_planner\n\
+string local_planner\n\
 GoalInfo[] sections\n\
 ================================================================================\n\
 MSG: costum_msgs/GoalInfo\n\
@@ -233,6 +245,8 @@ namespace serialization
       stream.next(m.global_linear_velocity_average);
       stream.next(m.global_maximum_linear_velocity);
       stream.next(m.global_failures);
+      stream.next(m.global_planner);
+      stream.next(m.local_planner);
       stream.next(m.sections);
     }
 
@@ -270,6 +284,10 @@ struct Printer< ::costum_msgs::PathInfo_<ContainerAllocator> >
     Printer<double>::stream(s, indent + "  ", v.global_maximum_linear_velocity);
     s << indent << "global_failures: ";
     Printer<int16_t>::stream(s, indent + "  ", v.global_failures);
+    s << indent << "global_planner: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.global_planner);
+    s << indent << "local_planner: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.local_planner);
     s << indent << "sections[]" << std::endl;
     for (size_t i = 0; i < v.sections.size(); ++i)
     {

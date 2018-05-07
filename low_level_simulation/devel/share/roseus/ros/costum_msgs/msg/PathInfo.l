@@ -14,7 +14,7 @@
 
 (defclass costum_msgs::PathInfo
   :super ros::object
-  :slots (_plan_file _date _simulations _global_time_average _global_distance_average _global_velocity_average _global_linear_velocity_average _global_maximum_linear_velocity _global_failures _sections ))
+  :slots (_plan_file _date _simulations _global_time_average _global_distance_average _global_velocity_average _global_linear_velocity_average _global_maximum_linear_velocity _global_failures _global_planner _local_planner _sections ))
 
 (defmethod costum_msgs::PathInfo
   (:init
@@ -28,6 +28,8 @@
     ((:global_linear_velocity_average __global_linear_velocity_average) 0.0)
     ((:global_maximum_linear_velocity __global_maximum_linear_velocity) 0.0)
     ((:global_failures __global_failures) 0)
+    ((:global_planner __global_planner) "")
+    ((:local_planner __local_planner) "")
     ((:sections __sections) (let (r) (dotimes (i 0) (push (instance costum_msgs::GoalInfo :init) r)) r))
     )
    (send-super :init)
@@ -40,6 +42,8 @@
    (setq _global_linear_velocity_average (float __global_linear_velocity_average))
    (setq _global_maximum_linear_velocity (float __global_maximum_linear_velocity))
    (setq _global_failures (round __global_failures))
+   (setq _global_planner (string __global_planner))
+   (setq _local_planner (string __local_planner))
    (setq _sections __sections)
    self)
   (:plan_file
@@ -69,6 +73,12 @@
   (:global_failures
    (&optional __global_failures)
    (if __global_failures (setq _global_failures __global_failures)) _global_failures)
+  (:global_planner
+   (&optional __global_planner)
+   (if __global_planner (setq _global_planner __global_planner)) _global_planner)
+  (:local_planner
+   (&optional __local_planner)
+   (if __local_planner (setq _local_planner __local_planner)) _local_planner)
   (:sections
    (&rest __sections)
    (if (keywordp (car __sections))
@@ -97,6 +107,10 @@
     8
     ;; int16 _global_failures
     2
+    ;; string _global_planner
+    4 (length _global_planner)
+    ;; string _local_planner
+    4 (length _local_planner)
     ;; costum_msgs/GoalInfo[] _sections
     (apply #'+ (send-all _sections :serialization-length)) 4
     ))
@@ -122,6 +136,10 @@
        (sys::poke _global_maximum_linear_velocity (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; int16 _global_failures
        (write-word _global_failures s)
+     ;; string _global_planner
+       (write-long (length _global_planner) s) (princ _global_planner s)
+     ;; string _local_planner
+       (write-long (length _local_planner) s) (princ _local_planner s)
      ;; costum_msgs/GoalInfo[] _sections
      (write-long (length _sections) s)
      (dolist (elem _sections)
@@ -149,6 +167,10 @@
      (setq _global_maximum_linear_velocity (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; int16 _global_failures
      (setq _global_failures (sys::peek buf ptr- :short)) (incf ptr- 2)
+   ;; string _global_planner
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _global_planner (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
+   ;; string _local_planner
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _local_planner (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; costum_msgs/GoalInfo[] _sections
    (let (n)
      (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
@@ -160,7 +182,7 @@
    self)
   )
 
-(setf (get costum_msgs::PathInfo :md5sum-) "7c2655d5b5f75f4be7efb52a24b34d2a")
+(setf (get costum_msgs::PathInfo :md5sum-) "c8ed68422d316510dcf75afd6187c8cc")
 (setf (get costum_msgs::PathInfo :datatype-) "costum_msgs/PathInfo")
 (setf (get costum_msgs::PathInfo :definition-)
       "string plan_file
@@ -172,6 +194,8 @@ float64 global_velocity_average
 float64 global_linear_velocity_average
 float64 global_maximum_linear_velocity
 int16 global_failures
+string global_planner
+string local_planner
 GoalInfo[] sections
 ================================================================================
 MSG: costum_msgs/GoalInfo
@@ -189,6 +213,6 @@ int16 failures
 
 
 
-(provide :costum_msgs/PathInfo "7c2655d5b5f75f4be7efb52a24b34d2a")
+(provide :costum_msgs/PathInfo "c8ed68422d316510dcf75afd6187c8cc")
 
 

@@ -124,6 +124,14 @@ The high level simulation needs the following dependencies for the proper functi
 
 3. mongodb-driver-core-3.0.2.jar ([mongodb-driver-core](https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongodb-driver-core/3.0.2/))
 
+Configure your mongodb database typing the following commands in two differents terminal windows:
+```
+# 1. Setup the database server
+mongod --dbpath data
+# 2. Setup the database client 
+mongo
+> use avss
+```
 
 ## Authors:
 

@@ -253,7 +253,7 @@ def run(n_simulations, density):
     read_route_configuration_from_file()
     
     # Build an obstacles model generator
-    obstacles_model_generator = ObstaclesModelGenerator("my simulation", 0.1, 0.4, \
+    obstacles_model_generator = ObstaclesModelGenerator("my simulation", 0.1, 0.5, \
         points_2d[0][0], points_2d[0][1], density, 0.1)
     
     i = 1
@@ -293,7 +293,7 @@ def run(n_simulations, density):
     obstacles_model_generator.spawn_obstacles()
 
     # Run the n simulations
-    for x in range(0, n_simulations):        
+    for x in range(0, n_simulations):      
         # Print in Rviz the visual end point icons
         poseArray_publisher.publish(convert_PoseWithCovArray_to_PoseArray(waypoints))
         # Execute waypoints each in seqsuence
@@ -312,7 +312,6 @@ def run(n_simulations, density):
             rospy.loginfo('Executing move_base goal to position (x,y): %s, %s' %
                 (waypoint.pose.pose.position.x, waypoint.pose.pose.position.y))
             rospy.loginfo("To cancel the goal: 'rostopic pub -1 /move_base/cancel actionlib_msgs/GoalID -- {}'")
-            
 
             current_traveled_distance = 0.0
             last_linear_velocity = 0.0
@@ -391,9 +390,6 @@ def run(n_simulations, density):
     global_linear_velocity_average = sum(linear_velocity_average_by_section) / float(len(waypoints))
     rospy.loginfo("###### Global -> linear velocity  " + str(global_linear_velocity_average) + "  ######")
 
-    #rospy.loginfo(rospy.get_param('~base_global_planner'))
-    #rospy.loginfo(rospy.get_param('~base_local_planner'))
-
     # Build plan results message
     plan_results = PathInfo()
     plan_results.plan_file = file_name
@@ -405,7 +401,11 @@ def run(n_simulations, density):
     plan_results.global_failures = global_failures
     plan_results.global_linear_velocity_average = global_linear_velocity_average
     plan_results.global_maximum_linear_velocity = max(maximum_linear_velocity_by_section)
-
+    plan_results.local_planner = str(rospy.get_param('move_base/base_local_planner'))
+    if eval(str(rospy.get_param('move_base/GlobalPlanner/use_dijkstra'))):
+        plan_results.global_planner = "Dijkstra"
+    else:
+        plan_results.global_planner = "A*"
     sections = []
 
     for i in range(0, len(waypoints)):

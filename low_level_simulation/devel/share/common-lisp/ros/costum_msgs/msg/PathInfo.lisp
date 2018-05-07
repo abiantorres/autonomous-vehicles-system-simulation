@@ -52,6 +52,16 @@
     :initarg :global_failures
     :type cl:fixnum
     :initform 0)
+   (global_planner
+    :reader global_planner
+    :initarg :global_planner
+    :type cl:string
+    :initform "")
+   (local_planner
+    :reader local_planner
+    :initarg :local_planner
+    :type cl:string
+    :initform "")
    (sections
     :reader sections
     :initarg :sections
@@ -111,6 +121,16 @@
 (cl:defmethod global_failures-val ((m <PathInfo>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:global_failures-val is deprecated.  Use costum_msgs-msg:global_failures instead.")
   (global_failures m))
+
+(cl:ensure-generic-function 'global_planner-val :lambda-list '(m))
+(cl:defmethod global_planner-val ((m <PathInfo>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:global_planner-val is deprecated.  Use costum_msgs-msg:global_planner instead.")
+  (global_planner m))
+
+(cl:ensure-generic-function 'local_planner-val :lambda-list '(m))
+(cl:defmethod local_planner-val ((m <PathInfo>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:local_planner-val is deprecated.  Use costum_msgs-msg:local_planner instead.")
+  (local_planner m))
 
 (cl:ensure-generic-function 'sections-val :lambda-list '(m))
 (cl:defmethod sections-val ((m <PathInfo>))
@@ -183,6 +203,18 @@
     (cl:write-byte (cl:ldb (cl:byte 8 0) unsigned) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) unsigned) ostream)
     )
+  (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'global_planner))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) (cl:slot-value msg 'global_planner))
+  (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'local_planner))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) (cl:slot-value msg 'local_planner))
   (cl:let ((__ros_arr_len (cl:length (cl:slot-value msg 'sections))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_arr_len) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_arr_len) ostream)
@@ -267,6 +299,22 @@
       (cl:setf (cl:ldb (cl:byte 8 0) unsigned) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) unsigned) (cl:read-byte istream))
       (cl:setf (cl:slot-value msg 'global_failures) (cl:if (cl:< unsigned 32768) unsigned (cl:- unsigned 65536))))
+    (cl:let ((__ros_str_len 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:slot-value msg 'global_planner) (cl:make-string __ros_str_len))
+      (cl:dotimes (__ros_str_idx __ros_str_len msg)
+        (cl:setf (cl:char (cl:slot-value msg 'global_planner) __ros_str_idx) (cl:code-char (cl:read-byte istream)))))
+    (cl:let ((__ros_str_len 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:slot-value msg 'local_planner) (cl:make-string __ros_str_len))
+      (cl:dotimes (__ros_str_idx __ros_str_len msg)
+        (cl:setf (cl:char (cl:slot-value msg 'local_planner) __ros_str_idx) (cl:code-char (cl:read-byte istream)))))
   (cl:let ((__ros_arr_len 0))
     (cl:setf (cl:ldb (cl:byte 8 0) __ros_arr_len) (cl:read-byte istream))
     (cl:setf (cl:ldb (cl:byte 8 8) __ros_arr_len) (cl:read-byte istream))
@@ -287,16 +335,16 @@
   "costum_msgs/PathInfo")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<PathInfo>)))
   "Returns md5sum for a message object of type '<PathInfo>"
-  "7c2655d5b5f75f4be7efb52a24b34d2a")
+  "c8ed68422d316510dcf75afd6187c8cc")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'PathInfo)))
   "Returns md5sum for a message object of type 'PathInfo"
-  "7c2655d5b5f75f4be7efb52a24b34d2a")
+  "c8ed68422d316510dcf75afd6187c8cc")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<PathInfo>)))
   "Returns full string definition for message of type '<PathInfo>"
-  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%float64 global_linear_velocity_average~%float64 global_maximum_linear_velocity~%int16 global_failures~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 distance_average~%float64 velocity_average~%float64 linear_velocity_average~%float64 maximum_linear_velocity~%float64 density~%float64 max_obstacle_shiftment~%float64 obstacle_length~%int16 failures~%~%"))
+  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%float64 global_linear_velocity_average~%float64 global_maximum_linear_velocity~%int16 global_failures~%string global_planner~%string local_planner~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 distance_average~%float64 velocity_average~%float64 linear_velocity_average~%float64 maximum_linear_velocity~%float64 density~%float64 max_obstacle_shiftment~%float64 obstacle_length~%int16 failures~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'PathInfo)))
   "Returns full string definition for message of type 'PathInfo"
-  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%float64 global_linear_velocity_average~%float64 global_maximum_linear_velocity~%int16 global_failures~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 distance_average~%float64 velocity_average~%float64 linear_velocity_average~%float64 maximum_linear_velocity~%float64 density~%float64 max_obstacle_shiftment~%float64 obstacle_length~%int16 failures~%~%"))
+  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%float64 global_linear_velocity_average~%float64 global_maximum_linear_velocity~%int16 global_failures~%string global_planner~%string local_planner~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 distance_average~%float64 velocity_average~%float64 linear_velocity_average~%float64 maximum_linear_velocity~%float64 density~%float64 max_obstacle_shiftment~%float64 obstacle_length~%int16 failures~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <PathInfo>))
   (cl:+ 0
      4 (cl:length (cl:slot-value msg 'plan_file))
@@ -308,6 +356,8 @@
      8
      8
      2
+     4 (cl:length (cl:slot-value msg 'global_planner))
+     4 (cl:length (cl:slot-value msg 'local_planner))
      4 (cl:reduce #'cl:+ (cl:slot-value msg 'sections) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ (roslisp-msg-protocol:serialization-length ele))))
 ))
 (cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <PathInfo>))
@@ -322,5 +372,7 @@
     (cl:cons ':global_linear_velocity_average (global_linear_velocity_average msg))
     (cl:cons ':global_maximum_linear_velocity (global_maximum_linear_velocity msg))
     (cl:cons ':global_failures (global_failures msg))
+    (cl:cons ':global_planner (global_planner msg))
+    (cl:cons ':local_planner (local_planner msg))
     (cl:cons ':sections (sections msg))
 ))

@@ -28,6 +28,8 @@ class PathInfo {
       this.global_linear_velocity_average = null;
       this.global_maximum_linear_velocity = null;
       this.global_failures = null;
+      this.global_planner = null;
+      this.local_planner = null;
       this.sections = null;
     }
     else {
@@ -85,6 +87,18 @@ class PathInfo {
       else {
         this.global_failures = 0;
       }
+      if (initObj.hasOwnProperty('global_planner')) {
+        this.global_planner = initObj.global_planner
+      }
+      else {
+        this.global_planner = '';
+      }
+      if (initObj.hasOwnProperty('local_planner')) {
+        this.local_planner = initObj.local_planner
+      }
+      else {
+        this.local_planner = '';
+      }
       if (initObj.hasOwnProperty('sections')) {
         this.sections = initObj.sections
       }
@@ -114,6 +128,10 @@ class PathInfo {
     bufferOffset = _serializer.float64(obj.global_maximum_linear_velocity, buffer, bufferOffset);
     // Serialize message field [global_failures]
     bufferOffset = _serializer.int16(obj.global_failures, buffer, bufferOffset);
+    // Serialize message field [global_planner]
+    bufferOffset = _serializer.string(obj.global_planner, buffer, bufferOffset);
+    // Serialize message field [local_planner]
+    bufferOffset = _serializer.string(obj.local_planner, buffer, bufferOffset);
     // Serialize message field [sections]
     // Serialize the length for message field [sections]
     bufferOffset = _serializer.uint32(obj.sections.length, buffer, bufferOffset);
@@ -145,6 +163,10 @@ class PathInfo {
     data.global_maximum_linear_velocity = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [global_failures]
     data.global_failures = _deserializer.int16(buffer, bufferOffset);
+    // Deserialize message field [global_planner]
+    data.global_planner = _deserializer.string(buffer, bufferOffset);
+    // Deserialize message field [local_planner]
+    data.local_planner = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [sections]
     // Deserialize array length for message field [sections]
     len = _deserializer.uint32(buffer, bufferOffset);
@@ -159,10 +181,12 @@ class PathInfo {
     let length = 0;
     length += object.plan_file.length;
     length += object.date.length;
+    length += object.global_planner.length;
+    length += object.local_planner.length;
     object.sections.forEach((val) => {
       length += GoalInfo.getMessageSize(val);
     });
-    return length + 56;
+    return length + 64;
   }
 
   static datatype() {
@@ -172,7 +196,7 @@ class PathInfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '7c2655d5b5f75f4be7efb52a24b34d2a';
+    return 'c8ed68422d316510dcf75afd6187c8cc';
   }
 
   static messageDefinition() {
@@ -187,6 +211,8 @@ class PathInfo {
     float64 global_linear_velocity_average
     float64 global_maximum_linear_velocity
     int16 global_failures
+    string global_planner
+    string local_planner
     GoalInfo[] sections
     ================================================================================
     MSG: costum_msgs/GoalInfo
@@ -270,6 +296,20 @@ class PathInfo {
     }
     else {
       resolved.global_failures = 0
+    }
+
+    if (msg.global_planner !== undefined) {
+      resolved.global_planner = msg.global_planner;
+    }
+    else {
+      resolved.global_planner = ''
+    }
+
+    if (msg.local_planner !== undefined) {
+      resolved.local_planner = msg.local_planner;
+    }
+    else {
+      resolved.local_planner = ''
     }
 
     if (msg.sections !== undefined) {
