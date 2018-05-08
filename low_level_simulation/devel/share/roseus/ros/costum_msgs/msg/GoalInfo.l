@@ -14,13 +14,14 @@
 
 (defclass costum_msgs::GoalInfo
   :super ros::object
-  :slots (_id _time_average _distance_average _velocity_average _linear_velocity_average _maximum_linear_velocity _density _max_obstacle_shiftment _obstacle_length _failures ))
+  :slots (_id _time_average _time_standard_deviation _distance_average _velocity_average _linear_velocity_average _maximum_linear_velocity _density _max_obstacle_shiftment _obstacle_length _failures ))
 
 (defmethod costum_msgs::GoalInfo
   (:init
    (&key
     ((:id __id) "")
     ((:time_average __time_average) 0.0)
+    ((:time_standard_deviation __time_standard_deviation) 0.0)
     ((:distance_average __distance_average) 0.0)
     ((:velocity_average __velocity_average) 0.0)
     ((:linear_velocity_average __linear_velocity_average) 0.0)
@@ -33,6 +34,7 @@
    (send-super :init)
    (setq _id (string __id))
    (setq _time_average (float __time_average))
+   (setq _time_standard_deviation (float __time_standard_deviation))
    (setq _distance_average (float __distance_average))
    (setq _velocity_average (float __velocity_average))
    (setq _linear_velocity_average (float __linear_velocity_average))
@@ -48,6 +50,9 @@
   (:time_average
    (&optional __time_average)
    (if __time_average (setq _time_average __time_average)) _time_average)
+  (:time_standard_deviation
+   (&optional __time_standard_deviation)
+   (if __time_standard_deviation (setq _time_standard_deviation __time_standard_deviation)) _time_standard_deviation)
   (:distance_average
    (&optional __distance_average)
    (if __distance_average (setq _distance_average __distance_average)) _distance_average)
@@ -79,6 +84,8 @@
     4 (length _id)
     ;; float64 _time_average
     8
+    ;; float64 _time_standard_deviation
+    8
     ;; float64 _distance_average
     8
     ;; float64 _velocity_average
@@ -104,6 +111,8 @@
        (write-long (length _id) s) (princ _id s)
      ;; float64 _time_average
        (sys::poke _time_average (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _time_standard_deviation
+       (sys::poke _time_standard_deviation (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _distance_average
        (sys::poke _distance_average (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _velocity_average
@@ -128,6 +137,8 @@
      (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _id (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; float64 _time_average
      (setq _time_average (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _time_standard_deviation
+     (setq _time_standard_deviation (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _distance_average
      (setq _distance_average (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _velocity_average
@@ -148,11 +159,12 @@
    self)
   )
 
-(setf (get costum_msgs::GoalInfo :md5sum-) "c51ce9fa517c0c13de051b9b30a430c3")
+(setf (get costum_msgs::GoalInfo :md5sum-) "c5759e1e10a4cf0239c09042d29b09f8")
 (setf (get costum_msgs::GoalInfo :datatype-) "costum_msgs/GoalInfo")
 (setf (get costum_msgs::GoalInfo :definition-)
       "string id
 float64 time_average
+float64 time_standard_deviation
 float64 distance_average
 float64 velocity_average
 float64 linear_velocity_average
@@ -165,6 +177,6 @@ int16 failures
 
 
 
-(provide :costum_msgs/GoalInfo "c51ce9fa517c0c13de051b9b30a430c3")
+(provide :costum_msgs/GoalInfo "c5759e1e10a4cf0239c09042d29b09f8")
 
 

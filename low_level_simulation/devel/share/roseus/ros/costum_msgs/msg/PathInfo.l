@@ -182,7 +182,7 @@
    self)
   )
 
-(setf (get costum_msgs::PathInfo :md5sum-) "c8ed68422d316510dcf75afd6187c8cc")
+(setf (get costum_msgs::PathInfo :md5sum-) "dbed994a4e6abf4aa6e4560c3e7dbb88")
 (setf (get costum_msgs::PathInfo :datatype-) "costum_msgs/PathInfo")
 (setf (get costum_msgs::PathInfo :definition-)
       "string plan_file
@@ -201,6 +201,7 @@ GoalInfo[] sections
 MSG: costum_msgs/GoalInfo
 string id
 float64 time_average
+float64 time_standard_deviation
 float64 distance_average
 float64 velocity_average
 float64 linear_velocity_average
@@ -213,6 +214,6 @@ int16 failures
 
 
 
-(provide :costum_msgs/PathInfo "c8ed68422d316510dcf75afd6187c8cc")
+(provide :costum_msgs/PathInfo "dbed994a4e6abf4aa6e4560c3e7dbb88")
 
 

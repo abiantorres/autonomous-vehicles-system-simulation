@@ -196,7 +196,7 @@ class PathInfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'c8ed68422d316510dcf75afd6187c8cc';
+    return 'dbed994a4e6abf4aa6e4560c3e7dbb88';
   }
 
   static messageDefinition() {
@@ -218,6 +218,7 @@ class PathInfo {
     MSG: costum_msgs/GoalInfo
     string id
     float64 time_average
+    float64 time_standard_deviation
     float64 distance_average
     float64 velocity_average
     float64 linear_velocity_average

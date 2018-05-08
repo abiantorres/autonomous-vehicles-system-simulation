@@ -20,6 +20,7 @@ class GoalInfo {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.id = null;
       this.time_average = null;
+      this.time_standard_deviation = null;
       this.distance_average = null;
       this.velocity_average = null;
       this.linear_velocity_average = null;
@@ -41,6 +42,12 @@ class GoalInfo {
       }
       else {
         this.time_average = 0.0;
+      }
+      if (initObj.hasOwnProperty('time_standard_deviation')) {
+        this.time_standard_deviation = initObj.time_standard_deviation
+      }
+      else {
+        this.time_standard_deviation = 0.0;
       }
       if (initObj.hasOwnProperty('distance_average')) {
         this.distance_average = initObj.distance_average
@@ -99,6 +106,8 @@ class GoalInfo {
     bufferOffset = _serializer.string(obj.id, buffer, bufferOffset);
     // Serialize message field [time_average]
     bufferOffset = _serializer.float64(obj.time_average, buffer, bufferOffset);
+    // Serialize message field [time_standard_deviation]
+    bufferOffset = _serializer.float64(obj.time_standard_deviation, buffer, bufferOffset);
     // Serialize message field [distance_average]
     bufferOffset = _serializer.float64(obj.distance_average, buffer, bufferOffset);
     // Serialize message field [velocity_average]
@@ -126,6 +135,8 @@ class GoalInfo {
     data.id = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [time_average]
     data.time_average = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [time_standard_deviation]
+    data.time_standard_deviation = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [distance_average]
     data.distance_average = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [velocity_average]
@@ -148,7 +159,7 @@ class GoalInfo {
   static getMessageSize(object) {
     let length = 0;
     length += object.id.length;
-    return length + 70;
+    return length + 78;
   }
 
   static datatype() {
@@ -158,7 +169,7 @@ class GoalInfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'c51ce9fa517c0c13de051b9b30a430c3';
+    return 'c5759e1e10a4cf0239c09042d29b09f8';
   }
 
   static messageDefinition() {
@@ -166,6 +177,7 @@ class GoalInfo {
     return `
     string id
     float64 time_average
+    float64 time_standard_deviation
     float64 distance_average
     float64 velocity_average
     float64 linear_velocity_average
@@ -195,6 +207,13 @@ class GoalInfo {
     }
     else {
       resolved.time_average = 0.0
+    }
+
+    if (msg.time_standard_deviation !== undefined) {
+      resolved.time_standard_deviation = msg.time_standard_deviation;
+    }
+    else {
+      resolved.time_standard_deviation = 0.0
     }
 
     if (msg.distance_average !== undefined) {

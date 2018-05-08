@@ -235,7 +235,6 @@ class ObstaclesSegmentModel():
 		# Set an identifier to this segment
 		self.segment_id = segment_id
 		# Build a line object to compute some maths
-		print("NEW SEGMENT " + str(round(x1, 2)) +" " +str(round(y1, 2))+" " + str(round(x2, 2))+" " + str(round(y2, 2)) )
 		self.segment = self.get_segment(round(x1, 2),round(y1, 2), round(x2, 2), round(y2, 2))
 		# Set the density of this segment
 		self.density = round(density, 2)

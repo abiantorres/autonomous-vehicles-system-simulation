@@ -335,16 +335,16 @@
   "costum_msgs/PathInfo")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<PathInfo>)))
   "Returns md5sum for a message object of type '<PathInfo>"
-  "c8ed68422d316510dcf75afd6187c8cc")
+  "dbed994a4e6abf4aa6e4560c3e7dbb88")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'PathInfo)))
   "Returns md5sum for a message object of type 'PathInfo"
-  "c8ed68422d316510dcf75afd6187c8cc")
+  "dbed994a4e6abf4aa6e4560c3e7dbb88")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<PathInfo>)))
   "Returns full string definition for message of type '<PathInfo>"
-  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%float64 global_linear_velocity_average~%float64 global_maximum_linear_velocity~%int16 global_failures~%string global_planner~%string local_planner~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 distance_average~%float64 velocity_average~%float64 linear_velocity_average~%float64 maximum_linear_velocity~%float64 density~%float64 max_obstacle_shiftment~%float64 obstacle_length~%int16 failures~%~%"))
+  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%float64 global_linear_velocity_average~%float64 global_maximum_linear_velocity~%int16 global_failures~%string global_planner~%string local_planner~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 time_standard_deviation~%float64 distance_average~%float64 velocity_average~%float64 linear_velocity_average~%float64 maximum_linear_velocity~%float64 density~%float64 max_obstacle_shiftment~%float64 obstacle_length~%int16 failures~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'PathInfo)))
   "Returns full string definition for message of type 'PathInfo"
-  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%float64 global_linear_velocity_average~%float64 global_maximum_linear_velocity~%int16 global_failures~%string global_planner~%string local_planner~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 distance_average~%float64 velocity_average~%float64 linear_velocity_average~%float64 maximum_linear_velocity~%float64 density~%float64 max_obstacle_shiftment~%float64 obstacle_length~%int16 failures~%~%"))
+  (cl:format cl:nil "string plan_file~%string date~%int16 simulations~%float64 global_time_average~%float64 global_distance_average~%float64 global_velocity_average~%float64 global_linear_velocity_average~%float64 global_maximum_linear_velocity~%int16 global_failures~%string global_planner~%string local_planner~%GoalInfo[] sections~%================================================================================~%MSG: costum_msgs/GoalInfo~%string id~%float64 time_average~%float64 time_standard_deviation~%float64 distance_average~%float64 velocity_average~%float64 linear_velocity_average~%float64 maximum_linear_velocity~%float64 density~%float64 max_obstacle_shiftment~%float64 obstacle_length~%int16 failures~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <PathInfo>))
   (cl:+ 0
      4 (cl:length (cl:slot-value msg 'plan_file))

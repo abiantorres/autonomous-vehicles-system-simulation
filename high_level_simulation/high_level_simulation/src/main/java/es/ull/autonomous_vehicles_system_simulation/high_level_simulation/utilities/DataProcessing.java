@@ -1,14 +1,10 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities;
 
-import org.bson.Document;
-
 //JSON tree structures handling 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
-
-import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.OfflineResults;
-import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.PathSection;
+// Simulation Structures
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSResults;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSSegment;
 
 final public class DataProcessing {
 	
@@ -16,11 +12,11 @@ final public class DataProcessing {
 	 * METHODS *
 	 **********/
 	
-	public static OfflineResults parseOfflineResultsJson(JsonNode data) {
+	public static ROSResults parseOfflineResultsJson(JsonNode data) {
 		/* Explores the JSON tree obtained from ROS in search of the main content of 
 		 * the message, and return an OfflineRosResults which will be used by the
 		 * PSIGHOS simulation*/
-		OfflineResults results = new OfflineResults();
+		ROSResults results = new ROSResults();
 		results.setPlanFile(data.get("msg").get("plan_file").textValue());
 		results.setDate(data.get("msg").get("date").textValue());
 		results.setSimulations(data.get("msg").get("simulations").intValue());
@@ -38,23 +34,24 @@ final public class DataProcessing {
 		results.setLocalPlanner(data.get("msg").get("local_planner").textValue());
 		results.setGlobalPlanner(data.get("msg").get("global_planner").textValue());
 		// Travel over the array searching for each section information
-		final JsonNode sections = data.get("msg").get("sections");
-		if(sections.isArray()) {
-			for(final JsonNode sectionNode : sections) {
-				PathSection section = new PathSection();
-				section.setId(sectionNode.get("id").textValue());
-				section.setTimeAverage(sectionNode.get("time_average").doubleValue());
-				section.setDistanceAverage(sectionNode.get("distance_average").doubleValue());
-				section.setVelocityAverage(sectionNode.get("velocity_average").doubleValue());
-				section.setLinearVelocityAverage(
-						sectionNode.get("linear_velocity_average").doubleValue());
-				section.setMaximumLinearVelocity(
-						sectionNode.get("maximum_linear_velocity").doubleValue());
-				section.setFailures(sectionNode.get("failures").intValue());
-				section.setDensity(sectionNode.get("density").doubleValue());
-				section.setMaxObstacleShiftment(sectionNode.get("max_obstacle_shiftment").doubleValue());
-				section.setObstacleLength(sectionNode.get("obstacle_length").doubleValue());
-				results.addSection(section);
+		final JsonNode segments = data.get("msg").get("sections");
+		if(segments.isArray()) {
+			for(final JsonNode segmentNode : segments) {
+				ROSSegment segment = new ROSSegment();
+				segment.setId(segmentNode.get("id").textValue());
+				segment.setTimeAverage(segmentNode.get("time_average").doubleValue());
+				segment.setDistanceAverage(segmentNode.get("distance_average").doubleValue());
+				segment.setVelocityAverage(segmentNode.get("velocity_average").doubleValue());
+				segment.setLinearVelocityAverage(
+						segmentNode.get("linear_velocity_average").doubleValue());
+				segment.setMaximumLinearVelocity(
+						segmentNode.get("maximum_linear_velocity").doubleValue());
+				segment.setFailures(segmentNode.get("failures").intValue());
+				segment.setDensity(segmentNode.get("density").doubleValue());
+				segment.setMaxObstacleShiftment(segmentNode.get("max_obstacle_shiftment").doubleValue());
+				segment.setObstacleLength(segmentNode.get("obstacle_length").doubleValue());
+				segment.setTimeStandardDeviation(segmentNode.get("time_standard_deviation").doubleValue());
+				results.addSegment(segment);
 			}
 		}
 		return results;

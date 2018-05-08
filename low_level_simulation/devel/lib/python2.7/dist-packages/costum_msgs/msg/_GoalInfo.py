@@ -7,11 +7,12 @@ import struct
 
 
 class GoalInfo(genpy.Message):
-  _md5sum = "c51ce9fa517c0c13de051b9b30a430c3"
+  _md5sum = "c5759e1e10a4cf0239c09042d29b09f8"
   _type = "costum_msgs/GoalInfo"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """string id
 float64 time_average
+float64 time_standard_deviation
 float64 distance_average
 float64 velocity_average
 float64 linear_velocity_average
@@ -20,8 +21,8 @@ float64 density
 float64 max_obstacle_shiftment
 float64 obstacle_length
 int16 failures"""
-  __slots__ = ['id','time_average','distance_average','velocity_average','linear_velocity_average','maximum_linear_velocity','density','max_obstacle_shiftment','obstacle_length','failures']
-  _slot_types = ['string','float64','float64','float64','float64','float64','float64','float64','float64','int16']
+  __slots__ = ['id','time_average','time_standard_deviation','distance_average','velocity_average','linear_velocity_average','maximum_linear_velocity','density','max_obstacle_shiftment','obstacle_length','failures']
+  _slot_types = ['string','float64','float64','float64','float64','float64','float64','float64','float64','float64','int16']
 
   def __init__(self, *args, **kwds):
     """
@@ -31,7 +32,7 @@ int16 failures"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       id,time_average,distance_average,velocity_average,linear_velocity_average,maximum_linear_velocity,density,max_obstacle_shiftment,obstacle_length,failures
+       id,time_average,time_standard_deviation,distance_average,velocity_average,linear_velocity_average,maximum_linear_velocity,density,max_obstacle_shiftment,obstacle_length,failures
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -44,6 +45,8 @@ int16 failures"""
         self.id = ''
       if self.time_average is None:
         self.time_average = 0.
+      if self.time_standard_deviation is None:
+        self.time_standard_deviation = 0.
       if self.distance_average is None:
         self.distance_average = 0.
       if self.velocity_average is None:
@@ -63,6 +66,7 @@ int16 failures"""
     else:
       self.id = ''
       self.time_average = 0.
+      self.time_standard_deviation = 0.
       self.distance_average = 0.
       self.velocity_average = 0.
       self.linear_velocity_average = 0.
@@ -91,7 +95,7 @@ int16 failures"""
         length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self
-      buff.write(_get_struct_8dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures))
+      buff.write(_get_struct_9dh().pack(_x.time_average, _x.time_standard_deviation, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -113,8 +117,8 @@ int16 failures"""
         self.id = str[start:end]
       _x = self
       start = end
-      end += 66
-      (_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures,) = _get_struct_8dh().unpack(str[start:end])
+      end += 74
+      (_x.time_average, _x.time_standard_deviation, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures,) = _get_struct_9dh().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -134,7 +138,7 @@ int16 failures"""
         length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self
-      buff.write(_get_struct_8dh().pack(_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures))
+      buff.write(_get_struct_9dh().pack(_x.time_average, _x.time_standard_deviation, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -157,8 +161,8 @@ int16 failures"""
         self.id = str[start:end]
       _x = self
       start = end
-      end += 66
-      (_x.time_average, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures,) = _get_struct_8dh().unpack(str[start:end])
+      end += 74
+      (_x.time_average, _x.time_standard_deviation, _x.distance_average, _x.velocity_average, _x.linear_velocity_average, _x.maximum_linear_velocity, _x.density, _x.max_obstacle_shiftment, _x.obstacle_length, _x.failures,) = _get_struct_9dh().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -167,9 +171,9 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_8dh = None
-def _get_struct_8dh():
-    global _struct_8dh
-    if _struct_8dh is None:
-        _struct_8dh = struct.Struct("<8dh")
-    return _struct_8dh
+_struct_9dh = None
+def _get_struct_9dh():
+    global _struct_9dh
+    if _struct_9dh is None:
+        _struct_9dh = struct.Struct("<9dh")
+    return _struct_9dh

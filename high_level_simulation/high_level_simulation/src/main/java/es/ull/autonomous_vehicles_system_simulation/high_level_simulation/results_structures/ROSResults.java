@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.bson.Document;
 
-public class OfflineResults {
+public class ROSResults {
 	
 	/**************
 	 * ATRIBUTTES *
@@ -14,14 +14,14 @@ public class OfflineResults {
 	private Integer simulations, globalFailures;
 	private Double globalTimeAverage, globalVelocityAverage, 
 		globalLinearVelocityAverage, globalMaximumLinearVelocity, globalDistanceAverage;
-	private ArrayList<PathSection> sections;
+	private ArrayList<ROSSegment> segments;
 	
 	/***********************
 	 * DEFAULT CONSTRUCTOR *
 	 **********************/
 	
-	public OfflineResults() {
-		this("", "", 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, new ArrayList<PathSection>(), "", "");
+	public ROSResults() {
+		this("", "", 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, new ArrayList<ROSSegment>(), "", "");
 	}
 	
 	/*************************
@@ -39,10 +39,10 @@ public class OfflineResults {
 	 * @param globalMaximumLinearVelocity Maximum linear velocity peak
 	 * @param sections Information for each plan section
 	 */
-	public OfflineResults(String planFile, String date, Integer simulations,
+	public ROSResults(String planFile, String date, Integer simulations,
 			Integer globalFailures, Double globalTimeAverage, Double globalVelocityAverage,
 			Double globalLinearVelocityAverage, Double globalMaximumLinearVelocity, 
-			Double globalDistanceAverage, ArrayList<PathSection> sections, String localPlanner, String globalPlanner) {
+			Double globalDistanceAverage, ArrayList<ROSSegment> sections, String localPlanner, String globalPlanner) {
 		super();
 		this.planFile = planFile;
 		this.date = date;
@@ -53,7 +53,7 @@ public class OfflineResults {
 		this.globalLinearVelocityAverage = globalLinearVelocityAverage;
 		this.globalMaximumLinearVelocity = globalMaximumLinearVelocity;
 		this.globalDistanceAverage = globalDistanceAverage;
-		this.sections = sections;
+		this.segments = sections;
 		this.localPlanner = localPlanner;
 		this.globalPlanner = globalPlanner;
 	}
@@ -67,9 +67,9 @@ public class OfflineResults {
 	 * @return Mongodb Document */
 	public Document getDocument() {
 		// Get all sections documents
-		ArrayList<Document> sectionsDocuments = new ArrayList<Document>();
+		ArrayList<Document> segmentsDocuments = new ArrayList<Document>();
 		for(int i = 0; i < getSections().size(); i++) {
-			sectionsDocuments.add(getSections().get(i).getDocument());
+			segmentsDocuments.add(getSections().get(i).getDocument());
 		}
 		return new Document("planFile", getPlanFile())
                 .append("date", getDate())
@@ -82,13 +82,13 @@ public class OfflineResults {
                 .append("globalDistanceAverage", getGlobalDistanceAverage())
                 .append("localPlanner", getLocalPlanner())
                 .append("globalPlanner", getGlobalPlanner())
-                .append("sections", sectionsDocuments);              
+                .append("segments", segmentsDocuments);              
 	}
 	
 	/** Add a section results
 	 * @param section new section results */
-	public void addSection(PathSection section) {
-		sections.add(section);
+	public void addSegment(ROSSegment segment) {
+		segments.add(segment);
 	}
 	
 	/** Add a section results 
@@ -99,13 +99,17 @@ public class OfflineResults {
 	 * @param velocityAverage Velocity average for this section (distance / time)
 	 * @param linearVelocityAverage Linear velocity average for this section
 	 * @param maximumLinearVelocity Maximum linear velocity peak for this section
-	 */
-	public void addSection(String id, Integer failures, Double timeAverage, 
+	 * @param density density of obstacle for this seg,e
+	 * @param obstacleLength
+	 * @param maxObstacleShiftment
+	 * @param timeStandardDeviation */
+	public void addSegment(String id, Integer failures, Double timeAverage, 
 			Double distanceAverage,Double velocityAverage, Double linearVelocityAverage, 
-			Double maximumLinearVelocity, Double density, Double obstacleLength, Double maxObstacleShiftment) {
-		getSections().add(new PathSection(id, failures, timeAverage, distanceAverage, 
+			Double maximumLinearVelocity, Double density, Double obstacleLength, Double maxObstacleShiftment,
+			Double timeStandardDeviation) {
+		getSections().add(new ROSSegment(id, failures, timeAverage, distanceAverage, 
 				velocityAverage, linearVelocityAverage, maximumLinearVelocity, density, obstacleLength,
-				maxObstacleShiftment));
+				maxObstacleShiftment, timeStandardDeviation));
 	}
 
 	/***************
@@ -189,12 +193,12 @@ public class OfflineResults {
 	}
 	
 	/** @return the sections */
-	public ArrayList<PathSection> getSections() {
-		return sections;
+	public ArrayList<ROSSegment> getSections() {
+		return segments;
 	}
 	/** @param sections the sections to set */
-	public void setSections(ArrayList<PathSection> sections) {
-		this.sections = sections;
+	public void setSections(ArrayList<ROSSegment> sections) {
+		this.segments = sections;
 	}
 
 	/** @return the globalDistanceAverage */
@@ -240,7 +244,7 @@ public class OfflineResults {
 				+ globalFailures + ", globalTimeAverage=" + globalTimeAverage + ", globalVelocityAverage="
 				+ globalVelocityAverage + ", globalLinearVelocityAverage=" + globalLinearVelocityAverage
 				+ ", globalMaximumLinearVelocity=" + globalMaximumLinearVelocity + ", globalDistanceAverage="
-				+ globalDistanceAverage + ", sections=" + sections + "]";
+				+ globalDistanceAverage + ", sections=" + segments + "]";
 	}
 	
 }

@@ -11,6 +11,7 @@ from math import pow, sqrt, ceil
 from datetime import datetime
 import time
 from random import randint
+from statistics import stdev
 
 # Path information messages
 from costum_msgs.msg import RouteTimes, GoalInfo, PathInfo
@@ -35,7 +36,10 @@ gazebo_simulation_pkg_path = str(rospack.get_path('gazebo_simulation'))
 waypoints = []
 
 # Local statistics by path section (Each array position corresponds to a section)
-time_average_by_section = [] # time by section
+time_average_by_section = [] # average time by section
+#times_by_section = [][] # times by section
+times_standard_deviation = [] # standard desviation by section
+
 failures_by_section = [] # failures by section
 traveled_distance_average_by_section = [] # distance traveled by section
 velocity_average_by_section = [] # velocity by section
@@ -237,7 +241,7 @@ def run(n_simulations, density):
     global_failures, global_traveled_distance_average, global_velocity_average, \
     maximum_linear_velocity_by_section, linear_velocity_average_by_section, \
     global_linear_velocity_average, max_linear_velocity, current_linear_velocity, \
-    compute_linear_velocity, points_2d
+    compute_linear_velocity, points_2d, times_standard_deviation
     
     # configure needed topics and move_base client
     path_plan_info_pub = rospy.Publisher('/path_plan_info', PathInfo, queue_size=1)
@@ -280,6 +284,10 @@ def run(n_simulations, density):
        # Make sure we have an empty array of maximun linear velocities.
     # The lenght of the array is equal to the number of end points (path sections)
     maximum_linear_velocity_by_section = [0.0] * len(waypoints)
+
+    # All times for each section
+    times_by_section = np.zeros((len(waypoints), n_simulations))
+    times_standard_deviation = [0.0] * len(waypoints) # standard desviation by section
     
     # Initialize global statistics
     global_time_average = 0.0
@@ -352,7 +360,10 @@ def run(n_simulations, density):
                     break
 
             # Computes section statistics
-            time_average_by_section[i] += (rospy.get_time() - start_time)
+            time = rospy.get_time() - start_time
+            time_average_by_section[i] += time
+            times_by_section[i][x] = time
+            rospy.loginfo(times_by_section)
             traveled_distance_average_by_section[i] = current_traveled_distance
             velocity_average_by_section[i] = traveled_distance_average_by_section[i] / time_average_by_section[i]
             linear_velocity_average_by_section[i] = current_linear_velocity_average
@@ -371,6 +382,11 @@ def run(n_simulations, density):
 
     # Compute local statistics for each section
     for i in range(0, len(waypoints)):
+        # Compute the population standard
+        if(times_by_section[i].size > 1):
+            times_standard_deviation[i] = stdev(times_by_section[i]) 
+        else:
+            times_standard_deviation[i] = 0.0
         time_average_by_section[i] /= n_simulations
         rospy.loginfo("###### Section " + str(i+1) + " -> time  " + str(time_average_by_section[i]) + "  ######")
         traveled_distance_average_by_section[i] /= n_simulations
@@ -393,7 +409,7 @@ def run(n_simulations, density):
     # Build plan results message
     plan_results = PathInfo()
     plan_results.plan_file = file_name
-    plan_results.date = time.strftime("%c")
+    plan_results.date = datetime.now().strftime("%I:%M%p on %B %d, %Y")
     plan_results.simulations = n_simulations
     plan_results.global_time_average = global_time_average
     plan_results.global_distance_average = global_traveled_distance_average
@@ -411,6 +427,7 @@ def run(n_simulations, density):
     for i in range(0, len(waypoints)):
         section = GoalInfo()
         section.id = str(i+1)
+        section.time_standard_deviation = times_standard_deviation[i]
         section.time_average = time_average_by_section[i]
         section.distance_average =  traveled_distance_average_by_section[i]
         section.velocity_average = velocity_average_by_section[i]

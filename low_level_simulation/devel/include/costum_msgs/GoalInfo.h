@@ -26,6 +26,7 @@ struct GoalInfo_
   GoalInfo_()
     : id()
     , time_average(0.0)
+    , time_standard_deviation(0.0)
     , distance_average(0.0)
     , velocity_average(0.0)
     , linear_velocity_average(0.0)
@@ -38,6 +39,7 @@ struct GoalInfo_
   GoalInfo_(const ContainerAllocator& _alloc)
     : id(_alloc)
     , time_average(0.0)
+    , time_standard_deviation(0.0)
     , distance_average(0.0)
     , velocity_average(0.0)
     , linear_velocity_average(0.0)
@@ -56,6 +58,9 @@ struct GoalInfo_
 
    typedef double _time_average_type;
   _time_average_type time_average;
+
+   typedef double _time_standard_deviation_type;
+  _time_standard_deviation_type time_standard_deviation;
 
    typedef double _distance_average_type;
   _distance_average_type distance_average;
@@ -159,12 +164,12 @@ struct MD5Sum< ::costum_msgs::GoalInfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "c51ce9fa517c0c13de051b9b30a430c3";
+    return "c5759e1e10a4cf0239c09042d29b09f8";
   }
 
   static const char* value(const ::costum_msgs::GoalInfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xc51ce9fa517c0c13ULL;
-  static const uint64_t static_value2 = 0xde051b9b30a430c3ULL;
+  static const uint64_t static_value1 = 0xc5759e1e10a4cf02ULL;
+  static const uint64_t static_value2 = 0x39c09042d29b09f8ULL;
 };
 
 template<class ContainerAllocator>
@@ -185,6 +190,7 @@ struct Definition< ::costum_msgs::GoalInfo_<ContainerAllocator> >
   {
     return "string id\n\
 float64 time_average\n\
+float64 time_standard_deviation\n\
 float64 distance_average\n\
 float64 velocity_average\n\
 float64 linear_velocity_average\n\
@@ -213,6 +219,7 @@ namespace serialization
     {
       stream.next(m.id);
       stream.next(m.time_average);
+      stream.next(m.time_standard_deviation);
       stream.next(m.distance_average);
       stream.next(m.velocity_average);
       stream.next(m.linear_velocity_average);
@@ -243,6 +250,8 @@ struct Printer< ::costum_msgs::GoalInfo_<ContainerAllocator> >
     Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.id);
     s << indent << "time_average: ";
     Printer<double>::stream(s, indent + "  ", v.time_average);
+    s << indent << "time_standard_deviation: ";
+    Printer<double>::stream(s, indent + "  ", v.time_standard_deviation);
     s << indent << "distance_average: ";
     Printer<double>::stream(s, indent + "  ", v.distance_average);
     s << indent << "velocity_average: ";

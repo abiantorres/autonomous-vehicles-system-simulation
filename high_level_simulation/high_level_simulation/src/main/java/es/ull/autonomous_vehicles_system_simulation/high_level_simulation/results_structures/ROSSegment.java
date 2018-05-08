@@ -2,7 +2,7 @@ package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.resul
 
 import org.bson.Document;
 
-public class PathSection {
+public class ROSSegment {
 	
 	/**************
 	 * ATRIBUTTES *
@@ -10,7 +10,7 @@ public class PathSection {
 	
 	private String id;
 	private Integer failures;
-	private Double timeAverage, distanceAverage, velocityAverage,
+	private Double timeAverage, distanceAverage, velocityAverage, timeStandardDeviation,
 		linearVelocityAverage, maximumLinearVelocity, density, obstacleLength, maxObstacleShiftment;
 	
 	/***********************
@@ -18,8 +18,8 @@ public class PathSection {
 	 **********************/
 	
 	/** Default constructor */
-	public PathSection() {
-		this("", 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	public ROSSegment() {
+		this("", 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	}
 	
 	/*************************
@@ -35,9 +35,10 @@ public class PathSection {
 	 * @param linearVelocityAverage Linear velocity average for this section
 	 * @param maximumLinearVelocity Maximum linear velocity peak for this section
 	 */
-	public PathSection(String id, Integer failures, Double timeAverage, Double distanceAverage,
+	public ROSSegment(String id, Integer failures, Double timeAverage, Double distanceAverage,
 			Double velocityAverage, Double linearVelocityAverage, Double maximumLinearVelocity, 
-			Double density, Double obstacleLength, Double maxObstacleShiftment) {
+			Double density, Double obstacleLength, Double maxObstacleShiftment,
+			Double timeStandardDeviation) {
 		super();
 		this.id = id;
 		this.failures = failures;
@@ -49,6 +50,7 @@ public class PathSection {
 		this.density = density;
 		this.obstacleLength = obstacleLength;
 		this.maxObstacleShiftment = maxObstacleShiftment;
+		this.timeStandardDeviation = timeStandardDeviation;
 	}
 	
 	/***********
@@ -61,6 +63,7 @@ public class PathSection {
 	public Document getDocument() {
 		return new Document("id", getId())
                 .append("failures", getFailures())
+                .append("timeStandardDeviation", getTimeStandardDeviation())
                 .append("timeAverage", getTimeAverage())
                 .append("distanceAverage", getDistanceAverage())
                 .append("velocityAverage", getVelocityAverage())
@@ -174,19 +177,29 @@ public class PathSection {
 	public void setMaxObstacleShiftment(Double maxObstacleShiftment) {
 		this.maxObstacleShiftment = maxObstacleShiftment;
 	}
+	
+	/** @return the timeStandardDeviation */
+	public Double getTimeStandardDeviation() {
+		return timeStandardDeviation;
+	}
+
+	/** @param timeStandardDeviation the timeStandardDeviation to set */
+	public void setTimeStandardDeviation(Double timeStandardDeviation) {
+		this.timeStandardDeviation = timeStandardDeviation;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "PathSection [id=" + id + ", failures=" + failures + ", timeAverage=" + timeAverage
-				+ ", distanceAverage=" + distanceAverage + ", velocityAverage=" + velocityAverage
-				+ ", linearVelocityAverage=" + linearVelocityAverage + ", maximumLinearVelocity="
-				+ maximumLinearVelocity + ", density=" + density + ", obstacleLength=" + obstacleLength
-				+ ", maxObstacleShiftment=" + maxObstacleShiftment + "]";
+		return "ROSSegment [id=" + id + ", failures=" + failures + ", timeAverage=" + timeAverage + ", distanceAverage="
+				+ distanceAverage + ", velocityAverage=" + velocityAverage + ", timeStandardDeviation="
+				+ timeStandardDeviation + ", linearVelocityAverage=" + linearVelocityAverage
+				+ ", maximumLinearVelocity=" + maximumLinearVelocity + ", density=" + density + ", obstacleLength="
+				+ obstacleLength + ", maxObstacleShiftment=" + maxObstacleShiftment + "]";
 	}
-	
-	
+
+
 
 }

@@ -1,5 +1,6 @@
 string id
 float64 time_average
+float64 time_standard_deviation
 float64 distance_average
 float64 velocity_average
 float64 linear_velocity_average

@@ -55,6 +55,9 @@ public class BasicHUNSCSimulation extends Simulation {
 		{new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("NormalVariate", 0.79 * 60, 0.017 * 60)), new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("NormalVariate", 1.79 * 60, 0.056 * 60)), new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("NormalVariate", 0.61 * 60, 0.054 * 60))},
 		{new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("NormalVariate", 0.82 * 60, 0.018 * 60)), new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("NormalVariate", 1.86 * 60, 0.063 * 60)), new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("NormalVariate", 0.77 * 60, 0.012 * 60 ))},
 		{new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("NormalVariate", 0.896 * 60, 0.054 * 60)), new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("NormalVariate", 2.038 * 60, 0.075 * 60)), new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("NormalVariate", 0.895 * 60, 0.019 * 60 ))}};
+	
+	
+	
 	final private static ElementReplicableTimeFunction T_APPOINTMENT = new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("UniformVariate", 10*60, 15*60));
 	final private static ElementReplicableTimeFunction T_M_SEAT = new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("UniformVariate", 1*60, 3*60));
 	final private static ElementReplicableTimeFunction T_A_SEAT = new ElementReplicableTimeFunction(TimeFunctionFactory.getInstance("UniformVariate", 1*60, 3*60));

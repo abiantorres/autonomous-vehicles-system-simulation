@@ -162,13 +162,11 @@ public class CheckFlowsView extends WFPTestView {
 			this.next = next;
 		}
 
-		@Override
 		public void add2FutureFlow(int eId, double ts) {
 			futureFlow.get(eId).add(
 					new EventToCheck(ElementActionInfo.Type.REQ, actId, ts));
 		}
 
-		@Override
 		public SingleFlowNode search(int id) {
 			if (this.id == id)
 				return this;
@@ -195,7 +193,6 @@ public class CheckFlowsView extends WFPTestView {
 				f.add2FutureFlow(eId, ts);
 		}
 
-		@Override
 		public SingleFlowNode search(int id) {
 			for (FlowNode f : list) {
 				SingleFlowNode sf = f.search(id);
@@ -221,7 +218,6 @@ public class CheckFlowsView extends WFPTestView {
 			this.ts = ts;
 		}
 
-		@Override
 		public int compareTo(EventToCheck o) {
 			if (type.ordinal() > o.type.ordinal())
 				return 1;
