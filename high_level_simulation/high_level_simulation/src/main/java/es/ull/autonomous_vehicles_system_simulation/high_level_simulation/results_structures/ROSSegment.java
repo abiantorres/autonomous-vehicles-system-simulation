@@ -2,6 +2,13 @@ package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.resul
 
 import org.bson.Document;
 
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.ElementReplicableTimeFunction;
+import es.ull.iis.function.TimeFunctionFactory;
+
+/**
+ * @author parallels
+ *
+ */
 public class ROSSegment {
 	
 	/**************
@@ -72,6 +79,17 @@ public class ROSSegment {
                 .append("density", getDensity())
                 .append("obstacleLength", getObstacleLength())
                 .append("maxObstacleShiftment", getMaxObstacleShiftment());
+	}
+	
+	
+	/**
+	 * Get a replicable time function instance from this segment statistics.
+	 * This time function is builded using a random normal distribution.
+	 * @return An element replicable time function instance.
+	 */
+	public ElementReplicableTimeFunction getElementReplicableTimeFunction() {
+		return new ElementReplicableTimeFunction(
+				TimeFunctionFactory.getInstance("NormalVariate", getTimeAverage(), getTimeStandardDeviation()));
 	}
 	
 	/***************

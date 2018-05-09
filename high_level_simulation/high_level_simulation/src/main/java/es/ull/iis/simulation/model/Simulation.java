@@ -42,7 +42,7 @@ public class Simulation implements Identifiable, Runnable, Describable, Variable
 	/** A short text describing this simulation. */
 	protected final String description;
 	/** Time unit of the simulation */
-	protected final TimeUnit unit;
+	public final TimeUnit unit;
 	/** A unique simulation identifier */
 	protected final int id;
 	/** The identifier to be assigned to the next element */ 

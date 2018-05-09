@@ -1,8 +1,8 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures;
 
 import java.util.ArrayList;
-
 import org.bson.Document;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.ElementReplicableTimeFunction;
 
 public class ROSResults {
 	
@@ -68,8 +68,8 @@ public class ROSResults {
 	public Document getDocument() {
 		// Get all sections documents
 		ArrayList<Document> segmentsDocuments = new ArrayList<Document>();
-		for(int i = 0; i < getSections().size(); i++) {
-			segmentsDocuments.add(getSections().get(i).getDocument());
+		for(int i = 0; i < getSegments().size(); i++) {
+			segmentsDocuments.add(getSegments().get(i).getDocument());
 		}
 		return new Document("planFile", getPlanFile())
                 .append("date", getDate())
@@ -107,9 +107,26 @@ public class ROSResults {
 			Double distanceAverage,Double velocityAverage, Double linearVelocityAverage, 
 			Double maximumLinearVelocity, Double density, Double obstacleLength, Double maxObstacleShiftment,
 			Double timeStandardDeviation) {
-		getSections().add(new ROSSegment(id, failures, timeAverage, distanceAverage, 
+		getSegments().add(new ROSSegment(id, failures, timeAverage, distanceAverage, 
 				velocityAverage, linearVelocityAverage, maximumLinearVelocity, density, obstacleLength,
 				maxObstacleShiftment, timeStandardDeviation));
+	}
+	
+	
+	/**
+	 * Get a replicable time function array instance from all segment statistics.
+	 * This time functions are builded using a random normal distribution.
+	 * @return An element replicable time function instance.
+	 */
+	public ArrayList<ElementReplicableTimeFunction> getElementReplicableTimeFunctions() {
+		
+		return new ArrayList<ElementReplicableTimeFunction>() {
+			private static final long serialVersionUID = 1441472047785325027L;
+		{
+			for (int i = 0; i < getSegments().size(); i++) {
+				add(getSegments().get(i).getElementReplicableTimeFunction());
+			}
+		}};
 	}
 
 	/***************
@@ -193,12 +210,12 @@ public class ROSResults {
 	}
 	
 	/** @return the sections */
-	public ArrayList<ROSSegment> getSections() {
+	public ArrayList<ROSSegment> getSegments() {
 		return segments;
 	}
 	/** @param sections the sections to set */
-	public void setSections(ArrayList<ROSSegment> sections) {
-		this.segments = sections;
+	public void setSegments(ArrayList<ROSSegment> segments) {
+		this.segments = segments;
 	}
 
 	/** @return the globalDistanceAverage */

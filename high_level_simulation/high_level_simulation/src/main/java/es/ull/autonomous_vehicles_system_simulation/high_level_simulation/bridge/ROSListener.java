@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import ros.RosBridge;
 import ros.RosListenDelegate;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.database.DatabaseService;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSResults;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.WheelChairsSimulation;
 // Utilities
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities.Constants;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities.DataProcessing;
 
-public class Listener /*extends Experiment*/ {
+public class ROSListener {
 
 	/**************
 	 * ATRIBUTTES *
@@ -21,7 +23,7 @@ public class Listener /*extends Experiment*/ {
 	/***********************
 	 * DEFAULT CONSTRUCTOR *
 	 **********************/
-	public Listener() {}
+	public ROSListener() {}
 	
 	/***********
 	 * METHODS *
@@ -30,9 +32,9 @@ public class Listener /*extends Experiment*/ {
 	/** Establish the ROS connection */
 	public static void connectToRos() {
 		// Opens the connection with ROS via WebSockets (Using Jetty 9)
-		Listener.bridge = RosBridge.createConnection(Constants.getRosUri());
+		ROSListener.bridge = RosBridge.createConnection(Constants.getRosUri());
 		// Waiting to establish the connection with the ROS server
-		Listener.bridge.waitForConnection();
+		ROSListener.bridge.waitForConnection();
 	}
 	
 	/********************************
@@ -42,7 +44,7 @@ public class Listener /*extends Experiment*/ {
 	
 	public static void main(String[] args) {
 		DatabaseService.connectToDatabase();
-		Listener.connectToRos();
+		ROSListener.connectToRos();
 		// Defines what actions to take when receiving data from the topic defined and
 		// with which type of ROS message. (We should get a JSON Tree structure)
 		bridge.subscribe(Constants.getLowLevelDataTopic(), Constants.getLowLevelDataMsgType(),
@@ -50,8 +52,9 @@ public class Listener /*extends Experiment*/ {
 				public void receive(JsonNode data, String stringRep) {	
 					// Parses the information in such a way that it can
 					// be used by high-level simulation
-					DatabaseService.insertResults(
-							DataProcessing.parseOfflineResultsJson(data).getDocument());		
+					ROSResults results = DataProcessing.parseOfflineResultsJson(data);
+					DatabaseService.insertResults(results.getDocument());	
+					WheelChairsSimulation.runSimulation(results);
 				}});
 	}
 	
