@@ -7,7 +7,7 @@ import ros.RosBridge;
 import ros.RosListenDelegate;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.database.DatabaseService;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSResults;
-import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.WheelChairsSimulation;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.WheelChairsExperiment;
 // Utilities
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities.Constants;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities.DataProcessing;
@@ -54,8 +54,8 @@ public class ROSListener {
 					// be used by high-level simulation
 					ROSResults results = DataProcessing.parseOfflineResultsJson(data);
 					DatabaseService.insertResults(results.getDocument());	
-					WheelChairsSimulation.runSimulation(results);
+					new WheelChairsExperiment(100, results, 1, 2, 0, 6, 4, 30, 1.0, 
+							new Long(0), new Long(7*24*60*60) ).start();
 				}});
 	}
-	
 }

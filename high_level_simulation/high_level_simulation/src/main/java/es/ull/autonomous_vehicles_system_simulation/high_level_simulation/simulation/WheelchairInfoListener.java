@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-//import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.BasicHUNSCSimulation.Density;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.PSIGHOSResults;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSResults;
 import es.ull.iis.simulation.info.ElementActionInfo;
 import es.ull.iis.simulation.info.ElementInfo;
 import es.ull.iis.simulation.info.ResourceUsageInfo;
@@ -17,102 +18,66 @@ import es.ull.iis.simulation.model.Resource;
 import es.ull.iis.simulation.model.TimeUnit;
 import es.ull.iis.util.Statistics;
 
-/**
- * @author usuario
- *
- */
-public class WheelchairListener extends View {
+public class WheelchairInfoListener extends View {
+	/**************
+	 * ATTRIBUTES *
+	 *************/
 	private final static String MISSING_VALUE = ".";
-	private final TreeMap<Element, Long> times = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> cummWaitForJanitorTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> waitForJanitorTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> cummWaitForDoctorTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> waitForDoctorTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> appointmentTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> routeTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> accomodationTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Resource, Long> rTimes = new TreeMap<Resource, Long>();
-	private final TreeMap<Resource, Long> janitorUsage = new TreeMap<Resource, Long>();
-	private final TreeMap<Resource, Long> doctorUsage = new TreeMap<Resource, Long>();
-	private final TreeMap<Resource, Long> aChairUsage = new TreeMap<Resource, Long>();
-	private final TreeMap<Resource, Long> mChairUsage = new TreeMap<Resource, Long>();
-	private int patientEndCounter;
-	private int aChairCounter;
-	private int mChairCounter;
-	private int doctorCounter;
-	private int janitorCounter;
-	private int nPatientsWaitForDoctor;
-	private int nPatientsWaitForJanitor;
 	private final boolean detailed;
-	private final int nJanitors;
-	private final int nDoctors;
-	private final int nAutoChairs;
-	private final int nManualChairs;
-	private final int maxJanitors;
-	private final int maxDoctors;
-	private final int maxAutoChairs;
-	private final int maxManualChairs;
-	private final int patientsPerArrival;
-	private final int minutesBetweenArrivals;
-	private final double manualFactor;
-	//private final BasicHUNSCSimulation.Density[] density;
 	private final double unitConversion;
 	private static PrintStream out = System.out;
-			
-	public WheelchairListener(TimeUnit unit, int nJanitors, int nDoctors, int nAutoChairs, int nManualChairs, 
-			int maxJanitors, int maxDoctors, int maxAutoChairs, int maxManualChairs, int patientsPerArrival, int minutesBetweenArrivals/*, Density[] density*/, double manualFactor, boolean detailed) {
-		super("Listener completo de las sillas");
+	private static PSIGHOSResults psighosResults;
+	private static ROSResults rosResults;
+	
+	/****************
+	 * CONSTRUCTORS *
+	 ***************/
+	public WheelchairInfoListener(TimeUnit unit, Integer nJanitors, Integer nDoctors, Integer nAutoChairs,
+			Integer nManualChairs, Integer maxJanitors, Integer maxDoctors, Integer maxAutoChairs, 
+			Integer maxManualChairs, Integer patientsPerArrival, Integer minutesBetweenArrivals,
+			Double manualFactor, Boolean detailed, ROSResults rosResults) {
+		super("Information listener for wheel chairs simulation");
 		this.detailed = detailed;
-		patientEndCounter = 0;
-		aChairCounter = 0;
-		mChairCounter = 0;
-		doctorCounter = 0;
-		janitorCounter = 0;
-		nPatientsWaitForDoctor = 0;
-		nPatientsWaitForJanitor = 0;
-		this.nJanitors = nJanitors;
-		this.nDoctors = nDoctors;
-		this.nAutoChairs = nAutoChairs;
-		this.nManualChairs = nManualChairs;
-		this.maxJanitors = maxJanitors;
-		this.maxDoctors = maxDoctors;
-		this.maxAutoChairs = maxAutoChairs;
-		this.maxManualChairs = maxManualChairs;
-		this.patientsPerArrival = patientsPerArrival;
-		this.minutesBetweenArrivals = minutesBetweenArrivals;
-		this.manualFactor = manualFactor;
-		//this.density = density;
-		this.unitConversion = WheelChairsModel.unit.convert(1.0, unit);
+		WheelchairInfoListener.setResults(new PSIGHOSResults(unit, nJanitors, nDoctors, nAutoChairs, nManualChairs, 
+				maxJanitors, maxDoctors, maxAutoChairs, maxManualChairs, patientsPerArrival,
+				minutesBetweenArrivals, manualFactor));
+		WheelchairInfoListener.setRosResults(rosResults);
+		this.unitConversion = WheelChairsSimulation.unit.convert(1.0, unit);
 		addEntrance(ResourceUsageInfo.class);
 		addEntrance(ElementInfo.class);
 		addEntrance(ElementActionInfo.class);
 		addEntrance(SimulationEndInfo.class);
 	}
-	public WheelchairListener(TimeUnit unit, int nJanitors, int nDoctors, int nAutoChairs, int nManualChairs, 
-			int patientsPerArrival, int minutesBetweenArrivals, /*Density[] density,*/ double manualFactor, boolean detailed) {
+	
+	public WheelchairInfoListener(TimeUnit unit, int nJanitors, int nDoctors, int nAutoChairs, int nManualChairs, 
+			int patientsPerArrival, int minutesBetweenArrivals, double manualFactor,
+			boolean detailed, ROSResults rosResults) {
 		this(unit, nJanitors, nDoctors, nAutoChairs, nManualChairs, nJanitors, nDoctors, nAutoChairs,
-				nManualChairs, patientsPerArrival, minutesBetweenArrivals/*, density*/, manualFactor, detailed);
+				nManualChairs, patientsPerArrival, minutesBetweenArrivals, manualFactor, detailed, rosResults);
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.ull.iis.simulation.inforeceiver.InfoReceiver#infoEmited(es.ull.iis.simulation.info.SimulationInfo)
-	 */
+	/***********
+	 * METHODS *
+	 **********/
 	@Override
 	public void infoEmited(SimulationInfo info) {
+		// Capture and procces information
 		if (info instanceof ElementInfo) {
 			final ElementInfo eInfo = (ElementInfo)info;
 			
 			if (eInfo.getType() == ElementInfo.Type.START) {
-				times.put(eInfo.getElement(), -eInfo.getTs());
+				getResults().getTimes().put(eInfo.getElement(), -eInfo.getTs());
 				if (detailed)
-					out.println(eInfo.getElement() + "\tARRIVE\t" + (- times.get(eInfo.getElement())));
+					out.println(eInfo.getElement() + "\tARRIVE\t" + (- 
+							getResults().getTimes().get(eInfo.getElement())));
 			}
 			else {
-				long initTime = times.get(eInfo.getElement());
-				times.put(eInfo.getElement(), eInfo.getTs() + initTime);
+				long initTime = getResults().getTimes().get(eInfo.getElement());
+				getResults().getTimes().put(eInfo.getElement(), eInfo.getTs() + initTime);
 				if (detailed)
-					out.println(eInfo.getElement() + "\tLEAVE\t" + times.get(eInfo.getElement()));
-				patientEndCounter++;
+					out.println(eInfo.getElement() + "\tLEAVE\t" + 
+							getResults().getTimes().get(eInfo.getElement()));
+				getResults().setPatientEndCounter(getResults().getPatientEndCounter() + 1);
 			}
 			
 		}
@@ -120,44 +85,49 @@ public class WheelchairListener extends View {
 			final ElementActionInfo eInfo = (ElementActionInfo)info; 
 			switch(eInfo.getType()) {
 			case ACQ:
-				if (eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_A_APPOINTMENT) | 
-						eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_M_APPOINTMENT)) {
-					final long t = eInfo.getTs() - waitForDoctorTimes.get(eInfo.getElement());
+				if (eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_A_APPOINTMENT) | 
+						eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_M_APPOINTMENT)) {
+					final long t = eInfo.getTs() - getResults().getWaitForDoctorTimes().get(eInfo.getElement());
 					if (t > 0) {
-						nPatientsWaitForDoctor++;
+						getResults().setnPatientsWaitForDoctor(getResults().getnPatientsWaitForDoctor() + 1);
 					}
-					if (cummWaitForDoctorTimes.containsKey(eInfo.getElement())) {
-						cummWaitForDoctorTimes.put(eInfo.getElement(), cummWaitForDoctorTimes.get(eInfo.getElement()) + t);
+					if (getResults().getCummWaitForDoctorTimes().containsKey(eInfo.getElement())) {
+						getResults().getCummWaitForDoctorTimes().put(eInfo.getElement(),
+								getResults().getCummWaitForDoctorTimes().get(eInfo.getElement()) + t);
 					}
 					else {
-						cummWaitForDoctorTimes.put(eInfo.getElement(), t);
+						getResults().getCummWaitForDoctorTimes().put(eInfo.getElement(), t);
 					}
 				}
 				else {
-					final long t = eInfo.getTs() - waitForJanitorTimes.get(eInfo.getElement());
-					if (!cummWaitForJanitorTimes.containsKey(eInfo.getElement())) {
-						cummWaitForJanitorTimes.put(eInfo.getElement(), t);
+					final long t = eInfo.getTs() - getResults().getWaitForJanitorTimes().get(eInfo.getElement());
+					if (!getResults().getCummWaitForJanitorTimes().containsKey(eInfo.getElement())) {
+						getResults().getCummWaitForJanitorTimes().put(eInfo.getElement(), t);
 						if (t > 0) {
-							nPatientsWaitForJanitor++;
+							getResults().setnPatientsWaitForJanitor(getResults().getnPatientsWaitForJanitor() + 1);
 						}
 					}
 					else if (t > 0) {
-						cummWaitForJanitorTimes.put(eInfo.getElement(), cummWaitForJanitorTimes.get(eInfo.getElement()) + t);
+						getResults().getCummWaitForJanitorTimes().put(eInfo.getElement(),
+								getResults().getCummWaitForJanitorTimes().get(eInfo.getElement()) + t);
 					}
 				}
 				break;
 			case END:
-				if (eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_A_APPOINTMENT) |
-						eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_M_APPOINTMENT)) {
-					appointmentTimes.put(eInfo.getElement(), eInfo.getTs() + appointmentTimes.get(eInfo.getElement()));
+				if (eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_A_APPOINTMENT) |
+						eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_M_APPOINTMENT)) {
+					getResults().getAppointmentTimes().put(eInfo.getElement(), 
+							eInfo.getTs() + getResults().getAppointmentTimes().get(eInfo.getElement()));
 				}
-				else if (eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_REQ_CHAIR) | 
-						eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_A_STAND) |
-						eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_M_STAND)) {
-					accomodationTimes.put(eInfo.getElement(), eInfo.getTs() + accomodationTimes.get(eInfo.getElement()));					
+				else if (eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_REQ_CHAIR) | 
+						eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_A_STAND) |
+						eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_M_STAND)) {
+					getResults().getAccomodationTimes().put(eInfo.getElement(), 
+							eInfo.getTs() + getResults().getAccomodationTimes().get(eInfo.getElement()));					
 				}
-				else if (eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_SECTION)) {
-					routeTimes.put(eInfo.getElement(), eInfo.getTs() + routeTimes.get(eInfo.getElement()));					
+				else if (eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_SECTION)) {
+					getResults().getRouteTimes().put(eInfo.getElement(),
+							eInfo.getTs() + getResults().getRouteTimes().get(eInfo.getElement()));					
 				}
 				break;
 			case INTACT:
@@ -165,33 +135,35 @@ public class WheelchairListener extends View {
 			case REL:
 				break;
 			case REQ:
-				if (eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_A_APPOINTMENT) 
-						| eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_M_APPOINTMENT)) {
-					waitForDoctorTimes.put(eInfo.getElement(), eInfo.getTs());
+				if (eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_A_APPOINTMENT) 
+						| eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_M_APPOINTMENT)) {
+					getResults().getWaitForDoctorTimes().put(eInfo.getElement(), eInfo.getTs());
 				}
 				else {
-					waitForJanitorTimes.put(eInfo.getElement(), eInfo.getTs());
+					getResults().getWaitForDoctorTimes().put(eInfo.getElement(), eInfo.getTs());
 				}
 				break;
 			case RESACT:
 				break;
 			case START:
-				if (eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_A_APPOINTMENT) 
-						| eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_M_APPOINTMENT)) {
-					appointmentTimes.put(eInfo.getElement(), -eInfo.getTs());					
+				if (eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_A_APPOINTMENT) 
+						| eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_M_APPOINTMENT)) {
+					getResults().getAppointmentTimes().put(eInfo.getElement(), -eInfo.getTs());					
 				}
-				else if (eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_REQ_CHAIR)) {
-					accomodationTimes.put(eInfo.getElement(), -eInfo.getTs());					
+				else if (eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_REQ_CHAIR)) {
+					getResults().getAppointmentTimes().put(eInfo.getElement(), -eInfo.getTs());					
 				}
-				else if (eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_A_STAND) 
-						| eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_M_STAND)) {
-					accomodationTimes.put(eInfo.getElement(), accomodationTimes.get(eInfo.getElement()) - eInfo.getTs());										
+				else if (eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_A_STAND) 
+						| eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_M_STAND)) {
+					getResults().getAppointmentTimes().put(eInfo.getElement(),
+							getResults().getAppointmentTimes().get(eInfo.getElement()) - eInfo.getTs());										
 				}
-				else if (eInfo.getActivity().getDescription().contains(WheelChairsModel.STR_SECTION)) {
-					if (!routeTimes.containsKey(eInfo.getElement()))
-						routeTimes.put(eInfo.getElement(), -eInfo.getTs());
+				else if (eInfo.getActivity().getDescription().contains(WheelChairsSimulation.STR_SECTION)) {
+					if (!getResults().getRouteTimes().containsKey(eInfo.getElement()))
+						getResults().getRouteTimes().put(eInfo.getElement(), -eInfo.getTs());
 					else
-						routeTimes.put(eInfo.getElement(), routeTimes.get(eInfo.getElement()) - eInfo.getTs());					
+						getResults().getRouteTimes().put(eInfo.getElement(),
+								getResults().getRouteTimes().get(eInfo.getElement()) - eInfo.getTs());					
 				}
 				break;
 			default:
@@ -203,45 +175,48 @@ public class WheelchairListener extends View {
 			final ResourceUsageInfo eInfo = (ResourceUsageInfo)info;
 			switch(eInfo.getType()) {
 			case CAUGHT:
-				rTimes.put( eInfo.getResource(), eInfo.getTs());
+				getResults().getrTimes().put( eInfo.getResource(), eInfo.getTs());
 				break;
 			case RELEASED:
-				final long usageTime = eInfo.getTs() - rTimes.get(eInfo.getResource());
+				final long usageTime = eInfo.getTs() - getResults().getrTimes().get(eInfo.getResource());
 				final String description = eInfo.getResource().getDescription();
-				if (description.contains(WheelChairsModel.STR_AUTO_CHAIR)) {
-					aChairCounter ++;
-					if (aChairUsage.containsKey(eInfo.getResource())) { //Si ya hay un tiempo acumulado, se suma
-						aChairUsage.put(eInfo.getResource(), aChairUsage.get(eInfo.getResource()) + usageTime);
+				if (description.contains(WheelChairsSimulation.STR_AUTO_CHAIR)) {
+					getResults().setaChairCounter(getResults().getaChairCounter() + 1);
+					if (getResults().getaChairUsage().containsKey(eInfo.getResource())) { //Si ya hay un tiempo acumulado, se suma
+						getResults().getaChairUsage().put(eInfo.getResource(), 
+								getResults().getaChairUsage().get(eInfo.getResource()) + usageTime);
 					}
 					else {
-						aChairUsage.put(eInfo.getResource(), usageTime);						
+						getResults().getaChairUsage().put(eInfo.getResource(), usageTime);						
 					}
 				}
-				else if (description.contains(WheelChairsModel.STR_MANUAL_CHAIR)) {
-					mChairCounter ++;
-					if (mChairUsage.containsKey(eInfo.getResource())) { //Si ya hay un tiempo acumulado, se suma
-						mChairUsage.put(eInfo.getResource(), mChairUsage.get(eInfo.getResource()) + usageTime);
+				else if (description.contains(WheelChairsSimulation.STR_MANUAL_CHAIR)) {
+					getResults().setmChairCounter(getResults().getmChairCounter() + 1);
+					if (getResults().getmChairUsage().containsKey(eInfo.getResource())) { //Si ya hay un tiempo acumulado, se suma
+						getResults().getmChairUsage().put(eInfo.getResource(), getResults().getmChairUsage().get(eInfo.getResource()) + usageTime);
 					}
 					else {
-						mChairUsage.put(eInfo.getResource(), usageTime);						
+						getResults().getmChairUsage().put(eInfo.getResource(), usageTime);						
 					}
 				}
-				else if (description.contains(WheelChairsModel.STR_DOCTOR)) {
-					doctorCounter ++;
-					if (doctorUsage.containsKey(eInfo.getResource())) {
-						doctorUsage.put(eInfo.getResource(), doctorUsage.get(eInfo.getResource()) + usageTime);  //Si no hay tiempo anterior, éste es el tiempo acumulado		
+				else if (description.contains(WheelChairsSimulation.STR_DOCTOR)) {
+					getResults().setDoctorCounter(getResults().getDoctorCounter() + 1);
+					if (getResults().getDoctorUsage().containsKey(eInfo.getResource())) {
+						getResults().getDoctorUsage().put(eInfo.getResource(), 
+								getResults().getDoctorUsage().get(eInfo.getResource()) + usageTime);  //Si no hay tiempo anterior, éste es el tiempo acumulado		
 					}
 					else {
-						doctorUsage.put(eInfo.getResource(), usageTime);  //Si no hay tiempo anterior, éste es el tiempo acumulado		
+						getResults().getDoctorUsage().put(eInfo.getResource(), usageTime);  //Si no hay tiempo anterior, éste es el tiempo acumulado		
 					}
 				}				
-				else if (description.contains(WheelChairsModel.STR_JANITOR)) {
-					janitorCounter ++;
-					if (janitorUsage.containsKey(eInfo.getResource())) {
-						janitorUsage.put(eInfo.getResource(), janitorUsage.get(eInfo.getResource()) + usageTime);  //Si no hay tiempo anterior, éste es el tiempo acumulado		
+				else if (description.contains(WheelChairsSimulation.STR_JANITOR)) {
+					getResults().setJanitorCounter(getResults().getJanitorCounter() + 1);
+					if (getResults().getJanitorUsage().containsKey(eInfo.getResource())) {
+						getResults().getJanitorUsage().put(eInfo.getResource(),
+								getResults().getJanitorUsage().get(eInfo.getResource()) + usageTime);  //Si no hay tiempo anterior, éste es el tiempo acumulado		
 					}
 					else {
-						janitorUsage.put(eInfo.getResource(), usageTime);  //Si no hay tiempo anterior, éste es el tiempo acumulado		
+						getResults().getJanitorUsage().put(eInfo.getResource(), usageTime);  //Si no hay tiempo anterior, éste es el tiempo acumulado		
 					}
 				}				
 				
@@ -255,28 +230,29 @@ public class WheelchairListener extends View {
 			final long endTs = ((SimulationEndInfo) info).getTs();
 			// con esto contaríamos el tiemp de las tareas que no hubiesen terminado como
 			//"Tiempo fin de simulación" - "tiempo de comienzo de tarea"
-			for (Entry<Element, Long> entry : times.entrySet()) {
+			for (Entry<Element, Long> entry : getResults().getTimes().entrySet()) {
 				if (entry.getValue() < 0) {
 					entry.setValue(endTs + entry.getValue());
 				}
 			}
-			for (Entry<Element, Long> entry : appointmentTimes.entrySet()) {
+			for (Entry<Element, Long> entry : getResults().getAccomodationTimes().entrySet()) {
 				if (entry.getValue() < 0) {
 					entry.setValue(endTs + entry.getValue());
 				}
 			}
-			out.print(endTs/unitConversion + "\t" + patientsPerArrival + "\t" + minutesBetweenArrivals + "\t" + manualFactor);
+			getResults().setEndTs(endTs);
+			//out.print(endTs/unitConversion + "\t" + patientsPerArrival + "\t" + minutesBetweenArrivals + "\t" + manualFactor);
 			/*for (int i = 0; i < density.length; i++)
 				out.print("\t" + density[i]);*/
-			out.print("\t" + nDoctors + "\t" + nJanitors +"\t" + nAutoChairs + "\t" + nManualChairs + "\t" + patientEndCounter);
-			printGeneralTimeStats(times);
+			//out.print("\t" + nDoctors + "\t" + nJanitors +"\t" + nAutoChairs + "\t" + nManualChairs + "\t" + patientEndCounter);
+			/*printGeneralTimeStats(times);
 			printGeneralTimeStats(appointmentTimes);
 			printGeneralTimeStats(accomodationTimes);
 			printGeneralTimeStats(routeTimes);
 			printGeneralTimeStats(cummWaitForJanitorTimes, nPatientsWaitForJanitor);
 			printGeneralTimeStats(cummWaitForDoctorTimes, nPatientsWaitForDoctor);
 			printAllResourcesUsage(endTs);
-			out.println();
+			out.println();*/
 		}
 	}
 
@@ -300,22 +276,22 @@ public class WheelchairListener extends View {
 		out.print("\t" + n + "\t" + minimo/unitConversion + "\t" + maximo/unitConversion + "\t" + Statistics.average(arrayTimes)/unitConversion + "\t" + Statistics.stdDev(arrayTimes)/unitConversion);	
 	}
 	
-	private void printAllResourcesUsage(long endTs) {
+	/*private void printAllResourcesUsage(long endTs) {
 		final ArrayList<Long> tAChair = new ArrayList<Long>(); 
 		final ArrayList<Long> tMChair = new ArrayList<Long>(); 
 		final ArrayList<Long> tJanitor = new ArrayList<Long>(); 
 		final ArrayList<Long> tDoctor = new ArrayList<Long>(); 
 		for (Resource res : rTimes.keySet()) {
-			if (res.getDescription().contains(WheelChairsModel.STR_AUTO_CHAIR)) {
+			if (res.getDescription().contains(WheelChairsSimulation.STR_AUTO_CHAIR)) {
 				tAChair.add((aChairUsage.get(res) == null) ? endTs - rTimes.get(res) : aChairUsage.get(res));
 			}
-			else if (res.getDescription().contains(WheelChairsModel.STR_MANUAL_CHAIR)) {
+			else if (res.getDescription().contains(WheelChairsSimulation.STR_MANUAL_CHAIR)) {
 				tMChair.add((mChairUsage.get(res) == null) ? endTs - rTimes.get(res) : mChairUsage.get(res));
 			}
-			else if (res.getDescription().contains(WheelChairsModel.STR_JANITOR)) {
+			else if (res.getDescription().contains(WheelChairsSimulation.STR_JANITOR)) {
 				tJanitor.add((janitorUsage.get(res) == null) ? endTs - rTimes.get(res) : janitorUsage.get(res));
 			}
-			else if (res.getDescription().contains(WheelChairsModel.STR_DOCTOR)) {
+			else if (res.getDescription().contains(WheelChairsSimulation.STR_DOCTOR)) {
 				tDoctor.add((doctorUsage.get(res) == null) ? endTs - rTimes.get(res) : doctorUsage.get(res));
 			}
 		}
@@ -327,7 +303,7 @@ public class WheelchairListener extends View {
 		printResourceUsage(nJanitors, maxJanitors, tJanitor);
 		out.print("\t" + doctorCounter);
 		printResourceUsage(nDoctors, maxDoctors, tDoctor);
-	}
+	}*/
 	
 	private void printResourceUsage(int n, int max, ArrayList<Long> times) {
 		int counter = 0;
@@ -381,9 +357,37 @@ public class WheelchairListener extends View {
 	}
 
 	public static void setOut(PrintStream out) {
-		WheelchairListener.out = out;
+		WheelchairInfoListener.out = out;
 	}
 	
+	/**
+	 * @return the results
+	 */
+	public static PSIGHOSResults getResults() {
+		return psighosResults;
+	}
+
+	/**
+	 * @param results the results to set
+	 */
+	public static void setResults(PSIGHOSResults results) {
+		WheelchairInfoListener.psighosResults = results;
+	}
+
+	/**
+	 * @return the rosResults
+	 */
+	public static ROSResults getRosResults() {
+		return rosResults;
+	}
+
+	/**
+	 * @param rosResults the rosResults to set
+	 */
+	public static void setRosResults(ROSResults rosResults) {
+		WheelchairInfoListener.rosResults = rosResults;
+	}
+
 	static enum Legend {
 		TIME("TIME", "Simulated time"),
 		PXA("PxA", "Patients per arrival"),

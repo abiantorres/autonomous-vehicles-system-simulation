@@ -1,5 +1,7 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities;
 
+import java.util.UUID;
+
 //JSON tree structures handling 
 import com.fasterxml.jackson.databind.JsonNode;
 // Simulation Structures
@@ -55,6 +57,10 @@ final public class DataProcessing {
 			}
 		}
 		return results;
+	}
+	
+	public static String generateUniqueSimulationID() {
+		return UUID.randomUUID().toString();
 	}
 	
 }
