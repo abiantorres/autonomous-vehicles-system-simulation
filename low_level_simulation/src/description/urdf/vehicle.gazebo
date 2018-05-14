@@ -37,15 +37,15 @@
 
 
   <gazebo reference="base_link">
-    <material>Gazebo/Orange</material>
+    <material>Gazebo/Black</material>
   </gazebo>
 
   <gazebo reference="left_wheel">
-    <material>Gazebo/Blue</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
 
   <gazebo reference="right_wheel">
-    <material>Gazebo/Blue</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
 
   <!-- hokuyo -->
@@ -84,5 +84,20 @@
       </plugin>
     </sensor>
   </gazebo>
+
+  <gazebo reference="base_link">
+    <sensor name="base_contact_sensor" type="contact">
+      <always_on>true</always_on>
+      <update_rate>100.0</update_rate>
+      <contact>
+        <collision>collision_collision</collision>
+      </contact>
+      <plugin filename="libgazebo_ros_bumper.so" name="base_gazebo_ros_bumper_controller">
+        <bumperTopicName>base_contact_sensor_state</bumperTopicName>
+        <frameName>base_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
 
 </robot>

@@ -53,7 +53,7 @@ public class ROSListener {
 					// Parses the information in such a way that it can
 					// be used by high-level simulation
 					ROSResults results = DataProcessing.parseOfflineResultsJson(data);
-					DatabaseService.insertResults(results.getDocument());	
+					//DatabaseService.insertResults(results.getDocument());	
 					new WheelChairsExperiment(100, results, 1, 2, 0, 6, 4, 30, 1.0, 
 							new Long(0), new Long(7*24*60*60) ).start();
 				}});

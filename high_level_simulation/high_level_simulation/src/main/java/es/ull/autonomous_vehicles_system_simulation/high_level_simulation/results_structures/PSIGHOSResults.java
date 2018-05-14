@@ -13,39 +13,15 @@ import es.ull.iis.util.Statistics;
 
 public class PSIGHOSResults {
 	
-	private final TreeMap<Element, Long> times = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> cummWaitForJanitorTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> waitForJanitorTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> cummWaitForDoctorTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> waitForDoctorTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> appointmentTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> routeTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Element, Long> accomodationTimes = new TreeMap<Element, Long>();
-	private final TreeMap<Resource, Long> rTimes = new TreeMap<Resource, Long>();
-	private final TreeMap<Resource, Long> janitorUsage = new TreeMap<Resource, Long>();
-	private final TreeMap<Resource, Long> doctorUsage = new TreeMap<Resource, Long>();
-	private final TreeMap<Resource, Long> aChairUsage = new TreeMap<Resource, Long>();
-	private final TreeMap<Resource, Long> mChairUsage = new TreeMap<Resource, Long>();
-	private Integer patientEndCounter;
-	private Integer aChairCounter;
-	private Integer mChairCounter;
-	private Integer doctorCounter;
-	private Integer janitorCounter;
-	private Integer nPatientsWaitForDoctor;
-	private Integer nPatientsWaitForJanitor;
-	private final Integer nJanitors;
-	private final Integer nDoctors;
-	private final Integer nAutoChairs;
-	private final Integer nManualChairs;
-	private final Integer maxJanitors;
-	private final Integer maxDoctors;
-	private final Integer maxAutoChairs;
-	private final Integer maxManualChairs;
-	private final Integer patientsPerArrival;
-	private final Integer minutesBetweenArrivals;
-	private final Double manualFactor;
-	private final double unitConversion;
-	private long endTs;
+	public TreeMap<Element, Long> times, cummWaitForJanitorTimes, waitForJanitorTimes, cummWaitForDoctorTimes,
+		waitForDoctorTimes, appointmentTimes, routeTimes, accomodationTimes;
+	public TreeMap<Resource, Long> rTimes, janitorUsage, doctorUsage, aChairUsage, mChairUsage;
+	public Integer patientEndCounter, aChairCounter, mChairCounter, doctorCounter, janitorCounter,
+		nPatientsWaitForDoctor, nPatientsWaitForJanitor;
+	public final Integer nJanitors, nDoctors, nAutoChairs, nManualChairs, maxJanitors, maxDoctors, maxAutoChairs,
+		maxManualChairs, patientsPerArrival, minutesBetweenArrivals;
+	public final Double manualFactor, unitConversion;
+	public long endTs;
 	
 	/****************
 	 * CONSTRUCTORS *
@@ -53,6 +29,21 @@ public class PSIGHOSResults {
 	public PSIGHOSResults(TimeUnit unit, Integer nJanitors, Integer nDoctors, Integer nAutoChairs, Integer nManualChairs, 
 			Integer maxJanitors, Integer maxDoctors, Integer maxAutoChairs, Integer maxManualChairs, 
 			Integer patientsPerArrival, Integer minutesBetweenArrivals, Double manualFactor) {
+		
+		this.times = new TreeMap<Element, Long>();
+		this.cummWaitForJanitorTimes = new TreeMap<Element, Long>();
+		this.waitForJanitorTimes = new TreeMap<Element, Long>();
+		this.cummWaitForDoctorTimes = new TreeMap<Element, Long>();
+		this.waitForDoctorTimes = new TreeMap<Element, Long>();
+		this.appointmentTimes = new TreeMap<Element, Long>();
+		this.routeTimes = new TreeMap<Element, Long>();
+		this.accomodationTimes = new TreeMap<Element, Long>();
+		this.rTimes = new TreeMap<Resource, Long>();
+		this.janitorUsage = new TreeMap<Resource, Long>();
+		this.doctorUsage = new TreeMap<Resource, Long>();
+		this.aChairUsage = new TreeMap<Resource, Long>();
+		this.mChairUsage = new TreeMap<Resource, Long>();
+		
 		this.patientEndCounter = 0;
 		this.aChairCounter = 0;
 		this.mChairCounter = 0;
@@ -60,6 +51,7 @@ public class PSIGHOSResults {
 		this.janitorCounter = 0;
 		this.nPatientsWaitForDoctor = 0;
 		this.nPatientsWaitForJanitor = 0;
+		
 		this.nJanitors = nJanitors;
 		this.nDoctors = nDoctors;
 		this.nAutoChairs = nAutoChairs;
@@ -71,11 +63,11 @@ public class PSIGHOSResults {
 		this.patientsPerArrival = patientsPerArrival;
 		this.minutesBetweenArrivals = minutesBetweenArrivals;
 		this.manualFactor = manualFactor;
-		this.unitConversion = WheelChairsSimulation.unit.convert(1.0, unit);
+		this.unitConversion = (double) WheelChairsSimulation.unit.convert(1.0, unit);
 	}
 	
-	public PSIGHOSResults(TimeUnit unit, int nJanitors, int nDoctors, int nAutoChairs, int nManualChairs, 
-			int patientsPerArrival, int minutesBetweenArrivals, double manualFactor) {
+	public PSIGHOSResults(TimeUnit unit, Integer nJanitors, Integer nDoctors, Integer nAutoChairs, Integer nManualChairs, 
+			Integer patientsPerArrival, Integer minutesBetweenArrivals, Double manualFactor) {
 		this(unit, nJanitors, nDoctors, nAutoChairs, nManualChairs, nJanitors, nDoctors, nAutoChairs,
 				nManualChairs, patientsPerArrival, minutesBetweenArrivals, manualFactor);
 	}
@@ -104,7 +96,8 @@ public class PSIGHOSResults {
                 .append("minutesBetweenArrivals", getMinutesBetweenArrivals())
                 .append("manualFactor", getManualFactor())
                 .append("unitConversion", getUnitConversion())
-				.append("resources", getAllResourcesUsage());
+				.append("resources", getAllResourcesUsage())
+				.append("generalTimesStats", getAllGeneralTimeStats());
                 
 	}
 	
@@ -143,7 +136,7 @@ public class PSIGHOSResults {
 	
 	private ResourceUsage getResourceUsage(String description, int n, int max, ArrayList<Long> times) {
 		int counter = 0, missingValues = 0;
-		for (long t : times) {
+		for (@SuppressWarnings("unused") long t : times) {
 			counter++;
 		}
 		for (; counter < n; counter++) {
@@ -169,6 +162,7 @@ public class PSIGHOSResults {
 			ResourceUsage.setMissingValues(missingValues);
 			ResourceUsage.setTimes(times);
 		}
+		
 		/** Get a document object with will allow us to insert the information
 		 * of the resource usage to the db.
 		 * @return Mongodb Document */
@@ -242,11 +236,23 @@ public class PSIGHOSResults {
 		}
 	}
 	
-	private GeneralTimeStats computeGeneralTimeStats(String description, TreeMap<Element, Long> time) {
-		return computeGeneralTimeStats(description, time, time.size());
+	private Document getAllGeneralTimeStats() {
+		return new Document("generalTimesStats", "generalTimesStats")
+				.append("times", getGeneralTimeStats("times", getTimes()).getDocument())
+				.append("appointmentTimes", getGeneralTimeStats("appointmentTimes", getAppointmentTimes()).getDocument())
+				.append("accomodationTimes", getGeneralTimeStats("accomodationTimes", getAccomodationTimes()).getDocument())
+				.append("routeTimes", getGeneralTimeStats("routeTimes", getRouteTimes()).getDocument())
+				.append("cummWaitForJanitorTimes", getGeneralTimeStats("cummWaitForJanitorTimes",
+						getCummWaitForJanitorTimes(), getnPatientsWaitForJanitor()).getDocument())
+				.append("cummWaitForDoctorTimes", getGeneralTimeStats("cummWaitForDoctorTimes",
+						getCummWaitForDoctorTimes(), getnPatientsWaitForDoctor()).getDocument());
+	}
+	
+	private GeneralTimeStats getGeneralTimeStats(String description, TreeMap<Element, Long> time) {
+		return getGeneralTimeStats(description, time, time.size());
 	}
 
-	private GeneralTimeStats computeGeneralTimeStats(String description, TreeMap<Element, Long> time, int n) {
+	private GeneralTimeStats getGeneralTimeStats(String description, TreeMap<Element, Long> time, int n) {
 		double []arrayTimes = new double[time.size()];
 		int count = 0;
 		long min = Long.MAX_VALUE;
@@ -278,6 +284,18 @@ public class PSIGHOSResults {
 			GeneralTimeStats.setMax(max);
 			GeneralTimeStats.setTimesAverage(timesAverage);
 			GeneralTimeStats.setTimesDev(timesDev);
+		}
+		
+		/** Get a document object with will allow us to insert the information
+		 * of the resource usage to the db.
+		 * @return Mongodb Document */
+		public Document getDocument() {
+			return new Document("generalTimeStats", getDescription())
+	                .append("nInstances", getN())
+	                .append("maxTime", getMax())
+	                .append("minTime", getMin())
+	                .append("timesAverage", getTimesAverage())
+	                .append("timesDev", getTimesDev());
 		}
 
 		/** @return the timesAverage */
@@ -632,7 +650,4 @@ public class PSIGHOSResults {
 	public void setEndTs(long endTs) {
 		this.endTs = endTs;
 	}
-
-	
-
 }

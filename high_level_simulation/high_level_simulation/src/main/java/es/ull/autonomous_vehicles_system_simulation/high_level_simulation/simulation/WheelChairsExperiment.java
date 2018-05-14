@@ -44,7 +44,7 @@ public class WheelChairsExperiment extends Experiment{
 
 	@Override
 	public Simulation getSimulation(int ind) {
-		Simulation sim = new WheelChairsSimulation(Integer.parseInt(super.description), getnJanitors(), getnDoctors(), 
+		Simulation sim = new WheelChairsSimulation(ind, getnJanitors(), getnDoctors(), 
 				getnAChairs(), getnMChairs(), getnPatientsPerArrival(), getnMinutesBetweenArrivals(),
 				manualFactor, results, getStartTime(), getEndTime());
 		sim.addInfoReceiver(new WheelchairInfoListener(TimeUnit.MINUTE, getnJanitors(), 

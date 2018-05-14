@@ -1,15 +1,17 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures;
 
-import java.util.ArrayList;
-
 import org.bson.Document;
-
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities.DataProcessing;
 
 public class CompleteResults {
 	
 	private static PSIGHOSResults psighosResults;
 	private static ROSResults rosResults;
+	
+	public CompleteResults(PSIGHOSResults psighosResults, ROSResults rosResults) {
+		CompleteResults.psighosResults =  psighosResults;
+		CompleteResults.rosResults =  rosResults;
+	}
 	
 	/** Get a document object with will allow us to insert the information
 	 * of a complete simulation to the db.
