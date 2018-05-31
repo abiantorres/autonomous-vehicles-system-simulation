@@ -77,9 +77,9 @@ to give some randomness to the simulation.
 DFLT_MAX_OBSTACLE_SHIFTMENT = 0.5
 
 """
-Default density of obstacles for each path section.
+Default distance between obstacles for each path section.
 """
-DFLT_DENSITY = 0.35
+DFLT_DISTANCE_BETWEEN_OBSTACLES = 1.5
 
 """
 Gazebo spawn and delete models services.
@@ -163,24 +163,25 @@ class ObstacleModel():
 		return box
 
 	def to_json(self):
-		""" 
+		"""
 		Get this object in json format.
 		"""
 		return json.dumps(self, default=lambda o:o.__dict__, sort_keys=True, indent=4)
 
 class ObstaclesSegmentModel():
 	"""
-	Obstacles Segment represents a set of methods which will build an obstacles 
+	Obstacles Segment represents a set of methods which will build an obstacles
 	segment randomly according to the density specified by the user.
 	"""
-	global DFLT_DENSITY, DFLT_MAX_OBSTACLE_SHIFTMENT, GEOD
-	
+	global DFLT_DISTANCE_BETWEEN_OBSTACLES, DFLT_MAX_OBSTACLE_SHIFTMENT, GEOD
+
 	def __init__(self, segment_id, x1, y1, x2, y2, obstacle_length, robot_radius, \
-		density = DFLT_DENSITY, max_obstacle_shiftment = DFLT_MAX_OBSTACLE_SHIFTMENT):
+		distance_between_obstacles = DFLT_DISTANCE_BETWEEN_OBSTACLES,
+		max_obstacle_shiftment = DFLT_MAX_OBSTACLE_SHIFTMENT):
 		"""
 		Default constructor.
 		"""
-		self.build(segment_id, x1, y1, x2, y2, obstacle_length, robot_radius, density = density, \
+		self.build(segment_id, x1, y1, x2, y2, obstacle_length, robot_radius, distance_between_obstacles = distance_between_obstacles, \
 			max_obstacle_shiftment = max_obstacle_shiftment)
 
 
@@ -190,28 +191,29 @@ class ObstaclesSegmentModel():
 		"""
 		return Segment(Point(x1, y1), Point(x2, y2))
 
-	def get_n_obstacles(self, segment_length, obstacle_length, density):
+	def get_n_obstacles(self, segment_length, obstacle_length, distance_between_obstacles):
 		"""
 		Get the number of obstacles from the following formula:
-		D: Sensity
+		D: distance between obstacles
 		L1: Length of the segment
 		L2: Length of the generic obstacle for the simulation
 		N: Number of obstacles
 
-		N = (D * L1) / L2
+		N = (L1 - D) / (L2 + D)
 		"""
-		return int(ceil(((density * segment_length) / obstacle_length)))
+		return int(ceil(((segment_length - distance_between_obstacles) / \
+			(obstacle_length + distance_between_obstacles))))
 
 	def get_obstacles_points(self, x1, y1, x2, y2, n_points, max_obstacle_shiftment):
 		"""
 		The following function will return a set of points equally spaced
 		in the which ones we will set the obstacles.
 
-		Geod.npts() official description: 
+		Geod.npts() official description:
 
 		Given a single initial point and terminus point (specified by python
 		floats lon1,lat1 and lon2,lat2), returns a list of longitude/latitude
-		pairs describing npts equally spaced intermediate points along the 
+		pairs describing npts equally spaced intermediate points along the
 		geodesic between the initial and terminus points.
 		"""
 		points = GEOD.npts(x1, y1, x2, y2, n_points)
@@ -228,16 +230,16 @@ class ObstaclesSegmentModel():
 		return points
 
 	def build(self, segment_id, x1, y1, x2, y2, obstacle_length, robot_radius, \
-		density = DFLT_DENSITY, max_obstacle_shiftment = DFLT_MAX_OBSTACLE_SHIFTMENT):
+		distance_between_obstacles = DFLT_DISTANCE_BETWEEN_OBSTACLES, max_obstacle_shiftment = DFLT_MAX_OBSTACLE_SHIFTMENT):
 		"""
 		Build a segment instance from scratch.
-		""" 
+		"""
 		# Set an identifier to this segment
 		self.segment_id = segment_id
 		# Build a line object to compute some maths
 		self.segment = self.get_segment(round(x1, 2),round(y1, 2), round(x2, 2), round(y2, 2))
 		# Set the density of this segment
-		self.density = round(density, 2)
+		self.distance_between_obstacles = round(distance_between_obstacles, 2)
 		# Set the generic length for the simulation
 		self.obstacle_length = round(obstacle_length, 2)
 		# Set a shiftment limit to give some randomness to the obstacles position
@@ -247,7 +249,7 @@ class ObstaclesSegmentModel():
 		# Compute the number of obstacles allowed according to the density and the
 		# length of the segment
 		n_obstacles = self.get_n_obstacles(eval(str(self.segment.length)), self.obstacle_length, \
-			self.density)
+			self.distance_between_obstacles)
 		# Generate n uniformly distanted points, also giving some randomness to the
 		# position of each obstacle
 		obstacles_points = self.get_obstacles_points(x1, y1, x2, y2, n_obstacles, \
@@ -285,7 +287,7 @@ class ObstaclesSegmentModel():
 		if not self.is_empty():
 			self.segment_id = None
 			self.segment = None
-			self.density = None
+			self.distance_between_obstacles = None
 			self.obstacle_length = None
 			self.obstacles = None
 
@@ -296,7 +298,7 @@ class ObstaclesSegmentModel():
 		return self.obstacles == [] or self.obstacles == None
 
 	def to_json(self):
-		""" 
+		"""
 		Get this object in json format.
 		"""
 		return json.dumps(self, default=lambda o:o.__dict__, sort_keys=True, indent=4)
@@ -305,10 +307,10 @@ class ObstaclesModelGenerator():
 	"""
 	An obstacles segment model generator.
 	"""
-	global DFLT_DENSITY, DFLT_MAX_OBSTACLE_SHIFTMENT
+	global DFLT_DISTANCE_BETWEEN_OBSTACLES, DFLT_MAX_OBSTACLE_SHIFTMENT
 
 	def __init__(self, simulation_id, obstacle_length, robot_radius, initial_x, initial_y, \
-		density = DFLT_DENSITY, max_obstacle_shiftment = DFLT_MAX_OBSTACLE_SHIFTMENT, segments = []):
+		distance_between_obstacles = DFLT_DISTANCE_BETWEEN_OBSTACLES, max_obstacle_shiftment = DFLT_MAX_OBSTACLE_SHIFTMENT, segments = []):
 		"""
 		Default constructor.
 		"""
@@ -326,41 +328,41 @@ class ObstaclesModelGenerator():
 		self.initial_y = round(initial_y, 2)
 		# Set a shiftment limit to give some randomness to the obstacles position
 		self.max_obstacle_shiftment = round(max_obstacle_shiftment, 2)
-		# Set the global density (In case we want the same density for each segment)
-		self.density = round(density, 2)
+		# Set the global distance between obstacles (In case we want the same distance between obstacles for each segment)
+		self.distance_between_obstacles = round(distance_between_obstacles, 2)
 
-	def append_point(self, segment_id, x, y, density = None, max_obstacle_shiftment = None):
+	def append_point(self, segment_id, x, y, distance_between_obstacles = None, max_obstacle_shiftment = None):
 		"""
 		Append a new point to the path, generating the segment properties automatically.
 		"""
-		# If the max obstacle shiftment isn't especified, we will get the global 
+		# If the max obstacle shiftment isn't especified, we will get the global
 		# or default value, and the same with density
 		if max_obstacle_shiftment == None:
 			max_obstacle_shiftment = self.max_obstacle_shiftment
-		if density == None:
-			density = self.density
+		if distance_between_obstacles == None:
+			distance_between_obstacles = self.distance_between_obstacles
 		# There are some segments yet
 		if not (self.segments == [] or self.segments == None):
 			self.__concatenate_segment(segment_id, self.segments[-1].segment.p2.x, \
-				self.segments[-1].segment.p2.y, x, y, density, max_obstacle_shiftment)
-		else: 
+				self.segments[-1].segment.p2.y, x, y, distance_between_obstacles, max_obstacle_shiftment)
+		else:
 			# Build the first segment
-			self.__concatenate_segment(segment_id, self.initial_x, self.initial_y, x, y, density, \
+			self.__concatenate_segment(segment_id, self.initial_x, self.initial_y, x, y, distance_between_obstacles, \
 				max_obstacle_shiftment)
 
-	def __concatenate_segment(self, segment_id, x1, y1, x2, y2, density = None, \
+	def __concatenate_segment(self, segment_id, x1, y1, x2, y2, distance_between_obstacles = None, \
 		max_obstacle_shiftment = None):
 		"""
 		Concatenate a new segment to the path.
 		"""
-		# If the max obstacle shiftment isn't especified, we will get the global 
+		# If the max obstacle shiftment isn't especified, we will get the global
 		# or default value, and the same with density
 		if max_obstacle_shiftment == None:
 			max_obstacle_shiftment = self.max_obstacle_shiftment
-		if density == None:
-			density = self.density
+		if distance_between_obstacles == None:
+			distance_between_obstacles = self.distance_between_obstacles
 		self.segments.append(ObstaclesSegmentModel(segment_id, x1, y1, x2, y2, \
-			self.obstacle_length, self.robot_radius, density = density, max_obstacle_shiftment = \
+			self.obstacle_length, self.robot_radius, distance_between_obstacles = distance_between_obstacles, max_obstacle_shiftment = \
 			max_obstacle_shiftment))
 
 
@@ -422,9 +424,7 @@ class ObstaclesModelGenerator():
 		return True
 
 	def to_json(self):
-		""" 
+		"""
 		Get this object in json format.
 		"""
 		return json.dumps(self, default=lambda o:o.__dict__, sort_keys=True, indent=4)
-
-

@@ -132,12 +132,13 @@ class SimulationResults:
         individual_speeds_results = []
         individual_distances_results = []
         for i in range(0, self.n_iterations):
-            individual_times_results.append(\
-                self.iterations_results[i].segments_results[segment_index].time)
-            individual_speeds_results.append(\
-                self.iterations_results[i].segments_results[segment_index].speed)
-            individual_distances_results.append(\
-                self.iterations_results[i].segments_results[segment_index].distance)
+            if(self.iterations_results[i].failure):
+                individual_times_results.append(\
+                    self.iterations_results[i].segments_results[segment_index].time)
+                individual_speeds_results.append(\
+                    self.iterations_results[i].segments_results[segment_index].speed)
+                individual_distances_results.append(\
+                    self.iterations_results[i].segments_results[segment_index].distance)
         return individual_times_results, individual_speeds_results,\
             individual_distances_results
 
@@ -146,12 +147,13 @@ class SimulationResults:
         individual_speeds_results = []
         individual_distances_results = []
         for i in range(0, self.n_iterations):
-            individual_times_results.append(\
-                self.iterations_results[i].time)
-            individual_speeds_results.append(\
-                self.iterations_results[i].speed)
-            individual_distances_results.append(\
-                self.iterations_results[i].distance)
+            if(self.iterations_results[i].failure):
+                individual_times_results.append(\
+                    self.iterations_results[i].time)
+                individual_speeds_results.append(\
+                    self.iterations_results[i].speed)
+                individual_distances_results.append(\
+                    self.iterations_results[i].distance)
         return individual_times_results, individual_speeds_results,\
             individual_distances_results
 
@@ -159,20 +161,21 @@ class SimulationResults:
         msg = GlobalSegmentResultsMsg()
         msg.segment_index = segment_index
         msg.n_failures = self.get_global_segment_failures_count(segment_index)
-        individual_times_results, individual_speeds_results,\
-            individual_distances_results = self.get_global_segment_results_lists(segment_index)
-        msg.time_mean = mean(individual_times_results)
-        msg.time_stdev = stdev(individual_times_results)
-        msg.time_max = max(individual_times_results)
-        msg.time_min = min(individual_times_results)
-        msg.distance_mean = mean(individual_distances_results)
-        msg.distance_stdev = stdev(individual_distances_results)
-        msg.distance_max = max(individual_distances_results)
-        msg.distance_min = min(individual_distances_results)
-        msg.speed_mean = mean(individual_speeds_results)
-        msg.speed_stdev = stdev(individual_speeds_results)
-        msg.speed_max = max(individual_speeds_results)
-        msg.speed_min = min(individual_speeds_results)
+        if(self.n_iterations - msg.n_failures >= 2):
+            individual_times_results, individual_speeds_results,\
+                individual_distances_results = self.get_global_segment_results_lists(segment_index)
+            msg.time_mean = mean(individual_times_results)
+            msg.time_stdev = stdev(individual_times_results)
+            msg.time_max = max(individual_times_results)
+            msg.time_min = min(individual_times_results)
+            msg.distance_mean = mean(individual_distances_results)
+            msg.distance_stdev = stdev(individual_distances_results)
+            msg.distance_max = max(individual_distances_results)
+            msg.distance_min = min(individual_distances_results)
+            msg.speed_mean = mean(individual_speeds_results)
+            msg.speed_stdev = stdev(individual_speeds_results)
+            msg.speed_max = max(individual_speeds_results)
+            msg.speed_min = min(individual_speeds_results)
         return msg
 
     def get_global_segment_results_msgs_list(self):
@@ -184,23 +187,24 @@ class SimulationResults:
 
     def get_global_simulation_results_msg(self):
         msg = GlobalSimulationResultsMsg()
-        msg.n_failures = self.get_global_simulation_failures_count()
         self.n_failures = msg.n_failures
         self.useful_simulation = not (self.n_failures >= 2)
-        individual_times_results, individual_speeds_results,\
-            individual_distances_results = self.get_global_simulation_results_lists()
-        msg.time_mean = mean(individual_times_results)
-        msg.time_stdev = stdev(individual_times_results)
-        msg.time_max = max(individual_times_results)
-        msg.time_min = min(individual_times_results)
-        msg.distance_mean = mean(individual_distances_results)
-        msg.distance_stdev = stdev(individual_distances_results)
-        msg.distance_max = max(individual_distances_results)
-        msg.distance_min = min(individual_distances_results)
-        msg.speed_mean = mean(individual_speeds_results)
-        msg.speed_stdev = stdev(individual_speeds_results)
-        msg.speed_max = max(individual_speeds_results)
-        msg.speed_min = min(individual_speeds_results)
+        msg.n_failures = self.get_global_simulation_failures_count()
+        if(self.useful_simulation):
+            individual_times_results, individual_speeds_results,\
+                individual_distances_results = self.get_global_simulation_results_lists()
+            msg.time_mean = mean(individual_times_results)
+            msg.time_stdev = stdev(individual_times_results)
+            msg.time_max = max(individual_times_results)
+            msg.time_min = min(individual_times_results)
+            msg.distance_mean = mean(individual_distances_results)
+            msg.distance_stdev = stdev(individual_distances_results)
+            msg.distance_max = max(individual_distances_results)
+            msg.distance_min = min(individual_distances_results)
+            msg.speed_mean = mean(individual_speeds_results)
+            msg.speed_stdev = stdev(individual_speeds_results)
+            msg.speed_max = max(individual_speeds_results)
+            msg.speed_min = min(individual_speeds_results)
         return msg
 
     def get_simulation_metadata_msg(self, plan_file, distance_between_obstacles,\

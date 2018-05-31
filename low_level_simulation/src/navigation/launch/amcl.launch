@@ -34,6 +34,7 @@
     <rosparam file="$(find navigation)/config/dwa_local_planner.yaml" command="load" />
     <rosparam file="$(find navigation)/config/teb_local_planner.yaml" command="load" />
     <rosparam file="$(find navigation)/config/global_planner.yaml" command="load" />
+    <rosparam file="$(find navigation)/config/nav_fn_global_planner.yaml" command="load" />
     <rosparam file="$(find navigation)/config/move_base.yaml" command="load" />
 
     <remap from="cmd_vel" to="cmd_vel"/>

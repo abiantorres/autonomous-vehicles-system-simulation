@@ -17,8 +17,8 @@ public final class Constants {
 	 * - MONGODB_RESULTS_COLLECTION: results MongoDB collection */
 	
 	private final static String 
-			LOW_LEVEL_DATA_TOPIC = "/path_plan_info",
-			LOW_LEVEL_DATA_MSG_TYPE = "costum_msgs/PathInfo", 
+			LOW_LEVEL_DATA_TOPIC = "/simulation_data",
+			LOW_LEVEL_DATA_MSG_TYPE = "costum_msgs/SimulationMsg", 
 			MONGODB_URI = "localhost",
 			ROS_URI = "ws://localhost:9090",
 			MONGODB_DB_NAME = "avss",
