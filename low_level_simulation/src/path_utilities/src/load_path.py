@@ -14,7 +14,7 @@ from random import randint
 from statistics import stdev
 
 # Path information messages
-from costum_msgs.msg import RouteTimes, GoalInfo, PathInfo
+from costum_msgs.msg import RouteTimes, GoalInfo, PathInfo, SimulationMsg
 
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseActionFeedback
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseArray, Pose, Quaternion, Point
@@ -27,6 +27,7 @@ import rosbag
 import rospkg,tf
 
 from obstacles_util import ObstaclesModelGenerator
+from results_util import SimulationResults
 
 # Initilize a rospack client
 rospack = rospkg.RosPack()
@@ -80,19 +81,19 @@ initial_state = ModelState()
 time_to_relocation = 5
 # Timeout for each simulation (in seconds)
 # Default: 2 minutes and 30 seconds
-simulation_timeout = 150 
+simulation_timeout = 40
 
 # Number of simulations
 simulations = 1
 
-# Path planning input file 
+# Path planning input file
 file_name = ""
 
 # Map metadata variables:
 
 map_metadata = {}
 # Avoid unnecessaries operations in map metadata callback
-get_map_metadata = False  
+get_map_metadata = False
 
 occupancy_grid = OccupancyGrid()
 # Avoid unnecessaries operations in occupancy grid callback
@@ -109,7 +110,7 @@ def callback_move_base(data):
         current_traveled_distance += sqrt(pow(data.feedback.base_position.pose.position.x - last_x_position, 2) + pow(data.feedback.base_position.pose.position.y - last_y_position, 2))
     last_x_position = data.feedback.base_position.pose.position.x
     last_y_position = data.feedback.base_position.pose.position.y
-    
+
 rospy.Subscriber("move_base/feedback", MoveBaseActionFeedback, callback_move_base)
 
 
@@ -125,7 +126,7 @@ def callback_odom(msg):
                 max_linear_velocity = current_linear_velocity
             # Current linear velocity is now the last linear velocity
             last_linear_velocity = current_linear_velocity_average
-  
+
 rospy.Subscriber('odom', Odometry, callback_odom)
 
 def callback_map_metadata(msg):
@@ -242,7 +243,7 @@ def run(n_simulations, density):
     maximum_linear_velocity_by_section, linear_velocity_average_by_section, \
     global_linear_velocity_average, max_linear_velocity, current_linear_velocity, \
     compute_linear_velocity, points_2d, times_standard_deviation
-    
+
     # configure needed topics and move_base client
     path_plan_info_pub = rospy.Publisher('/path_plan_info', PathInfo, queue_size=1)
     poseArray_publisher = rospy.Publisher('/waypoints', PoseArray, queue_size=1)
@@ -255,11 +256,11 @@ def run(n_simulations, density):
 
     # read path plan from file
     read_route_configuration_from_file()
-    
+
     # Build an obstacles model generator
     obstacles_model_generator = ObstaclesModelGenerator("my simulation", 0.1, 0.5, \
         points_2d[0][0], points_2d[0][1], density, 0.1)
-    
+
     i = 1
     for point in points_2d:
         if(i != 1):
@@ -268,7 +269,7 @@ def run(n_simulations, density):
 
     # Make sure we have an empty array of average times.
     # The lenght of the array is equal to the number of end points (path sections)
-    time_average_by_section = [0.0] * len(waypoints) 
+    time_average_by_section = [0.0] * len(waypoints)
     # Make sure we have an empty array of aborts.
     # The lenght of the array is equal to the number of end points (path sections)
     failures_by_section = [0.0] * len(waypoints)
@@ -288,7 +289,7 @@ def run(n_simulations, density):
     # All times for each section
     times_by_section = np.zeros((len(waypoints), n_simulations))
     times_standard_deviation = [0.0] * len(waypoints) # standard desviation by section
-    
+
     # Initialize global statistics
     global_time_average = 0.0
     global_failures_average = 0.0
@@ -299,9 +300,9 @@ def run(n_simulations, density):
     current_linear_velocity = 0.0
 
     obstacles_model_generator.spawn_obstacles()
-
+    simulator = SimulationResults(len(waypoints), n_simulations)
     # Run the n simulations
-    for x in range(0, n_simulations):      
+    for x in range(0, n_simulations):
         # Print in Rviz the visual end point icons
         poseArray_publisher.publish(convert_PoseWithCovArray_to_PoseArray(waypoints))
         # Execute waypoints each in seqsuence
@@ -310,7 +311,7 @@ def run(n_simulations, density):
 
         # Send to path planner each of the move base goals
         for waypoint in waypoints:
-            
+
             # Build goal
             goal = MoveBaseGoal()
             goal.target_pose.header.frame_id = frame_id
@@ -325,38 +326,42 @@ def run(n_simulations, density):
             last_linear_velocity = 0.0
             max_linear_velocity = -1.0
             current_linear_velocity = 0.0
-            
+
             compute_distance = True
             compute_linear_velocity = True
 
+            simulator.start(i, x)
             # Send goal to path planner
             client.send_goal(goal)
 
             # Set the start time for the current plan
             start_time = rospy.get_time()
 
-            # Keep waiting for results 
+            # Keep waiting for results
             finished_within_time = client.wait_for_result(rospy.Duration(simulation_timeout))
-            
+
             compute_distance = False
             compute_linear_velocity = False
-            
+
             # Check for success or failure
             if not finished_within_time:
                 client.cancel_goal()
                 rospy.loginfo("Timed out achieving goal")
                 # Increase the failures count for the current section
                 failures_by_section[i] += 1
+                simulator.stop(i, x, True)
                 break
             else:
                 state = client.get_state()
                 if state == GoalStatus.SUCCEEDED:
                     rospy.loginfo("Goal succeeded!")
                     rospy.loginfo("State:" + str(state))
+                    simulator.stop(i, x, False)
                 else:
                     rospy.loginfo("Goal failed with error code: " + str(state))
                     # Increase the failures count for the current section
                     failures_by_section[i] += 1
+                    simulator.stop(i, x, True)
                     break
 
             # Computes section statistics
@@ -368,13 +373,13 @@ def run(n_simulations, density):
             velocity_average_by_section[i] = traveled_distance_average_by_section[i] / time_average_by_section[i]
             linear_velocity_average_by_section[i] = current_linear_velocity_average
             maximum_linear_velocity_by_section[i] = max_linear_velocity
-            i += 1 
-        
+            i += 1
+
         # Reset gazebo word to avoid posible modifications in the last simulation
         reset_gazebo_world()
-        
+
         #obstacles_model_generator.delete_obstacles()
-        
+
         # Set the initial vehicle model state
         set_vehicle_model_state()
 
@@ -384,7 +389,7 @@ def run(n_simulations, density):
     for i in range(0, len(waypoints)):
         # Compute the population standard
         if(times_by_section[i].size > 1):
-            times_standard_deviation[i] = stdev(times_by_section[i]) 
+            times_standard_deviation[i] = stdev(times_by_section[i])
         else:
             times_standard_deviation[i] = 0.0
         time_average_by_section[i] /= n_simulations
@@ -393,9 +398,9 @@ def run(n_simulations, density):
         rospy.loginfo("###### Section " + str(i+1) + " -> distance  " + str(traveled_distance_average_by_section[i]) + "  ######")
         velocity_average_by_section[i] /= n_simulations
         rospy.loginfo("###### Section " + str(i+1) + " -> velocity  " + str(velocity_average_by_section[i]) + "  ######")
-    
+
     # Compute global statistics
-    global_time_average = sum(time_average_by_section) 
+    global_time_average = sum(time_average_by_section)
     rospy.loginfo("###### Global -> time  " + str(time_average_by_section[i]) + "  ######")
     global_traveled_distance_average = sum(traveled_distance_average_by_section)
     rospy.loginfo("###### Global -> distance  " + str(global_traveled_distance_average) + "  ######")
@@ -438,10 +443,11 @@ def run(n_simulations, density):
         section.max_obstacle_shiftment = obstacles_model_generator.segments[i].max_obstacle_shiftment
         section.obstacle_length = obstacles_model_generator.segments[i].obstacle_length
         sections.append(section)
-    
+
     plan_results.sections = sections
     path_plan_info_pub.publish(plan_results)
     rospy.loginfo(plan_results)
+    rospy.loginfo(simulator.get_msg("", 1.0, 1))
 
 if __name__ == '__main__':
     global file_name, simulations

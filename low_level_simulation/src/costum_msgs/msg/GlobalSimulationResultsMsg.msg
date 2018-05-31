@@ -1,0 +1,13 @@
+int64 n_failures
+float64 time_mean
+float64 time_stdev
+float64 time_max
+float64 time_min
+float64 distance_mean
+float64 distance_stdev
+float64 distance_max
+float64 distance_min
+float64 speed_mean
+float64 speed_stdev
+float64 speed_max
+float64 speed_min

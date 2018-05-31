@@ -31,16 +31,14 @@
     <rosparam file="$(find navigation)/config/costmap_common.yaml" command="load" ns="local_costmap" />
     <rosparam file="$(find navigation)/config/local_costmap.yaml" command="load" />
     <rosparam file="$(find navigation)/config/global_costmap.yaml" command="load" />
-    <rosparam file="$(find navigation)/config/local_planner.yaml" command="load" />
+    <rosparam file="$(find navigation)/config/dwa_local_planner.yaml" command="load" />
     <rosparam file="$(find navigation)/config/teb_local_planner.yaml" command="load" />
     <rosparam file="$(find navigation)/config/global_planner.yaml" command="load" />
     <rosparam file="$(find navigation)/config/move_base.yaml" command="load" />
-    
+
     <remap from="cmd_vel" to="cmd_vel"/>
     <remap from="odom" to="odom"/>
     <remap from="scan" to="vehicle/laser/scan"/>
 
   </node>
 </launch>
-
-

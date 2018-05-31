@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install")
+  set(CMAKE_INSTALL_PREFIX "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

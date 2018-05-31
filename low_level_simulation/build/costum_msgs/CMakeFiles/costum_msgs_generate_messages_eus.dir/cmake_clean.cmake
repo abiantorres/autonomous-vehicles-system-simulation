@@ -1,9 +1,15 @@
 file(REMOVE_RECURSE
   "CMakeFiles/costum_msgs_generate_messages_eus"
-  "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/GoalInfo.l"
-  "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/RouteTimes.l"
-  "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/PathInfo.l"
-  "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/manifest.l"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/SimulationMetadataMsg.l"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/IndividualIterationResultsMsg.l"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/PathInfo.l"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/GlobalSegmentResultsMsg.l"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/RouteTimes.l"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/SimulationMsg.l"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/IndividualSegmentResultsMsg.l"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/GoalInfo.l"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/msg/GlobalSimulationResultsMsg.l"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/share/roseus/ros/costum_msgs/manifest.l"
 )
 
 # Per-language clean rules from dependency scanning.

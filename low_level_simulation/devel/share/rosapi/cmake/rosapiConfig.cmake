@@ -67,14 +67,14 @@ set(rosapi_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(rosapi_SOURCE_PREFIX /home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosapi)
-  set(rosapi_DEVEL_PREFIX /home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel)
+  set(rosapi_SOURCE_PREFIX /home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosapi)
+  set(rosapi_DEVEL_PREFIX /home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel)
   set(rosapi_INSTALL_PREFIX "")
   set(rosapi_PREFIX ${rosapi_DEVEL_PREFIX})
 else()
   set(rosapi_SOURCE_PREFIX "")
   set(rosapi_DEVEL_PREFIX "")
-  set(rosapi_INSTALL_PREFIX /home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install)
+  set(rosapi_INSTALL_PREFIX /home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install)
   set(rosapi_PREFIX ${rosapi_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(rosapi_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/include " STREQUAL " ")
+if(NOT "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/include " STREQUAL " ")
   set(rosapi_INCLUDE_DIRS "")
-  set(_include_dirs "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/include")
+  set(_include_dirs "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/include")
   if(NOT "https://github.com/RobotWebTools/rosbridge_suite/issues " STREQUAL " ")
     set(_report "Check the issue tracker 'https://github.com/RobotWebTools/rosbridge_suite/issues' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT "http://ros.org/wiki/rosapi " STREQUAL " ")
@@ -110,7 +110,7 @@ if(NOT "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simu
         message(FATAL_ERROR "Project 'rosapi' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'rosapi' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosapi/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'rosapi' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/rosbridge_suite/rosapi/${idir}'.  ${_report}")
     endif()
     _list_append_unique(rosapi_INCLUDE_DIRS ${include})
   endforeach()
@@ -129,7 +129,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib;/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib;/opt/ros/kinetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

@@ -1,8 +1,8 @@
-prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel
+prefix=/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel
 
 Name: rosapi
 Description: Description of rosapi
 Version: 0.8.6
-Cflags: -I/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/include
-Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib 
+Cflags: -I/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/include
+Libs: -L/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib 
 Requires: message_runtime

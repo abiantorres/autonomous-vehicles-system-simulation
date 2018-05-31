@@ -1,0 +1,4 @@
+SimulationMetadataMsg metadata
+GlobalSimulationResultsMsg global_simulation_results
+GlobalSegmentResultsMsg[] global_segments_results
+IndividualIterationResultsMsg[] individual_iterations_results

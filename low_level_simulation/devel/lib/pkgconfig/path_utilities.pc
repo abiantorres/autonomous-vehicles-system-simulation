@@ -1,8 +1,8 @@
-prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel
+prefix=/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel
 
 Name: path_utilities
 Description: Description of path_utilities
 Version: 0.0.0
 Cflags: 
-Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib 
+Libs: -L/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib 
 Requires: actionlib costum_msgs geometry_msgs move_base_msgs rospy smach std_msgs

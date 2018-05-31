@@ -1,8 +1,8 @@
-prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel
+prefix=/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel
 
 Name: navigation
 Description: Description of navigation
 Version: 1.0.0
 Cflags: 
-Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib 
+Libs: -L/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel/lib 
 Requires: 

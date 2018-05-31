@@ -1,8 +1,0 @@
-prefix=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install
-
-Name: rosbridge_library
-Description: Description of rosbridge_library
-Version: 0.8.6
-Cflags: -I/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install/include
-Libs: -L/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install/lib 
-Requires: message_runtime std_msgs geometry_msgs

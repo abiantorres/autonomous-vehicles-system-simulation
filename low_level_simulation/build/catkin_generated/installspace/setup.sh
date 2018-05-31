@@ -10,7 +10,7 @@
 
 # since this file is sourced either use the provided _CATKIN_SETUP_DIR
 # or fall back to the destination set at configure time
-: ${_CATKIN_SETUP_DIR:=/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install}
+: ${_CATKIN_SETUP_DIR:=/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install}
 _SETUP_UTIL="$_CATKIN_SETUP_DIR/_setup_util.py"
 unset _CATKIN_SETUP_DIR
 

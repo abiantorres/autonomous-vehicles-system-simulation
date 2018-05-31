@@ -53,6 +53,12 @@ add_message_files(
    GoalInfo.msg
    PathInfo.msg
    RouteTimes.msg
+   IndividualSegmentResultsMsg.msg
+   IndividualIterationResultsMsg.msg
+   GlobalSegmentResultsMsg.msg
+   GlobalSimulationResultsMsg.msg
+   SimulationMetadataMsg.msg
+   SimulationMsg.msg
 )
 
 ## Generate added messages and services with any dependencies listed here

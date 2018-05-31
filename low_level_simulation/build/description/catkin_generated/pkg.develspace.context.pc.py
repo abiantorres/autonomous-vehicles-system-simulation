@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "description"
-PROJECT_SPACE_DIR = "/home/parallels/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel"
+PROJECT_SPACE_DIR = "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/devel"
 PROJECT_VERSION = "1.0.0"

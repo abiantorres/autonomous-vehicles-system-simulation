@@ -1,0 +1,9 @@
+string plan_file
+string date
+int64 n_segments
+int64 n_iterations
+int64 simulation_timeout
+float64 distance_between_obstacles
+bool useful_simulation
+string local_planner
+string global_planner
