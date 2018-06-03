@@ -90,7 +90,7 @@ namespace message_traits
 
 
 // BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': False}
-// {'costum_msgs': ['/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg']}
+// {'costum_msgs': ['/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg'], 'geometry_msgs': ['/opt/ros/kinetic/share/geometry_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
 
@@ -133,12 +133,12 @@ struct MD5Sum< ::costum_msgs::SimulationMsg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "1db179749f1d9c58be4915f56104bf18";
+    return "f76726cea71170d43f3772c8670bcc3f";
   }
 
   static const char* value(const ::costum_msgs::SimulationMsg_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x1db179749f1d9c58ULL;
-  static const uint64_t static_value2 = 0xbe4915f56104bf18ULL;
+  static const uint64_t static_value1 = 0xf76726cea71170d4ULL;
+  static const uint64_t static_value2 = 0x3f3772c8670bcc3fULL;
 };
 
 template<class ContainerAllocator>
@@ -167,12 +167,31 @@ MSG: costum_msgs/SimulationMetadataMsg\n\
 string plan_file\n\
 string date\n\
 int64 n_segments\n\
+SegmentsMetadataMsg segments_metadata\n\
 int64 n_iterations\n\
-int64 simulation_timeout\n\
-float64 distance_between_obstacles\n\
+int64 timeout_factor\n\
 bool useful_simulation\n\
 string local_planner\n\
 string global_planner\n\
+\n\
+================================================================================\n\
+MSG: costum_msgs/SegmentsMetadataMsg\n\
+SegmentMetadataMsg[] segments_metadata\n\
+\n\
+================================================================================\n\
+MSG: costum_msgs/SegmentMetadataMsg\n\
+int64 segment_index\n\
+geometry_msgs/Point initial_point\n\
+geometry_msgs/Point end_point\n\
+float64 distance_between_obstacles\n\
+int64 segment_simulation_timeout\n\
+\n\
+================================================================================\n\
+MSG: geometry_msgs/Point\n\
+# This contains the position of a point in free space\n\
+float64 x\n\
+float64 y\n\
+float64 z\n\
 \n\
 ================================================================================\n\
 MSG: costum_msgs/GlobalSimulationResultsMsg\n\

@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -50,21 +51,21 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
    FILES
-   GoalInfo.msg
-   PathInfo.msg
-   RouteTimes.msg
    IndividualSegmentResultsMsg.msg
    IndividualIterationResultsMsg.msg
    GlobalSegmentResultsMsg.msg
    GlobalSimulationResultsMsg.msg
    SimulationMetadataMsg.msg
    SimulationMsg.msg
+   SegmentsMetadataMsg.msg
+   SegmentMetadataMsg.msg
 )
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
   std_msgs
+  geometry_msgs
 )
 
 catkin_package(CATKIN_DEPENDS message_runtime)

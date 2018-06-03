@@ -1,8 +1,8 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "costum_msgs: 9 messages, 0 services")
+message(STATUS "costum_msgs: 8 messages, 0 services")
 
-set(MSG_I_FLAGS "-Icostum_msgs:/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg;-Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg")
+set(MSG_I_FLAGS "-Icostum_msgs:/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg;-Istd_msgs:/opt/ros/kinetic/share/std_msgs/cmake/../msg;-Igeometry_msgs:/opt/ros/kinetic/share/geometry_msgs/cmake/../msg")
 
 # Find all generators
 find_package(gencpp REQUIRED)
@@ -19,7 +19,7 @@ add_custom_target(costum_msgs_generate_messages ALL)
 
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg" NAME_WE)
 add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg" "costum_msgs/SegmentsMetadataMsg:costum_msgs/SegmentMetadataMsg:geometry_msgs/Point"
 )
 
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg" NAME_WE)
@@ -27,9 +27,9 @@ add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg" "costum_msgs/IndividualSegmentResultsMsg"
 )
 
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg" NAME_WE)
 add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" "costum_msgs/GoalInfo"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg" "geometry_msgs/Point"
 )
 
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg" NAME_WE)
@@ -37,24 +37,19 @@ add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg" ""
 )
 
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
-add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" ""
-)
-
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg" NAME_WE)
 add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg" "costum_msgs/IndividualSegmentResultsMsg:costum_msgs/IndividualIterationResultsMsg:costum_msgs/GlobalSimulationResultsMsg:costum_msgs/GlobalSegmentResultsMsg:costum_msgs/SimulationMetadataMsg"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg" "costum_msgs/SegmentsMetadataMsg:costum_msgs/SegmentMetadataMsg:costum_msgs/IndividualSegmentResultsMsg:costum_msgs/GlobalSegmentResultsMsg:costum_msgs/GlobalSimulationResultsMsg:geometry_msgs/Point:costum_msgs/SimulationMetadataMsg:costum_msgs/IndividualIterationResultsMsg"
+)
+
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg" NAME_WE)
+add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg" "costum_msgs/SegmentMetadataMsg:geometry_msgs/Point"
 )
 
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
 add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" ""
-)
-
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg" NAME_WE)
-add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "costum_msgs" "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg" ""
 )
 
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg" NAME_WE)
@@ -71,7 +66,7 @@ add_custom_target(_costum_msgs_generate_messages_check_deps_${_filename}
 _generate_msg_cpp(costum_msgs
   "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_cpp(costum_msgs
@@ -81,9 +76,9 @@ _generate_msg_cpp(costum_msgs
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_cpp(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
+  "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_cpp(costum_msgs
@@ -93,25 +88,19 @@ _generate_msg_cpp(costum_msgs
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_cpp(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_cpp(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_cpp(costum_msgs
   "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/costum_msgs
-)
-_generate_msg_cpp(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/costum_msgs
@@ -141,17 +130,15 @@ get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-ve
 add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
-add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_cpp _costum_msgs_generate_messages_check_deps_${_filename})
@@ -168,7 +155,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS costum_msgs_generate_messages_cpp)
 _generate_msg_eus(costum_msgs
   "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_eus(costum_msgs
@@ -178,9 +165,9 @@ _generate_msg_eus(costum_msgs
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_eus(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
+  "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_eus(costum_msgs
@@ -190,25 +177,19 @@ _generate_msg_eus(costum_msgs
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_eus(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_eus(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_eus(costum_msgs
   "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs
-)
-_generate_msg_eus(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs
@@ -238,17 +219,15 @@ get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-ve
 add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
-add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_eus _costum_msgs_generate_messages_check_deps_${_filename})
@@ -265,7 +244,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS costum_msgs_generate_messages_eus)
 _generate_msg_lisp(costum_msgs
   "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_lisp(costum_msgs
@@ -275,9 +254,9 @@ _generate_msg_lisp(costum_msgs
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_lisp(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
+  "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_lisp(costum_msgs
@@ -287,25 +266,19 @@ _generate_msg_lisp(costum_msgs
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_lisp(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_lisp(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_lisp(costum_msgs
   "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs
-)
-_generate_msg_lisp(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs
@@ -335,17 +308,15 @@ get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-ve
 add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
-add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_lisp _costum_msgs_generate_messages_check_deps_${_filename})
@@ -362,7 +333,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS costum_msgs_generate_messages_lisp)
 _generate_msg_nodejs(costum_msgs
   "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_nodejs(costum_msgs
@@ -372,9 +343,9 @@ _generate_msg_nodejs(costum_msgs
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_nodejs(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
+  "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_nodejs(costum_msgs
@@ -384,25 +355,19 @@ _generate_msg_nodejs(costum_msgs
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_nodejs(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_nodejs(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_nodejs(costum_msgs
   "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs
-)
-_generate_msg_nodejs(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs
@@ -432,17 +397,15 @@ get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-ve
 add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
-add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_nodejs _costum_msgs_generate_messages_check_deps_${_filename})
@@ -459,7 +422,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS costum_msgs_generate_messages_nodej
 _generate_msg_py(costum_msgs
   "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_py(costum_msgs
@@ -469,9 +432,9 @@ _generate_msg_py(costum_msgs
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_py(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
+  "/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_py(costum_msgs
@@ -481,25 +444,19 @@ _generate_msg_py(costum_msgs
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_py(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg"
   "${MSG_I_FLAGS}"
-  ""
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_py(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg;/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMetadataMsg.msg"
+  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg;/opt/ros/kinetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs
 )
 _generate_msg_py(costum_msgs
   "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs
-)
-_generate_msg_py(costum_msgs
-  "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs
@@ -529,17 +486,15 @@ get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-ve
 add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualIterationResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/PathInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentMetadataMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSegmentResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/RouteTimes.msg" NAME_WE)
-add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SimulationMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/SegmentsMetadataMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GoalInfo.msg" NAME_WE)
+get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/IndividualSegmentResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg/GlobalSimulationResultsMsg.msg" NAME_WE)
 add_dependencies(costum_msgs_generate_messages_py _costum_msgs_generate_messages_check_deps_${_filename})
@@ -563,6 +518,9 @@ endif()
 if(TARGET std_msgs_generate_messages_cpp)
   add_dependencies(costum_msgs_generate_messages_cpp std_msgs_generate_messages_cpp)
 endif()
+if(TARGET geometry_msgs_generate_messages_cpp)
+  add_dependencies(costum_msgs_generate_messages_cpp geometry_msgs_generate_messages_cpp)
+endif()
 
 if(geneus_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/costum_msgs)
   # install generated code
@@ -573,6 +531,9 @@ if(geneus_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/co
 endif()
 if(TARGET std_msgs_generate_messages_eus)
   add_dependencies(costum_msgs_generate_messages_eus std_msgs_generate_messages_eus)
+endif()
+if(TARGET geometry_msgs_generate_messages_eus)
+  add_dependencies(costum_msgs_generate_messages_eus geometry_msgs_generate_messages_eus)
 endif()
 
 if(genlisp_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/costum_msgs)
@@ -585,6 +546,9 @@ endif()
 if(TARGET std_msgs_generate_messages_lisp)
   add_dependencies(costum_msgs_generate_messages_lisp std_msgs_generate_messages_lisp)
 endif()
+if(TARGET geometry_msgs_generate_messages_lisp)
+  add_dependencies(costum_msgs_generate_messages_lisp geometry_msgs_generate_messages_lisp)
+endif()
 
 if(gennodejs_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/costum_msgs)
   # install generated code
@@ -595,6 +559,9 @@ if(gennodejs_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_D
 endif()
 if(TARGET std_msgs_generate_messages_nodejs)
   add_dependencies(costum_msgs_generate_messages_nodejs std_msgs_generate_messages_nodejs)
+endif()
+if(TARGET geometry_msgs_generate_messages_nodejs)
+  add_dependencies(costum_msgs_generate_messages_nodejs geometry_msgs_generate_messages_nodejs)
 endif()
 
 if(genpy_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/costum_msgs)
@@ -607,4 +574,7 @@ if(genpy_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/cost
 endif()
 if(TARGET std_msgs_generate_messages_py)
   add_dependencies(costum_msgs_generate_messages_py std_msgs_generate_messages_py)
+endif()
+if(TARGET geometry_msgs_generate_messages_py)
+  add_dependencies(costum_msgs_generate_messages_py geometry_msgs_generate_messages_py)
 endif()

@@ -6,9 +6,10 @@ import genpy
 import struct
 
 import costum_msgs.msg
+import geometry_msgs.msg
 
 class SimulationMsg(genpy.Message):
-  _md5sum = "1db179749f1d9c58be4915f56104bf18"
+  _md5sum = "f76726cea71170d43f3772c8670bcc3f"
   _type = "costum_msgs/SimulationMsg"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """SimulationMetadataMsg metadata
@@ -21,12 +22,31 @@ MSG: costum_msgs/SimulationMetadataMsg
 string plan_file
 string date
 int64 n_segments
+SegmentsMetadataMsg segments_metadata
 int64 n_iterations
-int64 simulation_timeout
-float64 distance_between_obstacles
+int64 timeout_factor
 bool useful_simulation
 string local_planner
 string global_planner
+
+================================================================================
+MSG: costum_msgs/SegmentsMetadataMsg
+SegmentMetadataMsg[] segments_metadata
+
+================================================================================
+MSG: costum_msgs/SegmentMetadataMsg
+int64 segment_index
+geometry_msgs/Point initial_point
+geometry_msgs/Point end_point
+float64 distance_between_obstacles
+int64 segment_simulation_timeout
+
+================================================================================
+MSG: geometry_msgs/Point
+# This contains the position of a point in free space
+float64 x
+float64 y
+float64 z
 
 ================================================================================
 MSG: costum_msgs/GlobalSimulationResultsMsg
@@ -137,8 +157,21 @@ bool failure
         _x = _x.encode('utf-8')
         length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x))
+      buff.write(_get_struct_q().pack(self.metadata.n_segments))
+      length = len(self.metadata.segments_metadata.segments_metadata)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.metadata.segments_metadata.segments_metadata:
+        buff.write(_get_struct_q().pack(val1.segment_index))
+        _v1 = val1.initial_point
+        _x = _v1
+        buff.write(_get_struct_3d().pack(_x.x, _x.y, _x.z))
+        _v2 = val1.end_point
+        _x = _v2
+        buff.write(_get_struct_3d().pack(_x.x, _x.y, _x.z))
+        _x = val1
+        buff.write(_get_struct_dq().pack(_x.distance_between_obstacles, _x.segment_simulation_timeout))
       _x = self
-      buff.write(_get_struct_3qdB().pack(_x.metadata.n_segments, _x.metadata.n_iterations, _x.metadata.simulation_timeout, _x.metadata.distance_between_obstacles, _x.metadata.useful_simulation))
+      buff.write(_get_struct_2qB().pack(_x.metadata.n_iterations, _x.metadata.timeout_factor, _x.metadata.useful_simulation))
       _x = self.metadata.local_planner
       length = len(_x)
       if python3 or type(_x) == unicode:
@@ -204,10 +237,37 @@ bool failure
         self.metadata.date = str[start:end].decode('utf-8')
       else:
         self.metadata.date = str[start:end]
+      start = end
+      end += 8
+      (self.metadata.n_segments,) = _get_struct_q().unpack(str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      self.metadata.segments_metadata.segments_metadata = []
+      for i in range(0, length):
+        val1 = costum_msgs.msg.SegmentMetadataMsg()
+        start = end
+        end += 8
+        (val1.segment_index,) = _get_struct_q().unpack(str[start:end])
+        _v3 = val1.initial_point
+        _x = _v3
+        start = end
+        end += 24
+        (_x.x, _x.y, _x.z,) = _get_struct_3d().unpack(str[start:end])
+        _v4 = val1.end_point
+        _x = _v4
+        start = end
+        end += 24
+        (_x.x, _x.y, _x.z,) = _get_struct_3d().unpack(str[start:end])
+        _x = val1
+        start = end
+        end += 16
+        (_x.distance_between_obstacles, _x.segment_simulation_timeout,) = _get_struct_dq().unpack(str[start:end])
+        self.metadata.segments_metadata.segments_metadata.append(val1)
       _x = self
       start = end
-      end += 33
-      (_x.metadata.n_segments, _x.metadata.n_iterations, _x.metadata.simulation_timeout, _x.metadata.distance_between_obstacles, _x.metadata.useful_simulation,) = _get_struct_3qdB().unpack(str[start:end])
+      end += 17
+      (_x.metadata.n_iterations, _x.metadata.timeout_factor, _x.metadata.useful_simulation,) = _get_struct_2qB().unpack(str[start:end])
       self.metadata.useful_simulation = bool(self.metadata.useful_simulation)
       start = end
       end += 4
@@ -290,8 +350,21 @@ bool failure
         _x = _x.encode('utf-8')
         length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x))
+      buff.write(_get_struct_q().pack(self.metadata.n_segments))
+      length = len(self.metadata.segments_metadata.segments_metadata)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.metadata.segments_metadata.segments_metadata:
+        buff.write(_get_struct_q().pack(val1.segment_index))
+        _v5 = val1.initial_point
+        _x = _v5
+        buff.write(_get_struct_3d().pack(_x.x, _x.y, _x.z))
+        _v6 = val1.end_point
+        _x = _v6
+        buff.write(_get_struct_3d().pack(_x.x, _x.y, _x.z))
+        _x = val1
+        buff.write(_get_struct_dq().pack(_x.distance_between_obstacles, _x.segment_simulation_timeout))
       _x = self
-      buff.write(_get_struct_3qdB().pack(_x.metadata.n_segments, _x.metadata.n_iterations, _x.metadata.simulation_timeout, _x.metadata.distance_between_obstacles, _x.metadata.useful_simulation))
+      buff.write(_get_struct_2qB().pack(_x.metadata.n_iterations, _x.metadata.timeout_factor, _x.metadata.useful_simulation))
       _x = self.metadata.local_planner
       length = len(_x)
       if python3 or type(_x) == unicode:
@@ -358,10 +431,37 @@ bool failure
         self.metadata.date = str[start:end].decode('utf-8')
       else:
         self.metadata.date = str[start:end]
+      start = end
+      end += 8
+      (self.metadata.n_segments,) = _get_struct_q().unpack(str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      self.metadata.segments_metadata.segments_metadata = []
+      for i in range(0, length):
+        val1 = costum_msgs.msg.SegmentMetadataMsg()
+        start = end
+        end += 8
+        (val1.segment_index,) = _get_struct_q().unpack(str[start:end])
+        _v7 = val1.initial_point
+        _x = _v7
+        start = end
+        end += 24
+        (_x.x, _x.y, _x.z,) = _get_struct_3d().unpack(str[start:end])
+        _v8 = val1.end_point
+        _x = _v8
+        start = end
+        end += 24
+        (_x.x, _x.y, _x.z,) = _get_struct_3d().unpack(str[start:end])
+        _x = val1
+        start = end
+        end += 16
+        (_x.distance_between_obstacles, _x.segment_simulation_timeout,) = _get_struct_dq().unpack(str[start:end])
+        self.metadata.segments_metadata.segments_metadata.append(val1)
       _x = self
       start = end
-      end += 33
-      (_x.metadata.n_segments, _x.metadata.n_iterations, _x.metadata.simulation_timeout, _x.metadata.distance_between_obstacles, _x.metadata.useful_simulation,) = _get_struct_3qdB().unpack(str[start:end])
+      end += 17
+      (_x.metadata.n_iterations, _x.metadata.timeout_factor, _x.metadata.useful_simulation,) = _get_struct_2qB().unpack(str[start:end])
       self.metadata.useful_simulation = bool(self.metadata.useful_simulation)
       start = end
       end += 4
@@ -428,12 +528,30 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_3qdB = None
-def _get_struct_3qdB():
-    global _struct_3qdB
-    if _struct_3qdB is None:
-        _struct_3qdB = struct.Struct("<3qdB")
-    return _struct_3qdB
+_struct_q3dB = None
+def _get_struct_q3dB():
+    global _struct_q3dB
+    if _struct_q3dB is None:
+        _struct_q3dB = struct.Struct("<q3dB")
+    return _struct_q3dB
+_struct_3d = None
+def _get_struct_3d():
+    global _struct_3d
+    if _struct_3d is None:
+        _struct_3d = struct.Struct("<3d")
+    return _struct_3d
+_struct_q = None
+def _get_struct_q():
+    global _struct_q
+    if _struct_q is None:
+        _struct_q = struct.Struct("<q")
+    return _struct_q
+_struct_2qB = None
+def _get_struct_2qB():
+    global _struct_2qB
+    if _struct_2qB is None:
+        _struct_2qB = struct.Struct("<2qB")
+    return _struct_2qB
 _struct_2q12d = None
 def _get_struct_2q12d():
     global _struct_2q12d
@@ -446,15 +564,15 @@ def _get_struct_q12d():
     if _struct_q12d is None:
         _struct_q12d = struct.Struct("<q12d")
     return _struct_q12d
-_struct_q3dB = None
-def _get_struct_q3dB():
-    global _struct_q3dB
-    if _struct_q3dB is None:
-        _struct_q3dB = struct.Struct("<q3dB")
-    return _struct_q3dB
 _struct_qBq3d = None
 def _get_struct_qBq3d():
     global _struct_qBq3d
     if _struct_qBq3d is None:
         _struct_qBq3d = struct.Struct("<qBq3d")
     return _struct_qBq3d
+_struct_dq = None
+def _get_struct_dq():
+    global _struct_dq
+    if _struct_dq is None:
+        _struct_dq = struct.Struct("<dq")
+    return _struct_dq

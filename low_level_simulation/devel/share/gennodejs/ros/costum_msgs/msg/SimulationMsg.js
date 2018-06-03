@@ -118,7 +118,7 @@ class SimulationMsg {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '1db179749f1d9c58be4915f56104bf18';
+    return 'f76726cea71170d43f3772c8670bcc3f';
   }
 
   static messageDefinition() {
@@ -134,12 +134,31 @@ class SimulationMsg {
     string plan_file
     string date
     int64 n_segments
+    SegmentsMetadataMsg segments_metadata
     int64 n_iterations
-    int64 simulation_timeout
-    float64 distance_between_obstacles
+    int64 timeout_factor
     bool useful_simulation
     string local_planner
     string global_planner
+    
+    ================================================================================
+    MSG: costum_msgs/SegmentsMetadataMsg
+    SegmentMetadataMsg[] segments_metadata
+    
+    ================================================================================
+    MSG: costum_msgs/SegmentMetadataMsg
+    int64 segment_index
+    geometry_msgs/Point initial_point
+    geometry_msgs/Point end_point
+    float64 distance_between_obstacles
+    int64 segment_simulation_timeout
+    
+    ================================================================================
+    MSG: geometry_msgs/Point
+    # This contains the position of a point in free space
+    float64 x
+    float64 y
+    float64 z
     
     ================================================================================
     MSG: costum_msgs/GlobalSimulationResultsMsg

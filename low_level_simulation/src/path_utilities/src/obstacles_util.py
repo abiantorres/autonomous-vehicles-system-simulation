@@ -42,7 +42,7 @@ my_obstacles_model_generator.spawn_obstacles()
 # Maths dependencies.
 from sympy import Point, Segment
 from pyproj import Geod
-from math import ceil, sqrt
+from math import ceil, sqrt, pi
 
 # Format dependencies.
 import json
@@ -190,6 +190,32 @@ class ObstaclesSegmentModel():
 		Build a segment for get some maths computations such as the length.
 		"""
 		return Segment(Point(x1, y1), Point(x2, y2))
+
+	def get_segment_timeout(self, maximum_robot_speed, simulation_timeout_factor):
+		"""
+		Get the segment simulation timeout
+		"""
+		# Get the costmap inflation radius
+		inflation_radius = float(rospy.get_param('move_base/global_costmap/inflation_layer/inflation_radius'))
+		# Compute the distance between obstacles without ceil
+		distance_between_obstacles_without_ceil =  \
+			(eval(str(self.segment.length)) - (self.obstacle_length * len(self.obstacles))) / (len(self.obstacles) + 1)
+		# Compute the straight distance to be traveled by the vehicle
+		straight_distance = \
+			(distance_between_obstacles_without_ceil * (len(self.obstacles) + 1)) -\
+			((inflation_radius * 2) * len(self.obstacles))
+		# Get the minimun distance to be traveled by the vehicle when it need to
+		# avoid an obstacle
+		avoidance_distance = (pi * ((self.obstacle_length / 2) + inflation_radius))
+		# Total minimum distance to be traveed when the robot need to avoid an obstacle
+		curved_distance = avoidance_distance * len(self.obstacles)
+		# Total minimum distance to be traveled by the robot
+		minimum_distance_to_travel = avoidance_distance + curved_distance
+		# Minimun time to travel the total minimum distance
+		minimum_segment_simulation_time = minimum_distance_to_travel / maximum_robot_speed
+		# Multiply by an navigation error factor
+		return int(minimum_segment_simulation_time * simulation_timeout_factor)
+
 
 	def get_n_obstacles(self, segment_length, obstacle_length, distance_between_obstacles):
 		"""

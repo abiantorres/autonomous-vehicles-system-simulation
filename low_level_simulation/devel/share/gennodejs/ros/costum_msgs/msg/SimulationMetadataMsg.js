@@ -11,6 +11,7 @@ const _deserializer = _ros_msg_utils.Deserialize;
 const _arrayDeserializer = _deserializer.Array;
 const _finder = _ros_msg_utils.Find;
 const _getByteLength = _ros_msg_utils.getByteLength;
+let SegmentsMetadataMsg = require('./SegmentsMetadataMsg.js');
 
 //-----------------------------------------------------------
 
@@ -21,9 +22,9 @@ class SimulationMetadataMsg {
       this.plan_file = null;
       this.date = null;
       this.n_segments = null;
+      this.segments_metadata = null;
       this.n_iterations = null;
-      this.simulation_timeout = null;
-      this.distance_between_obstacles = null;
+      this.timeout_factor = null;
       this.useful_simulation = null;
       this.local_planner = null;
       this.global_planner = null;
@@ -47,23 +48,23 @@ class SimulationMetadataMsg {
       else {
         this.n_segments = 0;
       }
+      if (initObj.hasOwnProperty('segments_metadata')) {
+        this.segments_metadata = initObj.segments_metadata
+      }
+      else {
+        this.segments_metadata = new SegmentsMetadataMsg();
+      }
       if (initObj.hasOwnProperty('n_iterations')) {
         this.n_iterations = initObj.n_iterations
       }
       else {
         this.n_iterations = 0;
       }
-      if (initObj.hasOwnProperty('simulation_timeout')) {
-        this.simulation_timeout = initObj.simulation_timeout
+      if (initObj.hasOwnProperty('timeout_factor')) {
+        this.timeout_factor = initObj.timeout_factor
       }
       else {
-        this.simulation_timeout = 0;
-      }
-      if (initObj.hasOwnProperty('distance_between_obstacles')) {
-        this.distance_between_obstacles = initObj.distance_between_obstacles
-      }
-      else {
-        this.distance_between_obstacles = 0.0;
+        this.timeout_factor = 0;
       }
       if (initObj.hasOwnProperty('useful_simulation')) {
         this.useful_simulation = initObj.useful_simulation
@@ -94,12 +95,12 @@ class SimulationMetadataMsg {
     bufferOffset = _serializer.string(obj.date, buffer, bufferOffset);
     // Serialize message field [n_segments]
     bufferOffset = _serializer.int64(obj.n_segments, buffer, bufferOffset);
+    // Serialize message field [segments_metadata]
+    bufferOffset = SegmentsMetadataMsg.serialize(obj.segments_metadata, buffer, bufferOffset);
     // Serialize message field [n_iterations]
     bufferOffset = _serializer.int64(obj.n_iterations, buffer, bufferOffset);
-    // Serialize message field [simulation_timeout]
-    bufferOffset = _serializer.int64(obj.simulation_timeout, buffer, bufferOffset);
-    // Serialize message field [distance_between_obstacles]
-    bufferOffset = _serializer.float64(obj.distance_between_obstacles, buffer, bufferOffset);
+    // Serialize message field [timeout_factor]
+    bufferOffset = _serializer.int64(obj.timeout_factor, buffer, bufferOffset);
     // Serialize message field [useful_simulation]
     bufferOffset = _serializer.bool(obj.useful_simulation, buffer, bufferOffset);
     // Serialize message field [local_planner]
@@ -119,12 +120,12 @@ class SimulationMetadataMsg {
     data.date = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [n_segments]
     data.n_segments = _deserializer.int64(buffer, bufferOffset);
+    // Deserialize message field [segments_metadata]
+    data.segments_metadata = SegmentsMetadataMsg.deserialize(buffer, bufferOffset);
     // Deserialize message field [n_iterations]
     data.n_iterations = _deserializer.int64(buffer, bufferOffset);
-    // Deserialize message field [simulation_timeout]
-    data.simulation_timeout = _deserializer.int64(buffer, bufferOffset);
-    // Deserialize message field [distance_between_obstacles]
-    data.distance_between_obstacles = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [timeout_factor]
+    data.timeout_factor = _deserializer.int64(buffer, bufferOffset);
     // Deserialize message field [useful_simulation]
     data.useful_simulation = _deserializer.bool(buffer, bufferOffset);
     // Deserialize message field [local_planner]
@@ -138,9 +139,10 @@ class SimulationMetadataMsg {
     let length = 0;
     length += object.plan_file.length;
     length += object.date.length;
+    length += SegmentsMetadataMsg.getMessageSize(object.segments_metadata);
     length += object.local_planner.length;
     length += object.global_planner.length;
-    return length + 49;
+    return length + 41;
   }
 
   static datatype() {
@@ -150,7 +152,7 @@ class SimulationMetadataMsg {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '6204327964663f21015d923ee7818638';
+    return '771eda917b6244b8b3956c84b90f4902';
   }
 
   static messageDefinition() {
@@ -159,12 +161,31 @@ class SimulationMetadataMsg {
     string plan_file
     string date
     int64 n_segments
+    SegmentsMetadataMsg segments_metadata
     int64 n_iterations
-    int64 simulation_timeout
-    float64 distance_between_obstacles
+    int64 timeout_factor
     bool useful_simulation
     string local_planner
     string global_planner
+    
+    ================================================================================
+    MSG: costum_msgs/SegmentsMetadataMsg
+    SegmentMetadataMsg[] segments_metadata
+    
+    ================================================================================
+    MSG: costum_msgs/SegmentMetadataMsg
+    int64 segment_index
+    geometry_msgs/Point initial_point
+    geometry_msgs/Point end_point
+    float64 distance_between_obstacles
+    int64 segment_simulation_timeout
+    
+    ================================================================================
+    MSG: geometry_msgs/Point
+    # This contains the position of a point in free space
+    float64 x
+    float64 y
+    float64 z
     
     `;
   }
@@ -196,6 +217,13 @@ class SimulationMetadataMsg {
       resolved.n_segments = 0
     }
 
+    if (msg.segments_metadata !== undefined) {
+      resolved.segments_metadata = SegmentsMetadataMsg.Resolve(msg.segments_metadata)
+    }
+    else {
+      resolved.segments_metadata = new SegmentsMetadataMsg()
+    }
+
     if (msg.n_iterations !== undefined) {
       resolved.n_iterations = msg.n_iterations;
     }
@@ -203,18 +231,11 @@ class SimulationMetadataMsg {
       resolved.n_iterations = 0
     }
 
-    if (msg.simulation_timeout !== undefined) {
-      resolved.simulation_timeout = msg.simulation_timeout;
+    if (msg.timeout_factor !== undefined) {
+      resolved.timeout_factor = msg.timeout_factor;
     }
     else {
-      resolved.simulation_timeout = 0
-    }
-
-    if (msg.distance_between_obstacles !== undefined) {
-      resolved.distance_between_obstacles = msg.distance_between_obstacles;
-    }
-    else {
-      resolved.distance_between_obstacles = 0.0
+      resolved.timeout_factor = 0
     }
 
     if (msg.useful_simulation !== undefined) {

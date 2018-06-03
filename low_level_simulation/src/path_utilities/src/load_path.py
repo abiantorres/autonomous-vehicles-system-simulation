@@ -45,7 +45,7 @@ initial_state = ModelState()
 time_to_relocation = 5
 # Timeout for each simulation (in seconds)
 # Default: 2 minutes and 30 seconds
-simulation_timeout = 120
+simulation_timeout = 150
 
 # Number of simulations
 simulations = 1
@@ -164,9 +164,9 @@ def run(n_simulations, density):
     obstacles_model_generator = ObstaclesModelGenerator("my simulation", 0.1, 0.5, \
         points_2d[0][0], points_2d[0][1], density, 0.1)
 
-    i = 1
+    i = 0
     for point in points_2d:
-        if(i != 1):
+        if(i != 0):
             obstacles_model_generator.append_point(str(i), point[0], point[1])
         i += 1
 
@@ -184,6 +184,9 @@ def run(n_simulations, density):
         # Send to path planner each of the move base goals
         for waypoint in waypoints:
 
+            segment_simulation_timeout = obstacles_model_generator.segments[i].get_segment_timeout(2, 12)
+            rospy.loginfo(segment_simulation_timeout)
+
             # Build goal
             goal = MoveBaseGoal()
             goal.target_pose.header.frame_id = frame_id
@@ -194,14 +197,13 @@ def run(n_simulations, density):
                 (waypoint.pose.pose.position.x, waypoint.pose.pose.position.y))
             rospy.loginfo("To cancel the goal: 'rostopic pub -1 /move_base/cancel actionlib_msgs/GoalID -- {}'")
 
-            compute_distance = True
-            compute_linear_velocity = True
-
-            simulator.start(i, x)
+            simulator.start(i, x)#, points_2d[i][0], points_2d[i][1],\
+                #points_2d[i + 1][0], points_2d[i + 1][1])
             # Send goal to path planner
+
             client.send_goal(goal)
             # Keep waiting for results
-            finished_within_time = client.wait_for_result(rospy.Duration(simulation_timeout))
+            finished_within_time = client.wait_for_result(rospy.Duration(segment_simulation_timeout))
 
             # Check for success or failure
             if not finished_within_time:
@@ -231,8 +233,8 @@ def run(n_simulations, density):
         # Set the initial vehicle model state
         set_vehicle_model_state()
 
-    simulation_data_pub.publish(simulator.get_msg("", 1.0, 1))
-    rospy.loginfo(simulator.get_msg("", 1.0, 1))
+    simulation_data_pub.publish(simulator.get_msg("", 1))
+    rospy.loginfo(simulator.get_msg("", 1))
 
 if __name__ == '__main__':
     global file_name, simulations

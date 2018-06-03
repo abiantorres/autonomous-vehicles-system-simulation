@@ -4,6 +4,7 @@ from costum_msgs.msg import IndividualSegmentResultsMsg, IndividualIterationResu
 GlobalSegmentResultsMsg, GlobalSimulationResultsMsg, SimulationMetadataMsg, SimulationMsg
 import rospy
 from move_base_msgs.msg import MoveBaseActionFeedback
+from geometry_msgs.msg import Point as PointMsg
 from statistics import stdev, mean
 from datetime import datetime
 from math import pow, sqrt
@@ -207,15 +208,13 @@ class SimulationResults:
             msg.speed_min = min(individual_speeds_results)
         return msg
 
-    def get_simulation_metadata_msg(self, plan_file, distance_between_obstacles,\
-        simulation_timeout):
+    def get_simulation_metadata_msg(self, plan_file, timeout_factor):
         msg = SimulationMetadataMsg()
         msg.plan_file = plan_file
         msg.date = datetime.now().strftime("%I:%M%p on %B %d, %Y")
         msg.n_segments = self.n_segments
-        msg.simulation_timeout = simulation_timeout
+        msg.timeout_factor = timeout_factor
         msg.n_iterations = self.n_iterations
-        msg.distance_between_obstacles = distance_between_obstacles
         msg.useful_simulation = self.useful_simulation
         msg.local_planner = str(rospy.get_param('move_base/base_local_planner'))
         if eval(str(rospy.get_param('move_base/GlobalPlanner/use_dijkstra'))):
@@ -224,11 +223,10 @@ class SimulationResults:
             msg.global_planner = "A*"
         return msg
 
-    def get_msg(self, plan_file, distance_between_obstacles, simulation_timeout):
+    def get_msg(self, plan_file, simulation_timeout):
         msg = SimulationMsg()
         msg.global_simulation_results = self.get_global_simulation_results_msg()
-        msg.metadata = self.get_simulation_metadata_msg(plan_file, \
-            distance_between_obstacles, simulation_timeout)
+        msg.metadata = self.get_simulation_metadata_msg(plan_file, simulation_timeout)
         msg.global_segments_results = self.get_global_segment_results_msgs_list()
         msg.individual_iterations_results = self.get_individual_iterations_results_msgs_list()
         return msg

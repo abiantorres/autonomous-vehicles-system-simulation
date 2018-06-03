@@ -15,6 +15,7 @@
 #include <ros/builtin_message_traits.h>
 #include <ros/message_operations.h>
 
+#include <costum_msgs/SegmentsMetadataMsg.h>
 
 namespace costum_msgs
 {
@@ -27,9 +28,9 @@ struct SimulationMetadataMsg_
     : plan_file()
     , date()
     , n_segments(0)
+    , segments_metadata()
     , n_iterations(0)
-    , simulation_timeout(0)
-    , distance_between_obstacles(0.0)
+    , timeout_factor(0)
     , useful_simulation(false)
     , local_planner()
     , global_planner()  {
@@ -38,9 +39,9 @@ struct SimulationMetadataMsg_
     : plan_file(_alloc)
     , date(_alloc)
     , n_segments(0)
+    , segments_metadata(_alloc)
     , n_iterations(0)
-    , simulation_timeout(0)
-    , distance_between_obstacles(0.0)
+    , timeout_factor(0)
     , useful_simulation(false)
     , local_planner(_alloc)
     , global_planner(_alloc)  {
@@ -58,14 +59,14 @@ struct SimulationMetadataMsg_
    typedef int64_t _n_segments_type;
   _n_segments_type n_segments;
 
+   typedef  ::costum_msgs::SegmentsMetadataMsg_<ContainerAllocator>  _segments_metadata_type;
+  _segments_metadata_type segments_metadata;
+
    typedef int64_t _n_iterations_type;
   _n_iterations_type n_iterations;
 
-   typedef int64_t _simulation_timeout_type;
-  _simulation_timeout_type simulation_timeout;
-
-   typedef double _distance_between_obstacles_type;
-  _distance_between_obstacles_type distance_between_obstacles;
+   typedef int64_t _timeout_factor_type;
+  _timeout_factor_type timeout_factor;
 
    typedef uint8_t _useful_simulation_type;
   _useful_simulation_type useful_simulation;
@@ -111,7 +112,7 @@ namespace message_traits
 
 
 // BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': False}
-// {'costum_msgs': ['/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg']}
+// {'costum_msgs': ['/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/src/costum_msgs/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg'], 'geometry_msgs': ['/opt/ros/kinetic/share/geometry_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
 
@@ -154,12 +155,12 @@ struct MD5Sum< ::costum_msgs::SimulationMetadataMsg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "6204327964663f21015d923ee7818638";
+    return "771eda917b6244b8b3956c84b90f4902";
   }
 
   static const char* value(const ::costum_msgs::SimulationMetadataMsg_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x6204327964663f21ULL;
-  static const uint64_t static_value2 = 0x015d923ee7818638ULL;
+  static const uint64_t static_value1 = 0x771eda917b6244b8ULL;
+  static const uint64_t static_value2 = 0xb3956c84b90f4902ULL;
 };
 
 template<class ContainerAllocator>
@@ -181,12 +182,31 @@ struct Definition< ::costum_msgs::SimulationMetadataMsg_<ContainerAllocator> >
     return "string plan_file\n\
 string date\n\
 int64 n_segments\n\
+SegmentsMetadataMsg segments_metadata\n\
 int64 n_iterations\n\
-int64 simulation_timeout\n\
-float64 distance_between_obstacles\n\
+int64 timeout_factor\n\
 bool useful_simulation\n\
 string local_planner\n\
 string global_planner\n\
+\n\
+================================================================================\n\
+MSG: costum_msgs/SegmentsMetadataMsg\n\
+SegmentMetadataMsg[] segments_metadata\n\
+\n\
+================================================================================\n\
+MSG: costum_msgs/SegmentMetadataMsg\n\
+int64 segment_index\n\
+geometry_msgs/Point initial_point\n\
+geometry_msgs/Point end_point\n\
+float64 distance_between_obstacles\n\
+int64 segment_simulation_timeout\n\
+\n\
+================================================================================\n\
+MSG: geometry_msgs/Point\n\
+# This contains the position of a point in free space\n\
+float64 x\n\
+float64 y\n\
+float64 z\n\
 ";
   }
 
@@ -208,9 +228,9 @@ namespace serialization
       stream.next(m.plan_file);
       stream.next(m.date);
       stream.next(m.n_segments);
+      stream.next(m.segments_metadata);
       stream.next(m.n_iterations);
-      stream.next(m.simulation_timeout);
-      stream.next(m.distance_between_obstacles);
+      stream.next(m.timeout_factor);
       stream.next(m.useful_simulation);
       stream.next(m.local_planner);
       stream.next(m.global_planner);
@@ -238,12 +258,13 @@ struct Printer< ::costum_msgs::SimulationMetadataMsg_<ContainerAllocator> >
     Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.date);
     s << indent << "n_segments: ";
     Printer<int64_t>::stream(s, indent + "  ", v.n_segments);
+    s << indent << "segments_metadata: ";
+    s << std::endl;
+    Printer< ::costum_msgs::SegmentsMetadataMsg_<ContainerAllocator> >::stream(s, indent + "  ", v.segments_metadata);
     s << indent << "n_iterations: ";
     Printer<int64_t>::stream(s, indent + "  ", v.n_iterations);
-    s << indent << "simulation_timeout: ";
-    Printer<int64_t>::stream(s, indent + "  ", v.simulation_timeout);
-    s << indent << "distance_between_obstacles: ";
-    Printer<double>::stream(s, indent + "  ", v.distance_between_obstacles);
+    s << indent << "timeout_factor: ";
+    Printer<int64_t>::stream(s, indent + "  ", v.timeout_factor);
     s << indent << "useful_simulation: ";
     Printer<uint8_t>::stream(s, indent + "  ", v.useful_simulation);
     s << indent << "local_planner: ";

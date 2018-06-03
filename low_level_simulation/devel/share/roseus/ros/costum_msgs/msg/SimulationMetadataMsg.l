@@ -14,7 +14,7 @@
 
 (defclass costum_msgs::SimulationMetadataMsg
   :super ros::object
-  :slots (_plan_file _date _n_segments _n_iterations _simulation_timeout _distance_between_obstacles _useful_simulation _local_planner _global_planner ))
+  :slots (_plan_file _date _n_segments _segments_metadata _n_iterations _timeout_factor _useful_simulation _local_planner _global_planner ))
 
 (defmethod costum_msgs::SimulationMetadataMsg
   (:init
@@ -22,9 +22,9 @@
     ((:plan_file __plan_file) "")
     ((:date __date) "")
     ((:n_segments __n_segments) 0)
+    ((:segments_metadata __segments_metadata) (instance costum_msgs::SegmentsMetadataMsg :init))
     ((:n_iterations __n_iterations) 0)
-    ((:simulation_timeout __simulation_timeout) 0)
-    ((:distance_between_obstacles __distance_between_obstacles) 0.0)
+    ((:timeout_factor __timeout_factor) 0)
     ((:useful_simulation __useful_simulation) nil)
     ((:local_planner __local_planner) "")
     ((:global_planner __global_planner) "")
@@ -33,9 +33,9 @@
    (setq _plan_file (string __plan_file))
    (setq _date (string __date))
    (setq _n_segments (round __n_segments))
+   (setq _segments_metadata __segments_metadata)
    (setq _n_iterations (round __n_iterations))
-   (setq _simulation_timeout (round __simulation_timeout))
-   (setq _distance_between_obstacles (float __distance_between_obstacles))
+   (setq _timeout_factor (round __timeout_factor))
    (setq _useful_simulation __useful_simulation)
    (setq _local_planner (string __local_planner))
    (setq _global_planner (string __global_planner))
@@ -49,15 +49,19 @@
   (:n_segments
    (&optional __n_segments)
    (if __n_segments (setq _n_segments __n_segments)) _n_segments)
+  (:segments_metadata
+   (&rest __segments_metadata)
+   (if (keywordp (car __segments_metadata))
+       (send* _segments_metadata __segments_metadata)
+     (progn
+       (if __segments_metadata (setq _segments_metadata (car __segments_metadata)))
+       _segments_metadata)))
   (:n_iterations
    (&optional __n_iterations)
    (if __n_iterations (setq _n_iterations __n_iterations)) _n_iterations)
-  (:simulation_timeout
-   (&optional __simulation_timeout)
-   (if __simulation_timeout (setq _simulation_timeout __simulation_timeout)) _simulation_timeout)
-  (:distance_between_obstacles
-   (&optional __distance_between_obstacles)
-   (if __distance_between_obstacles (setq _distance_between_obstacles __distance_between_obstacles)) _distance_between_obstacles)
+  (:timeout_factor
+   (&optional __timeout_factor)
+   (if __timeout_factor (setq _timeout_factor __timeout_factor)) _timeout_factor)
   (:useful_simulation
    (&optional __useful_simulation)
    (if __useful_simulation (setq _useful_simulation __useful_simulation)) _useful_simulation)
@@ -76,11 +80,11 @@
     4 (length _date)
     ;; int64 _n_segments
     8
+    ;; costum_msgs/SegmentsMetadataMsg _segments_metadata
+    (send _segments_metadata :serialization-length)
     ;; int64 _n_iterations
     8
-    ;; int64 _simulation_timeout
-    8
-    ;; float64 _distance_between_obstacles
+    ;; int64 _timeout_factor
     8
     ;; bool _useful_simulation
     1
@@ -109,6 +113,8 @@
               (write-long (if (>= _n_segments 0) 0 #xffffffff) s))
              (t                                         ;; integer
               (write-long _n_segments s)(write-long (if (>= _n_segments 0) 0 #xffffffff) s)))
+     ;; costum_msgs/SegmentsMetadataMsg _segments_metadata
+       (send _segments_metadata :serialize s)
      ;; int64 _n_iterations
 #+(or :alpha :irix6 :x86_64)
        (progn (sys::poke _n_iterations (send s :buffer) (send s :count) :long) (incf (stream-count s) 8))
@@ -121,20 +127,18 @@
               (write-long (if (>= _n_iterations 0) 0 #xffffffff) s))
              (t                                         ;; integer
               (write-long _n_iterations s)(write-long (if (>= _n_iterations 0) 0 #xffffffff) s)))
-     ;; int64 _simulation_timeout
+     ;; int64 _timeout_factor
 #+(or :alpha :irix6 :x86_64)
-       (progn (sys::poke _simulation_timeout (send s :buffer) (send s :count) :long) (incf (stream-count s) 8))
+       (progn (sys::poke _timeout_factor (send s :buffer) (send s :count) :long) (incf (stream-count s) 8))
 #-(or :alpha :irix6 :x86_64)
-       (cond ((and (class _simulation_timeout) (= (length (_simulation_timeout . bv)) 2)) ;; bignum
-              (write-long (ash (elt (_simulation_timeout . bv) 0) 0) s)
-              (write-long (ash (elt (_simulation_timeout . bv) 1) -1) s))
-             ((and (class _simulation_timeout) (= (length (_simulation_timeout . bv)) 1)) ;; big1
-              (write-long (elt (_simulation_timeout . bv) 0) s)
-              (write-long (if (>= _simulation_timeout 0) 0 #xffffffff) s))
+       (cond ((and (class _timeout_factor) (= (length (_timeout_factor . bv)) 2)) ;; bignum
+              (write-long (ash (elt (_timeout_factor . bv) 0) 0) s)
+              (write-long (ash (elt (_timeout_factor . bv) 1) -1) s))
+             ((and (class _timeout_factor) (= (length (_timeout_factor . bv)) 1)) ;; big1
+              (write-long (elt (_timeout_factor . bv) 0) s)
+              (write-long (if (>= _timeout_factor 0) 0 #xffffffff) s))
              (t                                         ;; integer
-              (write-long _simulation_timeout s)(write-long (if (>= _simulation_timeout 0) 0 #xffffffff) s)))
-     ;; float64 _distance_between_obstacles
-       (sys::poke _distance_between_obstacles (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+              (write-long _timeout_factor s)(write-long (if (>= _timeout_factor 0) 0 #xffffffff) s)))
      ;; bool _useful_simulation
        (if _useful_simulation (write-byte -1 s) (write-byte 0 s))
      ;; string _local_planner
@@ -161,6 +165,8 @@
                       b0)
                     ((= b1  0) (make-instance bignum :size 1 :bv (integer-vector b0)))
                     (t (make-instance bignum :size 2 :bv (integer-vector b0 (ash b1 1)))))))
+   ;; costum_msgs/SegmentsMetadataMsg _segments_metadata
+     (send _segments_metadata :deserialize buf ptr-) (incf ptr- (send _segments_metadata :serialization-length))
    ;; int64 _n_iterations
 #+(or :alpha :irix6 :x86_64)
       (setf _n_iterations (prog1 (sys::peek buf ptr- :long) (incf ptr- 8)))
@@ -173,11 +179,11 @@
                       b0)
                     ((= b1  0) (make-instance bignum :size 1 :bv (integer-vector b0)))
                     (t (make-instance bignum :size 2 :bv (integer-vector b0 (ash b1 1)))))))
-   ;; int64 _simulation_timeout
+   ;; int64 _timeout_factor
 #+(or :alpha :irix6 :x86_64)
-      (setf _simulation_timeout (prog1 (sys::peek buf ptr- :long) (incf ptr- 8)))
+      (setf _timeout_factor (prog1 (sys::peek buf ptr- :long) (incf ptr- 8)))
 #-(or :alpha :irix6 :x86_64)
-      (setf _simulation_timeout (let ((b0 (prog1 (sys::peek buf ptr- :integer) (incf ptr- 4)))
+      (setf _timeout_factor (let ((b0 (prog1 (sys::peek buf ptr- :integer) (incf ptr- 4)))
                   (b1 (prog1 (sys::peek buf ptr- :integer) (incf ptr- 4))))
               (cond ((= b1 -1) b0)
                      ((and (= b1  0)
@@ -185,8 +191,6 @@
                       b0)
                     ((= b1  0) (make-instance bignum :size 1 :bv (integer-vector b0)))
                     (t (make-instance bignum :size 2 :bv (integer-vector b0 (ash b1 1)))))))
-   ;; float64 _distance_between_obstacles
-     (setq _distance_between_obstacles (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; bool _useful_simulation
      (setq _useful_simulation (not (= 0 (sys::peek buf ptr- :char)))) (incf ptr- 1)
    ;; string _local_planner
@@ -197,23 +201,42 @@
    self)
   )
 
-(setf (get costum_msgs::SimulationMetadataMsg :md5sum-) "6204327964663f21015d923ee7818638")
+(setf (get costum_msgs::SimulationMetadataMsg :md5sum-) "771eda917b6244b8b3956c84b90f4902")
 (setf (get costum_msgs::SimulationMetadataMsg :datatype-) "costum_msgs/SimulationMetadataMsg")
 (setf (get costum_msgs::SimulationMetadataMsg :definition-)
       "string plan_file
 string date
 int64 n_segments
+SegmentsMetadataMsg segments_metadata
 int64 n_iterations
-int64 simulation_timeout
-float64 distance_between_obstacles
+int64 timeout_factor
 bool useful_simulation
 string local_planner
 string global_planner
+
+================================================================================
+MSG: costum_msgs/SegmentsMetadataMsg
+SegmentMetadataMsg[] segments_metadata
+
+================================================================================
+MSG: costum_msgs/SegmentMetadataMsg
+int64 segment_index
+geometry_msgs/Point initial_point
+geometry_msgs/Point end_point
+float64 distance_between_obstacles
+int64 segment_simulation_timeout
+
+================================================================================
+MSG: geometry_msgs/Point
+# This contains the position of a point in free space
+float64 x
+float64 y
+float64 z
 
 ")
 
 
 
-(provide :costum_msgs/SimulationMetadataMsg "6204327964663f21015d923ee7818638")
+(provide :costum_msgs/SimulationMetadataMsg "771eda917b6244b8b3956c84b90f4902")
 
 
