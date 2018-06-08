@@ -1,14 +1,35 @@
 <?xml version="1.0"?>
 <launch>
-  	<env name="ROSCONSOLE_FORMAT" value="[${severity}][${thread}][${node}/${function}:${line}]: ${message}"/>
-	<arg name="input_file" default="path.bag"/>
-  <param name="plan_file" value="$(arg input_file)" />
-	<arg name="simulations" default="1"/>
-	<arg name="density" default="0.3"/>
-  	<node pkg="path_utilities" type="load_path.py" name="load_path" output="screen">
-   		<param name="goal_frame_id" value="map"/>
-    	<param name="input_file" value="$(arg input_file)" />
-    	<param name="simulations" value="$(arg simulations)" />
-    	<param name="density" value="$(arg density)" />
-  	</node>
+
+  <env name="ROSCONSOLE_FORMAT" value="[${severity}][${thread}][${node}/${function}:${line}]: ${message}"/>
+
+  <arg name="plan_file" default="path.bag"/>
+  <param name="plan_file" value="$(arg plan_file)" />
+	<arg name="n_iterations" default="2"/>
+  <param name="n_iterations" value="$(arg n_iterations)" />
+	<arg name="distance_between_obstacles" default="3.0"/>
+  <param name="distance_between_obstacles" value="$(arg distance_between_obstacles)" />
+
+  <arg name="robot_radius" default="0.5"/>
+  <param name="robot_radius" value="$(arg robot_radius)" />
+  <arg name="max_robot_speed" default="1.0"/>
+  <param name="max_robot_speed" value="$(arg max_robot_speed)" />
+  <arg name="obstacle_length" default="0.1"/>
+  <param name="obstacle_length" value="$(arg obstacle_length)" />
+  <arg name="max_obstacle_shiftment" default="0.1"/>
+  <param name="max_obstacle_shiftment" value="$(arg max_obstacle_shiftment)" />
+  <arg name="timeout_factor" default="10"/>
+  <param name="timeout_factor" value="$(arg timeout_factor)" />
+
+  <node pkg="path_utilities" type="load_path.py" name="load_path" output="screen">
+   	<param name="goal_frame_id" value="map"/>
+    <param name="plan_file" value="$(arg plan_file)" />
+    <param name="n_iterations" value="$(arg n_iterations)" />
+    <param name="obstacle_length" value="$(arg obstacle_length)" />
+    <param name="robot_radius" value="$(arg robot_radius)" />
+    <param name="max_robot_speed" value="$(arg max_robot_speed)" />
+    <param name="timeout_factor" value="$(arg timeout_factor)" />
+    <param name="max_obstacle_shiftment" value="$(arg max_obstacle_shiftment)" />
+    <param name="distance_between_obstacles" value="$(arg distance_between_obstacles)" />
+  </node>
 </launch>

@@ -117,6 +117,7 @@ Install mongodb **package** via apt-get:
 
 ```
 sudo apt-get install mongodb
+sudo python -m pip install pymongo
 ```
 
 To **start** the mongdb service:

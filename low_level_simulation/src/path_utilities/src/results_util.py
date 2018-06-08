@@ -3,13 +3,12 @@
 from costum_msgs.msg import IndividualSegmentResultsMsg, IndividualIterationResultsMsg, \
     GlobalSegmentResultsMsg, GlobalSimulationResultsMsg, SimulationMetadataMsg, SimulationMsg, \
     SegmentMetadataMsg, SegmentsMetadataMsg
-import rospy
+import rospy, hashlib, json, yaml
 from move_base_msgs.msg import MoveBaseActionFeedback
 from geometry_msgs.msg import Point as PointMsg
 from statistics import stdev, mean
 from datetime import datetime
 from math import pow, sqrt
-import hashlib
 
 last_vehicle_coordinates = [0.0, 0.0]
 current_traveled_distance = 0.0
@@ -289,10 +288,10 @@ class SimulationResults:
             prehash += str(self.segments_metadata[i].end_point.y)
         return hashlib.md5(prehash.encode()).hexdigest()
 
-    def get_msg(self, plan_file, simulation_timeout):
+    def get_msg(self, plan_file, timeout_factor):
         msg = SimulationMsg()
         msg.global_simulation_results = self.get_global_simulation_results_msg()
-        msg.metadata = self.get_simulation_metadata_msg(plan_file, simulation_timeout)
+        msg.metadata = self.get_simulation_metadata_msg(plan_file, timeout_factor)
         msg.global_segments_results = self.get_global_segment_results_msgs_list()
         msg.individual_iterations_results = self.get_individual_iterations_results_msgs_list()
         return msg
