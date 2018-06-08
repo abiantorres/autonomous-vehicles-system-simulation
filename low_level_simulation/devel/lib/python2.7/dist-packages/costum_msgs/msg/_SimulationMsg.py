@@ -9,7 +9,7 @@ import costum_msgs.msg
 import geometry_msgs.msg
 
 class SimulationMsg(genpy.Message):
-  _md5sum = "f76726cea71170d43f3772c8670bcc3f"
+  _md5sum = "1fc04017a8937851069ea4d1e0d47bfe"
   _type = "costum_msgs/SimulationMsg"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """SimulationMetadataMsg metadata
@@ -19,7 +19,11 @@ IndividualIterationResultsMsg[] individual_iterations_results
 
 ================================================================================
 MSG: costum_msgs/SimulationMetadataMsg
+string simulation_hash
+string robot_file
+string world_file
 string plan_file
+string map_file
 string date
 int64 n_segments
 SegmentsMetadataMsg segments_metadata
@@ -145,7 +149,31 @@ bool failure
     :param buff: buffer, ``StringIO``
     """
     try:
+      _x = self.metadata.simulation_hash
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.metadata.robot_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.metadata.world_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self.metadata.plan_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.metadata.map_file
       length = len(_x)
       if python3 or type(_x) == unicode:
         _x = _x.encode('utf-8')
@@ -225,9 +253,45 @@ bool failure
       start = end
       end += length
       if python3:
+        self.metadata.simulation_hash = str[start:end].decode('utf-8')
+      else:
+        self.metadata.simulation_hash = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.metadata.robot_file = str[start:end].decode('utf-8')
+      else:
+        self.metadata.robot_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.metadata.world_file = str[start:end].decode('utf-8')
+      else:
+        self.metadata.world_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
         self.metadata.plan_file = str[start:end].decode('utf-8')
       else:
         self.metadata.plan_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.metadata.map_file = str[start:end].decode('utf-8')
+      else:
+        self.metadata.map_file = str[start:end]
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
@@ -338,7 +402,31 @@ bool failure
     :param numpy: numpy python module
     """
     try:
+      _x = self.metadata.simulation_hash
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.metadata.robot_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.metadata.world_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self.metadata.plan_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.metadata.map_file
       length = len(_x)
       if python3 or type(_x) == unicode:
         _x = _x.encode('utf-8')
@@ -419,9 +507,45 @@ bool failure
       start = end
       end += length
       if python3:
+        self.metadata.simulation_hash = str[start:end].decode('utf-8')
+      else:
+        self.metadata.simulation_hash = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.metadata.robot_file = str[start:end].decode('utf-8')
+      else:
+        self.metadata.robot_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.metadata.world_file = str[start:end].decode('utf-8')
+      else:
+        self.metadata.world_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
         self.metadata.plan_file = str[start:end].decode('utf-8')
       else:
         self.metadata.plan_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.metadata.map_file = str[start:end].decode('utf-8')
+      else:
+        self.metadata.map_file = str[start:end]
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])

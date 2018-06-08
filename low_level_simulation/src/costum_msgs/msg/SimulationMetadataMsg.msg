@@ -1,4 +1,8 @@
+string simulation_hash
+string robot_file
+string world_file
 string plan_file
+string map_file
 string date
 int64 n_segments
 SegmentsMetadataMsg segments_metadata

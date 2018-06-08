@@ -118,7 +118,7 @@ class SimulationMsg {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'f76726cea71170d43f3772c8670bcc3f';
+    return '1fc04017a8937851069ea4d1e0d47bfe';
   }
 
   static messageDefinition() {
@@ -131,7 +131,11 @@ class SimulationMsg {
     
     ================================================================================
     MSG: costum_msgs/SimulationMetadataMsg
+    string simulation_hash
+    string robot_file
+    string world_file
     string plan_file
+    string map_file
     string date
     int64 n_segments
     SegmentsMetadataMsg segments_metadata

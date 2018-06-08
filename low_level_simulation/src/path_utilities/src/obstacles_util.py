@@ -210,7 +210,7 @@ class ObstaclesSegmentModel():
 		# Total minimum distance to be traveed when the robot need to avoid an obstacle
 		curved_distance = avoidance_distance * len(self.obstacles)
 		# Total minimum distance to be traveled by the robot
-		minimum_distance_to_travel = avoidance_distance + curved_distance
+		minimum_distance_to_travel = straight_distance + curved_distance
 		# Minimun time to travel the total minimum distance
 		minimum_segment_simulation_time = minimum_distance_to_travel / maximum_robot_speed
 		# Multiply by an navigation error factor

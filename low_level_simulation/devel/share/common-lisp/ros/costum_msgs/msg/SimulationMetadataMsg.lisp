@@ -7,9 +7,29 @@
 ;//! \htmlinclude SimulationMetadataMsg.msg.html
 
 (cl:defclass <SimulationMetadataMsg> (roslisp-msg-protocol:ros-message)
-  ((plan_file
+  ((simulation_hash
+    :reader simulation_hash
+    :initarg :simulation_hash
+    :type cl:string
+    :initform "")
+   (robot_file
+    :reader robot_file
+    :initarg :robot_file
+    :type cl:string
+    :initform "")
+   (world_file
+    :reader world_file
+    :initarg :world_file
+    :type cl:string
+    :initform "")
+   (plan_file
     :reader plan_file
     :initarg :plan_file
+    :type cl:string
+    :initform "")
+   (map_file
+    :reader map_file
+    :initarg :map_file
     :type cl:string
     :initform "")
    (date
@@ -62,10 +82,30 @@
   (cl:unless (cl:typep m 'SimulationMetadataMsg)
     (roslisp-msg-protocol:msg-deprecation-warning "using old message class name costum_msgs-msg:<SimulationMetadataMsg> is deprecated: use costum_msgs-msg:SimulationMetadataMsg instead.")))
 
+(cl:ensure-generic-function 'simulation_hash-val :lambda-list '(m))
+(cl:defmethod simulation_hash-val ((m <SimulationMetadataMsg>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:simulation_hash-val is deprecated.  Use costum_msgs-msg:simulation_hash instead.")
+  (simulation_hash m))
+
+(cl:ensure-generic-function 'robot_file-val :lambda-list '(m))
+(cl:defmethod robot_file-val ((m <SimulationMetadataMsg>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:robot_file-val is deprecated.  Use costum_msgs-msg:robot_file instead.")
+  (robot_file m))
+
+(cl:ensure-generic-function 'world_file-val :lambda-list '(m))
+(cl:defmethod world_file-val ((m <SimulationMetadataMsg>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:world_file-val is deprecated.  Use costum_msgs-msg:world_file instead.")
+  (world_file m))
+
 (cl:ensure-generic-function 'plan_file-val :lambda-list '(m))
 (cl:defmethod plan_file-val ((m <SimulationMetadataMsg>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:plan_file-val is deprecated.  Use costum_msgs-msg:plan_file instead.")
   (plan_file m))
+
+(cl:ensure-generic-function 'map_file-val :lambda-list '(m))
+(cl:defmethod map_file-val ((m <SimulationMetadataMsg>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader costum_msgs-msg:map_file-val is deprecated.  Use costum_msgs-msg:map_file instead.")
+  (map_file m))
 
 (cl:ensure-generic-function 'date-val :lambda-list '(m))
 (cl:defmethod date-val ((m <SimulationMetadataMsg>))
@@ -108,12 +148,36 @@
   (global_planner m))
 (cl:defmethod roslisp-msg-protocol:serialize ((msg <SimulationMetadataMsg>) ostream)
   "Serializes a message object of type '<SimulationMetadataMsg>"
+  (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'simulation_hash))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) (cl:slot-value msg 'simulation_hash))
+  (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'robot_file))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) (cl:slot-value msg 'robot_file))
+  (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'world_file))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) (cl:slot-value msg 'world_file))
   (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'plan_file))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
   (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) (cl:slot-value msg 'plan_file))
+  (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'map_file))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) (cl:slot-value msg 'map_file))
   (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'date))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
@@ -172,9 +236,41 @@
       (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:slot-value msg 'simulation_hash) (cl:make-string __ros_str_len))
+      (cl:dotimes (__ros_str_idx __ros_str_len msg)
+        (cl:setf (cl:char (cl:slot-value msg 'simulation_hash) __ros_str_idx) (cl:code-char (cl:read-byte istream)))))
+    (cl:let ((__ros_str_len 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:slot-value msg 'robot_file) (cl:make-string __ros_str_len))
+      (cl:dotimes (__ros_str_idx __ros_str_len msg)
+        (cl:setf (cl:char (cl:slot-value msg 'robot_file) __ros_str_idx) (cl:code-char (cl:read-byte istream)))))
+    (cl:let ((__ros_str_len 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:slot-value msg 'world_file) (cl:make-string __ros_str_len))
+      (cl:dotimes (__ros_str_idx __ros_str_len msg)
+        (cl:setf (cl:char (cl:slot-value msg 'world_file) __ros_str_idx) (cl:code-char (cl:read-byte istream)))))
+    (cl:let ((__ros_str_len 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
       (cl:setf (cl:slot-value msg 'plan_file) (cl:make-string __ros_str_len))
       (cl:dotimes (__ros_str_idx __ros_str_len msg)
         (cl:setf (cl:char (cl:slot-value msg 'plan_file) __ros_str_idx) (cl:code-char (cl:read-byte istream)))))
+    (cl:let ((__ros_str_len 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:slot-value msg 'map_file) (cl:make-string __ros_str_len))
+      (cl:dotimes (__ros_str_idx __ros_str_len msg)
+        (cl:setf (cl:char (cl:slot-value msg 'map_file) __ros_str_idx) (cl:code-char (cl:read-byte istream)))))
     (cl:let ((__ros_str_len 0))
       (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
@@ -241,19 +337,23 @@
   "costum_msgs/SimulationMetadataMsg")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<SimulationMetadataMsg>)))
   "Returns md5sum for a message object of type '<SimulationMetadataMsg>"
-  "771eda917b6244b8b3956c84b90f4902")
+  "b64b7db80c218e4a90f09816c189d51c")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'SimulationMetadataMsg)))
   "Returns md5sum for a message object of type 'SimulationMetadataMsg"
-  "771eda917b6244b8b3956c84b90f4902")
+  "b64b7db80c218e4a90f09816c189d51c")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<SimulationMetadataMsg>)))
   "Returns full string definition for message of type '<SimulationMetadataMsg>"
-  (cl:format cl:nil "string plan_file~%string date~%int64 n_segments~%SegmentsMetadataMsg segments_metadata~%int64 n_iterations~%int64 timeout_factor~%bool useful_simulation~%string local_planner~%string global_planner~%~%================================================================================~%MSG: costum_msgs/SegmentsMetadataMsg~%SegmentMetadataMsg[] segments_metadata~%~%================================================================================~%MSG: costum_msgs/SegmentMetadataMsg~%int64 segment_index~%geometry_msgs/Point initial_point~%geometry_msgs/Point end_point~%float64 distance_between_obstacles~%int64 segment_simulation_timeout~%~%================================================================================~%MSG: geometry_msgs/Point~%# This contains the position of a point in free space~%float64 x~%float64 y~%float64 z~%~%~%"))
+  (cl:format cl:nil "string simulation_hash~%string robot_file~%string world_file~%string plan_file~%string map_file~%string date~%int64 n_segments~%SegmentsMetadataMsg segments_metadata~%int64 n_iterations~%int64 timeout_factor~%bool useful_simulation~%string local_planner~%string global_planner~%~%================================================================================~%MSG: costum_msgs/SegmentsMetadataMsg~%SegmentMetadataMsg[] segments_metadata~%~%================================================================================~%MSG: costum_msgs/SegmentMetadataMsg~%int64 segment_index~%geometry_msgs/Point initial_point~%geometry_msgs/Point end_point~%float64 distance_between_obstacles~%int64 segment_simulation_timeout~%~%================================================================================~%MSG: geometry_msgs/Point~%# This contains the position of a point in free space~%float64 x~%float64 y~%float64 z~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'SimulationMetadataMsg)))
   "Returns full string definition for message of type 'SimulationMetadataMsg"
-  (cl:format cl:nil "string plan_file~%string date~%int64 n_segments~%SegmentsMetadataMsg segments_metadata~%int64 n_iterations~%int64 timeout_factor~%bool useful_simulation~%string local_planner~%string global_planner~%~%================================================================================~%MSG: costum_msgs/SegmentsMetadataMsg~%SegmentMetadataMsg[] segments_metadata~%~%================================================================================~%MSG: costum_msgs/SegmentMetadataMsg~%int64 segment_index~%geometry_msgs/Point initial_point~%geometry_msgs/Point end_point~%float64 distance_between_obstacles~%int64 segment_simulation_timeout~%~%================================================================================~%MSG: geometry_msgs/Point~%# This contains the position of a point in free space~%float64 x~%float64 y~%float64 z~%~%~%"))
+  (cl:format cl:nil "string simulation_hash~%string robot_file~%string world_file~%string plan_file~%string map_file~%string date~%int64 n_segments~%SegmentsMetadataMsg segments_metadata~%int64 n_iterations~%int64 timeout_factor~%bool useful_simulation~%string local_planner~%string global_planner~%~%================================================================================~%MSG: costum_msgs/SegmentsMetadataMsg~%SegmentMetadataMsg[] segments_metadata~%~%================================================================================~%MSG: costum_msgs/SegmentMetadataMsg~%int64 segment_index~%geometry_msgs/Point initial_point~%geometry_msgs/Point end_point~%float64 distance_between_obstacles~%int64 segment_simulation_timeout~%~%================================================================================~%MSG: geometry_msgs/Point~%# This contains the position of a point in free space~%float64 x~%float64 y~%float64 z~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <SimulationMetadataMsg>))
   (cl:+ 0
+     4 (cl:length (cl:slot-value msg 'simulation_hash))
+     4 (cl:length (cl:slot-value msg 'robot_file))
+     4 (cl:length (cl:slot-value msg 'world_file))
      4 (cl:length (cl:slot-value msg 'plan_file))
+     4 (cl:length (cl:slot-value msg 'map_file))
      4 (cl:length (cl:slot-value msg 'date))
      8
      (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'segments_metadata))
@@ -266,7 +366,11 @@
 (cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <SimulationMetadataMsg>))
   "Converts a ROS message object to a list"
   (cl:list 'SimulationMetadataMsg
+    (cl:cons ':simulation_hash (simulation_hash msg))
+    (cl:cons ':robot_file (robot_file msg))
+    (cl:cons ':world_file (world_file msg))
     (cl:cons ':plan_file (plan_file msg))
+    (cl:cons ':map_file (map_file msg))
     (cl:cons ':date (date msg))
     (cl:cons ':n_segments (n_segments msg))
     (cl:cons ':segments_metadata (segments_metadata msg))

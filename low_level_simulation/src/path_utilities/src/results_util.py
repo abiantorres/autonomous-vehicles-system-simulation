@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 
 from costum_msgs.msg import IndividualSegmentResultsMsg, IndividualIterationResultsMsg, \
-GlobalSegmentResultsMsg, GlobalSimulationResultsMsg, SimulationMetadataMsg, SimulationMsg
+    GlobalSegmentResultsMsg, GlobalSimulationResultsMsg, SimulationMetadataMsg, SimulationMsg, \
+    SegmentMetadataMsg, SegmentsMetadataMsg
 import rospy
 from move_base_msgs.msg import MoveBaseActionFeedback
 from geometry_msgs.msg import Point as PointMsg
 from statistics import stdev, mean
 from datetime import datetime
 from math import pow, sqrt
+import hashlib
 
 last_vehicle_coordinates = [0.0, 0.0]
 current_traveled_distance = 0.0
@@ -24,6 +26,26 @@ def callback(data):
     last_vehicle_coordinates[1] = data.feedback.base_position.pose.position.y
 
 rospy.Subscriber("move_base/feedback", MoveBaseActionFeedback, callback)
+
+class SegmentMetadata:
+
+    def __init__(self, segment_index = None, initial_point = None, \
+        end_point = None, distance_between_obstacles = None, \
+        segment_simulation_timeout = None):
+        self.segment_index = segment_index
+        self.initial_point = initial_point
+        self.end_point = end_point
+        self.distance_between_obstacles = distance_between_obstacles
+        self.segment_simulation_timeout = segment_simulation_timeout
+
+    def get_msg(self):
+        msg = SegmentMetadataMsg()
+        msg.segment_index = self.segment_index
+        msg.initial_point = self.initial_point
+        msg.end_point = self.end_point
+        msg.distance_between_obstacles = self.distance_between_obstacles
+        msg.segment_simulation_timeout = self.segment_simulation_timeout
+        return msg
 
 class SegmentResults:
 
@@ -104,8 +126,11 @@ class SimulationResults:
         self.n_failures = 0
         self.useful_simulation = True
         self.iterations_results = []
+        self.segments_metadata = []
         for i in range(0, self.n_iterations):
             self.iterations_results.append(IterationResults(n_segments, i))
+        for i in range(0, self.n_segments):
+            self.segments_metadata.append(SegmentMetadata(segment_index = i))
 
     def get_global_simulation_failures_count(self):
         count = 0
@@ -121,6 +146,21 @@ class SimulationResults:
             self.iterations_results[i].failure_segment_index == segment_index):
                 count += 1
         return count
+
+    def get_point_msg(self, x, y):
+        msg = PointMsg()
+        msg.x = x
+        msg.y = y
+        return msg
+
+    def set_segment_metadata(self, segment_index, x1, y1, x2, y2,\
+        distance_between_obstacles, segment_simulation_timeout):
+        self.segments_metadata[segment_index].initial_point = self.get_point_msg(x1, y1)
+        self.segments_metadata[segment_index].end_point = self.get_point_msg(x2, y2)
+        self.segments_metadata[segment_index].distance_between_obstacles =\
+            distance_between_obstacles
+        self.segments_metadata[segment_index].segment_simulation_timeout =\
+            segment_simulation_timeout
 
     def get_individual_iterations_results_msgs_list(self):
         individual_iterations_results = []
@@ -208,20 +248,46 @@ class SimulationResults:
             msg.speed_min = min(individual_speeds_results)
         return msg
 
+    def get_segments_metadata_msg(self):
+        msg = SegmentsMetadataMsg()
+        tmp = []
+        for i in range(0, self.n_segments):
+            tmp.append(self.segments_metadata[i].get_msg())
+        msg.segments_metadata = tmp
+        return msg
+
     def get_simulation_metadata_msg(self, plan_file, timeout_factor):
         msg = SimulationMetadataMsg()
-        msg.plan_file = plan_file
+        msg.simulation_hash = self.get_simulation_hash()
+        msg.robot_file = str(rospy.get_param('robot_file'))
+        msg.world_file = str(rospy.get_param('world_file'))
+        msg.plan_file = str(rospy.get_param('plan_file'))
+        msg.map_file = str(rospy.get_param('map_file'))
         msg.date = datetime.now().strftime("%I:%M%p on %B %d, %Y")
         msg.n_segments = self.n_segments
         msg.timeout_factor = timeout_factor
         msg.n_iterations = self.n_iterations
         msg.useful_simulation = self.useful_simulation
         msg.local_planner = str(rospy.get_param('move_base/base_local_planner'))
+        msg.segments_metadata = self.get_segments_metadata_msg()
         if eval(str(rospy.get_param('move_base/GlobalPlanner/use_dijkstra'))):
             msg.global_planner = "Dijkstra"
         else:
             msg.global_planner = "A*"
         return msg
+
+    def get_simulation_hash(self):
+        prehash = ""
+        prehash += str(rospy.get_param('robot_file'))
+        prehash += str(rospy.get_param('world_file'))
+        prehash += str(rospy.get_param('map_file'))
+        prehash += str(rospy.get_param('plan_file'))
+        for i in range(0, self.n_segments):
+            prehash += str(self.segments_metadata[i].initial_point.x)
+            prehash += str(self.segments_metadata[i].initial_point.y)
+            prehash += str(self.segments_metadata[i].end_point.x)
+            prehash += str(self.segments_metadata[i].end_point.y)
+        return hashlib.md5(prehash.encode()).hexdigest()
 
     def get_msg(self, plan_file, simulation_timeout):
         msg = SimulationMsg()

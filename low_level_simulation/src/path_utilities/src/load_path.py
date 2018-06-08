@@ -172,7 +172,17 @@ def run(n_simulations, density):
 
     obstacles_model_generator.spawn_obstacles()
     simulator = SimulationResults(len(waypoints), n_simulations)
+    for i in range(0, len(waypoints)):
+        if(i != 0):
+            simulator.set_segment_metadata(i, points_2d[i - 1][0], points_2d[i - 1][1], \
+                points_2d[i][0], points_2d[i][1], density, \
+                obstacles_model_generator.segments[i].get_segment_timeout(1, 12))
+        else:
+            simulator.set_segment_metadata(i, points_2d[0][0], points_2d[0][1], \
+                points_2d[1][0], points_2d[1][1], density, \
+                obstacles_model_generator.segments[i].get_segment_timeout(1, 12))
 
+    rospy.loginfo(simulator.get_segments_metadata_msg())
     # Run the n simulations
     for x in range(0, n_simulations):
         # Print in Rviz the visual end point icons
@@ -184,7 +194,7 @@ def run(n_simulations, density):
         # Send to path planner each of the move base goals
         for waypoint in waypoints:
 
-            segment_simulation_timeout = obstacles_model_generator.segments[i].get_segment_timeout(2, 12)
+            segment_simulation_timeout = obstacles_model_generator.segments[i].get_segment_timeout(1, 12)
             rospy.loginfo(segment_simulation_timeout)
 
             # Build goal

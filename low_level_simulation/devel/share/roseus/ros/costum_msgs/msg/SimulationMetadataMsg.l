@@ -14,12 +14,16 @@
 
 (defclass costum_msgs::SimulationMetadataMsg
   :super ros::object
-  :slots (_plan_file _date _n_segments _segments_metadata _n_iterations _timeout_factor _useful_simulation _local_planner _global_planner ))
+  :slots (_simulation_hash _robot_file _world_file _plan_file _map_file _date _n_segments _segments_metadata _n_iterations _timeout_factor _useful_simulation _local_planner _global_planner ))
 
 (defmethod costum_msgs::SimulationMetadataMsg
   (:init
    (&key
+    ((:simulation_hash __simulation_hash) "")
+    ((:robot_file __robot_file) "")
+    ((:world_file __world_file) "")
     ((:plan_file __plan_file) "")
+    ((:map_file __map_file) "")
     ((:date __date) "")
     ((:n_segments __n_segments) 0)
     ((:segments_metadata __segments_metadata) (instance costum_msgs::SegmentsMetadataMsg :init))
@@ -30,7 +34,11 @@
     ((:global_planner __global_planner) "")
     )
    (send-super :init)
+   (setq _simulation_hash (string __simulation_hash))
+   (setq _robot_file (string __robot_file))
+   (setq _world_file (string __world_file))
    (setq _plan_file (string __plan_file))
+   (setq _map_file (string __map_file))
    (setq _date (string __date))
    (setq _n_segments (round __n_segments))
    (setq _segments_metadata __segments_metadata)
@@ -40,9 +48,21 @@
    (setq _local_planner (string __local_planner))
    (setq _global_planner (string __global_planner))
    self)
+  (:simulation_hash
+   (&optional __simulation_hash)
+   (if __simulation_hash (setq _simulation_hash __simulation_hash)) _simulation_hash)
+  (:robot_file
+   (&optional __robot_file)
+   (if __robot_file (setq _robot_file __robot_file)) _robot_file)
+  (:world_file
+   (&optional __world_file)
+   (if __world_file (setq _world_file __world_file)) _world_file)
   (:plan_file
    (&optional __plan_file)
    (if __plan_file (setq _plan_file __plan_file)) _plan_file)
+  (:map_file
+   (&optional __map_file)
+   (if __map_file (setq _map_file __map_file)) _map_file)
   (:date
    (&optional __date)
    (if __date (setq _date __date)) _date)
@@ -74,8 +94,16 @@
   (:serialization-length
    ()
    (+
+    ;; string _simulation_hash
+    4 (length _simulation_hash)
+    ;; string _robot_file
+    4 (length _robot_file)
+    ;; string _world_file
+    4 (length _world_file)
     ;; string _plan_file
     4 (length _plan_file)
+    ;; string _map_file
+    4 (length _map_file)
     ;; string _date
     4 (length _date)
     ;; int64 _n_segments
@@ -97,8 +125,16 @@
    (&optional strm)
    (let ((s (if strm strm
               (make-string-output-stream (send self :serialization-length)))))
+     ;; string _simulation_hash
+       (write-long (length _simulation_hash) s) (princ _simulation_hash s)
+     ;; string _robot_file
+       (write-long (length _robot_file) s) (princ _robot_file s)
+     ;; string _world_file
+       (write-long (length _world_file) s) (princ _world_file s)
      ;; string _plan_file
        (write-long (length _plan_file) s) (princ _plan_file s)
+     ;; string _map_file
+       (write-long (length _map_file) s) (princ _map_file s)
      ;; string _date
        (write-long (length _date) s) (princ _date s)
      ;; int64 _n_segments
@@ -149,8 +185,16 @@
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
    (buf &optional (ptr- 0))
+   ;; string _simulation_hash
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _simulation_hash (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
+   ;; string _robot_file
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _robot_file (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
+   ;; string _world_file
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _world_file (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; string _plan_file
      (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _plan_file (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
+   ;; string _map_file
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _map_file (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; string _date
      (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _date (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; int64 _n_segments
@@ -201,10 +245,14 @@
    self)
   )
 
-(setf (get costum_msgs::SimulationMetadataMsg :md5sum-) "771eda917b6244b8b3956c84b90f4902")
+(setf (get costum_msgs::SimulationMetadataMsg :md5sum-) "b64b7db80c218e4a90f09816c189d51c")
 (setf (get costum_msgs::SimulationMetadataMsg :datatype-) "costum_msgs/SimulationMetadataMsg")
 (setf (get costum_msgs::SimulationMetadataMsg :definition-)
-      "string plan_file
+      "string simulation_hash
+string robot_file
+string world_file
+string plan_file
+string map_file
 string date
 int64 n_segments
 SegmentsMetadataMsg segments_metadata
@@ -237,6 +285,6 @@ float64 z
 
 
 
-(provide :costum_msgs/SimulationMetadataMsg "771eda917b6244b8b3956c84b90f4902")
+(provide :costum_msgs/SimulationMetadataMsg "b64b7db80c218e4a90f09816c189d51c")
 
 

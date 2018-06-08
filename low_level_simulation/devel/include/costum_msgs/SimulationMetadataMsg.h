@@ -25,7 +25,11 @@ struct SimulationMetadataMsg_
   typedef SimulationMetadataMsg_<ContainerAllocator> Type;
 
   SimulationMetadataMsg_()
-    : plan_file()
+    : simulation_hash()
+    , robot_file()
+    , world_file()
+    , plan_file()
+    , map_file()
     , date()
     , n_segments(0)
     , segments_metadata()
@@ -36,7 +40,11 @@ struct SimulationMetadataMsg_
     , global_planner()  {
     }
   SimulationMetadataMsg_(const ContainerAllocator& _alloc)
-    : plan_file(_alloc)
+    : simulation_hash(_alloc)
+    , robot_file(_alloc)
+    , world_file(_alloc)
+    , plan_file(_alloc)
+    , map_file(_alloc)
     , date(_alloc)
     , n_segments(0)
     , segments_metadata(_alloc)
@@ -50,8 +58,20 @@ struct SimulationMetadataMsg_
 
 
 
+   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _simulation_hash_type;
+  _simulation_hash_type simulation_hash;
+
+   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _robot_file_type;
+  _robot_file_type robot_file;
+
+   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _world_file_type;
+  _world_file_type world_file;
+
    typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _plan_file_type;
   _plan_file_type plan_file;
+
+   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _map_file_type;
+  _map_file_type map_file;
 
    typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _date_type;
   _date_type date;
@@ -155,12 +175,12 @@ struct MD5Sum< ::costum_msgs::SimulationMetadataMsg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "771eda917b6244b8b3956c84b90f4902";
+    return "b64b7db80c218e4a90f09816c189d51c";
   }
 
   static const char* value(const ::costum_msgs::SimulationMetadataMsg_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x771eda917b6244b8ULL;
-  static const uint64_t static_value2 = 0xb3956c84b90f4902ULL;
+  static const uint64_t static_value1 = 0xb64b7db80c218e4aULL;
+  static const uint64_t static_value2 = 0x90f09816c189d51cULL;
 };
 
 template<class ContainerAllocator>
@@ -179,7 +199,11 @@ struct Definition< ::costum_msgs::SimulationMetadataMsg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "string plan_file\n\
+    return "string simulation_hash\n\
+string robot_file\n\
+string world_file\n\
+string plan_file\n\
+string map_file\n\
 string date\n\
 int64 n_segments\n\
 SegmentsMetadataMsg segments_metadata\n\
@@ -225,7 +249,11 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
+      stream.next(m.simulation_hash);
+      stream.next(m.robot_file);
+      stream.next(m.world_file);
       stream.next(m.plan_file);
+      stream.next(m.map_file);
       stream.next(m.date);
       stream.next(m.n_segments);
       stream.next(m.segments_metadata);
@@ -252,8 +280,16 @@ struct Printer< ::costum_msgs::SimulationMetadataMsg_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::costum_msgs::SimulationMetadataMsg_<ContainerAllocator>& v)
   {
+    s << indent << "simulation_hash: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.simulation_hash);
+    s << indent << "robot_file: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.robot_file);
+    s << indent << "world_file: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.world_file);
     s << indent << "plan_file: ";
     Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.plan_file);
+    s << indent << "map_file: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.map_file);
     s << indent << "date: ";
     Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.date);
     s << indent << "n_segments: ";

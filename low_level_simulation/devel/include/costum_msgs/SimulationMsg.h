@@ -133,12 +133,12 @@ struct MD5Sum< ::costum_msgs::SimulationMsg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "f76726cea71170d43f3772c8670bcc3f";
+    return "1fc04017a8937851069ea4d1e0d47bfe";
   }
 
   static const char* value(const ::costum_msgs::SimulationMsg_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xf76726cea71170d4ULL;
-  static const uint64_t static_value2 = 0x3f3772c8670bcc3fULL;
+  static const uint64_t static_value1 = 0x1fc04017a8937851ULL;
+  static const uint64_t static_value2 = 0x069ea4d1e0d47bfeULL;
 };
 
 template<class ContainerAllocator>
@@ -164,7 +164,11 @@ IndividualIterationResultsMsg[] individual_iterations_results\n\
 \n\
 ================================================================================\n\
 MSG: costum_msgs/SimulationMetadataMsg\n\
+string simulation_hash\n\
+string robot_file\n\
+string world_file\n\
 string plan_file\n\
+string map_file\n\
 string date\n\
 int64 n_segments\n\
 SegmentsMetadataMsg segments_metadata\n\

@@ -1,6 +1,6 @@
 # Robot radius calculated from the circle defined by the
 # point model robot. (Square shape)
-robot_radius: 0.5
+robot_radius: 0.55
 
 ####################################
 #Coordinate frame and tf parameters#
@@ -39,8 +39,8 @@ laser_scan_sensor: {sensor_frame: hokuyo, data_type: LaserScan, topic: /vehicle/
 
 #inflation_layer:
   #enabled: true
-inflation_radius: 1.2
-cost_scalinf_factor: 2.28
+inflation_radius: 0.5
+cost_scaling_factor: 1.0
 
 #static_layer:
 #enabled: true

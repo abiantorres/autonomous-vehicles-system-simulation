@@ -114,7 +114,7 @@
    self)
   )
 
-(setf (get costum_msgs::SimulationMsg :md5sum-) "f76726cea71170d43f3772c8670bcc3f")
+(setf (get costum_msgs::SimulationMsg :md5sum-) "1fc04017a8937851069ea4d1e0d47bfe")
 (setf (get costum_msgs::SimulationMsg :datatype-) "costum_msgs/SimulationMsg")
 (setf (get costum_msgs::SimulationMsg :definition-)
       "SimulationMetadataMsg metadata
@@ -124,7 +124,11 @@ IndividualIterationResultsMsg[] individual_iterations_results
 
 ================================================================================
 MSG: costum_msgs/SimulationMetadataMsg
+string simulation_hash
+string robot_file
+string world_file
 string plan_file
+string map_file
 string date
 int64 n_segments
 SegmentsMetadataMsg segments_metadata
@@ -208,6 +212,6 @@ bool failure
 
 
 
-(provide :costum_msgs/SimulationMsg "f76726cea71170d43f3772c8670bcc3f")
+(provide :costum_msgs/SimulationMsg "1fc04017a8937851069ea4d1e0d47bfe")
 
 

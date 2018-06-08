@@ -19,7 +19,11 @@ class SimulationMetadataMsg {
   constructor(initObj={}) {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
+      this.simulation_hash = null;
+      this.robot_file = null;
+      this.world_file = null;
       this.plan_file = null;
+      this.map_file = null;
       this.date = null;
       this.n_segments = null;
       this.segments_metadata = null;
@@ -30,11 +34,35 @@ class SimulationMetadataMsg {
       this.global_planner = null;
     }
     else {
+      if (initObj.hasOwnProperty('simulation_hash')) {
+        this.simulation_hash = initObj.simulation_hash
+      }
+      else {
+        this.simulation_hash = '';
+      }
+      if (initObj.hasOwnProperty('robot_file')) {
+        this.robot_file = initObj.robot_file
+      }
+      else {
+        this.robot_file = '';
+      }
+      if (initObj.hasOwnProperty('world_file')) {
+        this.world_file = initObj.world_file
+      }
+      else {
+        this.world_file = '';
+      }
       if (initObj.hasOwnProperty('plan_file')) {
         this.plan_file = initObj.plan_file
       }
       else {
         this.plan_file = '';
+      }
+      if (initObj.hasOwnProperty('map_file')) {
+        this.map_file = initObj.map_file
+      }
+      else {
+        this.map_file = '';
       }
       if (initObj.hasOwnProperty('date')) {
         this.date = initObj.date
@@ -89,8 +117,16 @@ class SimulationMetadataMsg {
 
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type SimulationMetadataMsg
+    // Serialize message field [simulation_hash]
+    bufferOffset = _serializer.string(obj.simulation_hash, buffer, bufferOffset);
+    // Serialize message field [robot_file]
+    bufferOffset = _serializer.string(obj.robot_file, buffer, bufferOffset);
+    // Serialize message field [world_file]
+    bufferOffset = _serializer.string(obj.world_file, buffer, bufferOffset);
     // Serialize message field [plan_file]
     bufferOffset = _serializer.string(obj.plan_file, buffer, bufferOffset);
+    // Serialize message field [map_file]
+    bufferOffset = _serializer.string(obj.map_file, buffer, bufferOffset);
     // Serialize message field [date]
     bufferOffset = _serializer.string(obj.date, buffer, bufferOffset);
     // Serialize message field [n_segments]
@@ -114,8 +150,16 @@ class SimulationMetadataMsg {
     //deserializes a message object of type SimulationMetadataMsg
     let len;
     let data = new SimulationMetadataMsg(null);
+    // Deserialize message field [simulation_hash]
+    data.simulation_hash = _deserializer.string(buffer, bufferOffset);
+    // Deserialize message field [robot_file]
+    data.robot_file = _deserializer.string(buffer, bufferOffset);
+    // Deserialize message field [world_file]
+    data.world_file = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [plan_file]
     data.plan_file = _deserializer.string(buffer, bufferOffset);
+    // Deserialize message field [map_file]
+    data.map_file = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [date]
     data.date = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [n_segments]
@@ -137,12 +181,16 @@ class SimulationMetadataMsg {
 
   static getMessageSize(object) {
     let length = 0;
+    length += object.simulation_hash.length;
+    length += object.robot_file.length;
+    length += object.world_file.length;
     length += object.plan_file.length;
+    length += object.map_file.length;
     length += object.date.length;
     length += SegmentsMetadataMsg.getMessageSize(object.segments_metadata);
     length += object.local_planner.length;
     length += object.global_planner.length;
-    return length + 41;
+    return length + 57;
   }
 
   static datatype() {
@@ -152,13 +200,17 @@ class SimulationMetadataMsg {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '771eda917b6244b8b3956c84b90f4902';
+    return 'b64b7db80c218e4a90f09816c189d51c';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
+    string simulation_hash
+    string robot_file
+    string world_file
     string plan_file
+    string map_file
     string date
     int64 n_segments
     SegmentsMetadataMsg segments_metadata
@@ -196,11 +248,39 @@ class SimulationMetadataMsg {
       msg = {};
     }
     const resolved = new SimulationMetadataMsg(null);
+    if (msg.simulation_hash !== undefined) {
+      resolved.simulation_hash = msg.simulation_hash;
+    }
+    else {
+      resolved.simulation_hash = ''
+    }
+
+    if (msg.robot_file !== undefined) {
+      resolved.robot_file = msg.robot_file;
+    }
+    else {
+      resolved.robot_file = ''
+    }
+
+    if (msg.world_file !== undefined) {
+      resolved.world_file = msg.world_file;
+    }
+    else {
+      resolved.world_file = ''
+    }
+
     if (msg.plan_file !== undefined) {
       resolved.plan_file = msg.plan_file;
     }
     else {
       resolved.plan_file = ''
+    }
+
+    if (msg.map_file !== undefined) {
+      resolved.map_file = msg.map_file;
+    }
+    else {
+      resolved.map_file = ''
     }
 
     if (msg.date !== undefined) {

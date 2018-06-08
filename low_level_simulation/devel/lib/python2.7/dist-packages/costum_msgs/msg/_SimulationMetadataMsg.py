@@ -9,10 +9,14 @@ import costum_msgs.msg
 import geometry_msgs.msg
 
 class SimulationMetadataMsg(genpy.Message):
-  _md5sum = "771eda917b6244b8b3956c84b90f4902"
+  _md5sum = "b64b7db80c218e4a90f09816c189d51c"
   _type = "costum_msgs/SimulationMetadataMsg"
   _has_header = False #flag to mark the presence of a Header object
-  _full_text = """string plan_file
+  _full_text = """string simulation_hash
+string robot_file
+string world_file
+string plan_file
+string map_file
 string date
 int64 n_segments
 SegmentsMetadataMsg segments_metadata
@@ -41,8 +45,8 @@ float64 x
 float64 y
 float64 z
 """
-  __slots__ = ['plan_file','date','n_segments','segments_metadata','n_iterations','timeout_factor','useful_simulation','local_planner','global_planner']
-  _slot_types = ['string','string','int64','costum_msgs/SegmentsMetadataMsg','int64','int64','bool','string','string']
+  __slots__ = ['simulation_hash','robot_file','world_file','plan_file','map_file','date','n_segments','segments_metadata','n_iterations','timeout_factor','useful_simulation','local_planner','global_planner']
+  _slot_types = ['string','string','string','string','string','string','int64','costum_msgs/SegmentsMetadataMsg','int64','int64','bool','string','string']
 
   def __init__(self, *args, **kwds):
     """
@@ -52,7 +56,7 @@ float64 z
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       plan_file,date,n_segments,segments_metadata,n_iterations,timeout_factor,useful_simulation,local_planner,global_planner
+       simulation_hash,robot_file,world_file,plan_file,map_file,date,n_segments,segments_metadata,n_iterations,timeout_factor,useful_simulation,local_planner,global_planner
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -61,8 +65,16 @@ float64 z
     if args or kwds:
       super(SimulationMetadataMsg, self).__init__(*args, **kwds)
       #message fields cannot be None, assign default values for those that are
+      if self.simulation_hash is None:
+        self.simulation_hash = ''
+      if self.robot_file is None:
+        self.robot_file = ''
+      if self.world_file is None:
+        self.world_file = ''
       if self.plan_file is None:
         self.plan_file = ''
+      if self.map_file is None:
+        self.map_file = ''
       if self.date is None:
         self.date = ''
       if self.n_segments is None:
@@ -80,7 +92,11 @@ float64 z
       if self.global_planner is None:
         self.global_planner = ''
     else:
+      self.simulation_hash = ''
+      self.robot_file = ''
+      self.world_file = ''
       self.plan_file = ''
+      self.map_file = ''
       self.date = ''
       self.n_segments = 0
       self.segments_metadata = costum_msgs.msg.SegmentsMetadataMsg()
@@ -102,7 +118,31 @@ float64 z
     :param buff: buffer, ``StringIO``
     """
     try:
+      _x = self.simulation_hash
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.robot_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.world_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self.plan_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.map_file
       length = len(_x)
       if python3 or type(_x) == unicode:
         _x = _x.encode('utf-8')
@@ -159,9 +199,45 @@ float64 z
       start = end
       end += length
       if python3:
+        self.simulation_hash = str[start:end].decode('utf-8')
+      else:
+        self.simulation_hash = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.robot_file = str[start:end].decode('utf-8')
+      else:
+        self.robot_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.world_file = str[start:end].decode('utf-8')
+      else:
+        self.world_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
         self.plan_file = str[start:end].decode('utf-8')
       else:
         self.plan_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.map_file = str[start:end].decode('utf-8')
+      else:
+        self.map_file = str[start:end]
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
@@ -233,7 +309,31 @@ float64 z
     :param numpy: numpy python module
     """
     try:
+      _x = self.simulation_hash
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.robot_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.world_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self.plan_file
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.pack('<I%ss'%length, length, _x))
+      _x = self.map_file
       length = len(_x)
       if python3 or type(_x) == unicode:
         _x = _x.encode('utf-8')
@@ -291,9 +391,45 @@ float64 z
       start = end
       end += length
       if python3:
+        self.simulation_hash = str[start:end].decode('utf-8')
+      else:
+        self.simulation_hash = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.robot_file = str[start:end].decode('utf-8')
+      else:
+        self.robot_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.world_file = str[start:end].decode('utf-8')
+      else:
+        self.world_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
         self.plan_file = str[start:end].decode('utf-8')
       else:
         self.plan_file = str[start:end]
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.map_file = str[start:end].decode('utf-8')
+      else:
+        self.map_file = str[start:end]
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])

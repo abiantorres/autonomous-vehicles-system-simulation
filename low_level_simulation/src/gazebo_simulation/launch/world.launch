@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
 
-  <arg name="world" default="empty"/> 
+  <arg name="world" default="empty"/>
   <arg name="paused" default="false"/>
   <arg name="use_sim_time" default="true"/>
-  <arg name="gui" default="true"/>
+  <arg name="gui" default="false"/>
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
 
@@ -14,11 +14,18 @@
   <arg name="roll" default="0"/>
   <arg name="pitch" default="0"/>
   <arg name="yaw" default="0"/>
-  
+
+  <!-- simulation description input file -->
+  <arg name="world_file" default="complete_hotel.sdf"/>
+  <arg name="robot_file" default="vehicle.xacro"/>
+  <!-- set input files as server parameters to use them us metadata information -->
+  <param name="world_file" value="$(arg world_file)"/>
+  <param name="robot_file" value="$(arg robot_file)"/>
+
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <!--arg name="world_name" value="$(find gazebo_simulation)/worlds/willowgarage.world"/-->
     <!--arg name="world_name" value="$(find gazebo_simulation)/worlds/turtlebot_playground.world"/-->
-    <arg name="world_name" value="$(find gazebo_simulation)/worlds/complete_hotel.sdf"/>
+    <arg name="world_name" value="$(find gazebo_simulation)/worlds/$(arg world_file)"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gui" value="$(arg gui)"/>
@@ -26,9 +33,9 @@
     <arg name="debug" value="$(arg debug)"/>
   </include>
 
-  
-  <param name="robot_description" command="$(find xacro)/xacro.py '$(find description)/urdf/vehicle.xacro'"/>
-
+  <!-- get the robot description, this will allow us to obtain the initial coorninates -->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find description)/urdf/$(arg robot_file)'"/>
+  <!-- spawn the robot in the current world-->
   <node name="spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -model vehicle"/>
 
 </launch>

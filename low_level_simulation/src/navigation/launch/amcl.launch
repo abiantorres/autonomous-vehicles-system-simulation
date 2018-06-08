@@ -4,7 +4,9 @@
   <master auto="start"/>
 
   <!-- Map server -->
-  <arg name="map_file" default="$(find navigation)/maps/hotel_map.yaml"/>
+  <arg name="map_file_name" default="hotel_map.yaml"/>
+  <arg name="map_file" default="$(find navigation)/maps/$(arg map_file_name)"/>
+  <param name="map_file" value="$(arg map_file_name)"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
 
@@ -19,7 +21,7 @@
     <param name="base_frame_id" value="base_link"/>
     <param name="update_min_d" value="0.5"/>
     <param name="update_min_a" value="1.0"/-->
-    <rosparam file="$(find navigation)/config/amcl.yaml" command="load" />
+    <!--rosparam file="$(find navigation)/config/amcl.yaml" command="load" /-->
   </node>
 
 <!-- Distribute pose array across free space -->

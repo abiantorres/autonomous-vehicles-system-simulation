@@ -1,6 +1,14 @@
 (cl:in-package costum_msgs-msg)
-(cl:export '(PLAN_FILE-VAL
+(cl:export '(SIMULATION_HASH-VAL
+          SIMULATION_HASH
+          ROBOT_FILE-VAL
+          ROBOT_FILE
+          WORLD_FILE-VAL
+          WORLD_FILE
+          PLAN_FILE-VAL
           PLAN_FILE
+          MAP_FILE-VAL
+          MAP_FILE
           DATE-VAL
           DATE
           N_SEGMENTS-VAL
