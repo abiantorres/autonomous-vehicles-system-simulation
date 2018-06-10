@@ -20,7 +20,6 @@ class DBClient():
     def msg_to_json(self, msg):
          """ Convert a ROS message to JSON format"""
          y = yaml.load(str(msg))
-         #return json.dumps(y,indent=4)
          return json_util.loads(json.dumps(y,indent=4))
 
     def insert_simulation_results(self, msg):

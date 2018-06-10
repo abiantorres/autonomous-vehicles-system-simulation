@@ -1,10 +1,6 @@
 #!/bin/bash
-
-sudo killall gzserver
-sudo killall gzclient
-sudo killall rviz
-sudo killall roscore
-sudo killall rosmaster
-
-roslaunch gazebo_simulation world.launch
-rosservice call gazebo/pause_physics
+if [ $# -eq 1 ]; then
+  roslaunch gazebo_simulation world.launch world_file:=$1
+else
+  roslaunch gazebo_simulation world.launch
+fi
