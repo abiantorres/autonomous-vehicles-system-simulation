@@ -18,7 +18,7 @@ robot_radius: 0.55
 # the coordinate frames specified by the global_frame and robot_base_frame parameters
 # is transform_tolerance seconds older than ros::Time::now(), then the navigation
 # stack will stop the robot.
-transform_tolerance: 0.5
+#transform_tolerance: 0.5
 
 ####################################
 #Coordinate frame and tf parameters#
@@ -32,6 +32,9 @@ transform_tolerance: 0.5
 #  enabled: true
 obstacle_range: 2.5
 raytrace_range: 3.0
+
+inflation_radius: 0.55
+cost_scaling_factor: 0.45
 #  track_unknown_space: false
 # combination_method: 1
 observation_sources: laser_scan_sensor
@@ -39,8 +42,6 @@ laser_scan_sensor: {sensor_frame: hokuyo, data_type: LaserScan, topic: /vehicle/
 
 #inflation_layer:
   #enabled: true
-inflation_radius: 0.5
-cost_scaling_factor: 1.0
 
 #static_layer:
 #enabled: true

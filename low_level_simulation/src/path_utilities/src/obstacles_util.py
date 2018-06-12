@@ -42,7 +42,7 @@ my_obstacles_model_generator.spawn_obstacles()
 # Maths dependencies.
 from sympy import Point, Segment
 from pyproj import Geod
-from math import ceil, sqrt, pi
+from math import ceil, sqrt, pi, pow
 
 # Format dependencies.
 import json
@@ -255,6 +255,9 @@ class ObstaclesSegmentModel():
 			points[i] = (round(points[i][0] + x_randomness, 2), round(points[i][1] + y_randomness, 2))
 		return points
 
+	def math_calc_dist(self, x1, y1, x2, y2):
+		return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2))
+
 	def build(self, segment_id, x1, y1, x2, y2, obstacle_length, robot_radius, \
 		distance_between_obstacles = DFLT_DISTANCE_BETWEEN_OBSTACLES, max_obstacle_shiftment = DFLT_MAX_OBSTACLE_SHIFTMENT):
 		"""
@@ -262,6 +265,11 @@ class ObstaclesSegmentModel():
 		"""
 		# Set an identifier to this segment
 		self.segment_id = segment_id
+		self.x1 = x1
+		self.y1 = y1
+		self.x2 = x2
+		self.y2 = y2
+		self.segment_distance = self.math_calc_dist(x1, y1, x2, y2)
 		# Build a line object to compute some maths
 		self.segment = self.get_segment(round(x1, 2),round(y1, 2), round(x2, 2), round(y2, 2))
 		# Set the density of this segment
@@ -274,7 +282,7 @@ class ObstaclesSegmentModel():
 		self.robot_radius = round(robot_radius, 2)
 		# Compute the number of obstacles allowed according to the density and the
 		# length of the segment
-		n_obstacles = self.get_n_obstacles(eval(str(self.segment.length)), self.obstacle_length, \
+		n_obstacles = self.get_n_obstacles(self.segment_distance, self.obstacle_length, \
 			self.distance_between_obstacles)
 		# Generate n uniformly distanted points, also giving some randomness to the
 		# position of each obstacle
@@ -389,8 +397,8 @@ class ObstaclesModelGenerator():
 			max_obstacle_shiftment = self.max_obstacle_shiftment
 		if distance_between_obstacles == None:
 			distance_between_obstacles = self.distance_between_obstacles
-		self.x = x2
-		self.y = y2
+		self.last_x = x2
+		self.last_y = y2
 		self.segments.append(ObstaclesSegmentModel(segment_id, x1, y1, x2, y2, \
 			self.obstacle_length, self.robot_radius, distance_between_obstacles = distance_between_obstacles, max_obstacle_shiftment = \
 			max_obstacle_shiftment))

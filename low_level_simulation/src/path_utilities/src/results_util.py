@@ -187,7 +187,7 @@ class SimulationResults:
         individual_speeds_results = []
         individual_distances_results = []
         for i in range(0, self.n_iterations):
-            if(self.iterations_results[i].failure):
+            if(not self.iterations_results[i].failure):
                 individual_times_results.append(\
                     self.iterations_results[i].time)
                 individual_speeds_results.append(\
@@ -201,7 +201,7 @@ class SimulationResults:
         msg = GlobalSegmentResultsMsg()
         msg.segment_index = segment_index
         msg.n_failures = self.get_global_segment_failures_count(segment_index)
-        if(self.n_iterations - msg.n_failures >= 2):
+        if((self.n_iterations - msg.n_failures) >= 2):
             individual_times_results, individual_speeds_results,\
                 individual_distances_results = self.get_global_segment_results_lists(segment_index)
             msg.time_mean = mean(individual_times_results)

@@ -1,8 +1,8 @@
-myrobot:
+vehicle:
   # Publish all joint states -----------------------------------
   joint_state_controller:
     type: joint_state_controller/JointStateController
-    publish_rate: 50  
+    publish_rate: 50
 
   mobile_base_controller:
     type: "diff_drive_controller/DiffDriveController"
@@ -10,4 +10,3 @@ myrobot:
     right_wheel: 'right_wheel_hinge'
     pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
     twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
-
