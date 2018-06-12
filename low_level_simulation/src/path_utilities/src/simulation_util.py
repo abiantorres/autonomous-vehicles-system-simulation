@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import rosbag, rospy, actionlib, time
+import rosbag, rospy, actionlib, time, sys, csv, rospkg, re, os
 from gazebo_msgs.msg import ModelState
 from std_msgs.msg import Empty
 from std_srvs.srv import Empty
@@ -13,10 +13,17 @@ from results_util import SimulationResults
 from db_client import DBClient
 # Path information messages
 from costum_msgs.msg import SimulationMsg
+import Tkinter
+import tkMessageBox
 
 class SimulationExecutor():
 
     def __init__(self):
+        self.rospack = rospkg.RosPack()
+        self.navigation_pkg_path = str(self.rospack.get_path('navigation'))
+        self.csv_path = re.sub("navigation","", self.navigation_pkg_path)
+        self.csv_path = re.sub("/src/","/csv/",self.csv_path)
+
         self.db_client = DBClient()
         # Get some parameters
         self.plan_file = rospy.get_param('~plan_file')
@@ -61,16 +68,17 @@ class SimulationExecutor():
         for i in range(0, self.n_segments):
             if(i != 0):
                 self.simulation_results_listener.set_segment_metadata(i, \
-                    self.points_2d[i - 1][0], self.points_2d[i - 1][1], \
-                    self.points_2d[i][0], self.points_2d[i][1], self.distance_between_obstacles, \
+                    self.points_2d[i][0], self.points_2d[i][1], \
+                    self.points_2d[i+1][0], self.points_2d[i+1][1], self.distance_between_obstacles, \
                     self.obstacles_model_generator.segments[i].get_segment_timeout(\
                     self.max_robot_speed, self.timeout_factor))
             else:
-                self.simulation_results_listener.set_segment_metadata(i, \
+                self.simulation_results_listener.set_segment_metadata(0, \
                     self.points_2d[0][0], self.points_2d[0][1], \
                     self.points_2d[1][0], self.points_2d[1][1], self.distance_between_obstacles, \
                     self.obstacles_model_generator.segments[0].get_segment_timeout(\
                     self.max_robot_speed, self.timeout_factor))
+            i += 1
 
     def reset_gazebo_world(self):
         # reset the gazebo world to the initial state
@@ -118,6 +126,78 @@ class SimulationExecutor():
         poses.poses = [pose.pose.pose for pose in self.waypoints]
         return poses
 
+    def msg_to_csv(self, msg):
+        with open(self.csv_path + msg.metadata.simulation_hash + "_" + msg.metadata.date + ".csv", 'wb') as csvfile:
+            fieldnames_global_segments_results = ['segment_index', 'n_failures', \
+                        'time_mean', 'time_stdev', \
+                        'time_max', 'time_min', \
+                        'distance_mean', 'distance_stdev', \
+                        'distance_max', 'distance_min', \
+                        'speed_mean', 'speed_stdev', \
+                        'speed_max', 'speed_min']
+            fieldnames_global_simulation_results = ['n_failures', \
+                        'time_mean', 'time_stdev', \
+                        'time_max', 'time_min', \
+                        'distance_mean', 'distance_stdev', \
+                        'distance_max', 'distance_min', \
+                        'speed_mean', 'speed_stdev', \
+                        'speed_max', 'speed_min']
+            fieldnames_segments_metadata = ['segment_index', 'initial_point', \
+                        'end_point', 'distance_between_obstacles', \
+                        'segment_simulation_timeout']
+            fieldnames_simulation_metadata = ['simulation_hash', 'robot_file', \
+                        'world_file', 'plan_file', \
+                        'map_file', 'date', \
+                        'n_segments', 'n_iterations', \
+                        'timeout_factor', 'useful_simulation', \
+                        'local_planner', 'global_planner']
+            # Simulation metadata
+            writer = csv.DictWriter(csvfile, fieldnames=['Simulation metadata'], delimiter=';', quotechar='"')
+            writer.writeheader()
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames_simulation_metadata, delimiter=';', quotechar='"')
+            writer.writeheader()
+            writer.writerow({'simulation_hash':msg.metadata.simulation_hash, 'robot_file':msg.metadata.robot_file, \
+                        'world_file':msg.metadata.world_file, 'plan_file':msg.metadata.plan_file, 'map_file':msg.metadata.map_file, \
+                        'date':msg.metadata.date, 'n_segments':msg.metadata.n_segments, \
+                        'n_iterations':msg.metadata.n_iterations, 'timeout_factor':msg.metadata.timeout_factor, \
+                        'useful_simulation':msg.metadata.useful_simulation, 'useful_simulation':msg.metadata.useful_simulation, \
+                        'local_planner':msg.metadata.local_planner, 'global_planner':msg.metadata.global_planner})
+            # Segments metadata
+            writer = csv.DictWriter(csvfile, fieldnames=['Segments metadata'], delimiter=';', quotechar='"')
+            writer.writeheader()
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames_segments_metadata, delimiter=';', quotechar='"')
+            writer.writeheader()
+            for i in msg.metadata.segments_metadata.segments_metadata:
+                writer.writerow({'segment_index':i.segment_index, 'initial_point':i.initial_point, \
+                            'end_point':i.end_point, 'distance_between_obstacles':i.distance_between_obstacles, \
+                            'segment_simulation_timeout':i.segment_simulation_timeout})
+            # Global Simulation Results
+            writer = csv.DictWriter(csvfile, fieldnames=['Global simulation results'], delimiter=';', quotechar='"')
+            writer.writeheader()
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames_global_simulation_results, delimiter=';', quotechar='"')
+            writer.writeheader()
+            writer.writerow({'n_failures':msg.global_simulation_results.n_failures, \
+                        'time_mean':msg.global_simulation_results.time_mean, 'time_stdev':msg.global_simulation_results.time_stdev, \
+                        'time_max':msg.global_simulation_results.time_max, 'time_min':msg.global_simulation_results.time_min, \
+                        'distance_mean':msg.global_simulation_results.distance_mean, 'distance_stdev':msg.global_simulation_results.distance_stdev, \
+                        'distance_max':msg.global_simulation_results.distance_max, 'distance_min':msg.global_simulation_results.distance_min, \
+                        'speed_mean':msg.global_simulation_results.speed_mean, 'speed_stdev':msg.global_simulation_results.speed_stdev, \
+                        'speed_max':msg.global_simulation_results.speed_max, 'speed_min':msg.global_simulation_results.speed_min})
+            # Global Segments Results
+            writer = csv.DictWriter(csvfile, fieldnames=['Global segments results'], delimiter=';', quotechar='"')
+            writer.writeheader()
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames_global_segments_results, delimiter=';', quotechar='"')
+            writer.writeheader()
+            for i in msg.global_segments_results:
+                writer.writerow({'segment_index':i.segment_index, 'n_failures':i.n_failures, \
+                            'time_mean':i.time_mean, 'time_stdev':i.time_stdev, \
+                            'time_max':i.time_max, 'time_min':i.time_min, \
+                            'distance_mean':i.distance_mean, 'distance_stdev':i.distance_stdev, \
+                            'distance_max':i.distance_max, 'distance_min':i.distance_min, \
+                            'speed_mean':i.speed_mean, 'speed_stdev':i.speed_stdev, \
+                            'speed_max':i.speed_max, 'speed_min':i.speed_min})
+        tkMessageBox.showinfo('Results', "A CSV file has been generated behind the path "+self.csv_path + msg.metadata.simulation_hash + "_" + msg.metadata.date + ".csv")
+
     def start(self):
         """ Low level information publisher. High level should be
         subscribed to the simulation_data topic.
@@ -132,6 +212,7 @@ class SimulationExecutor():
             self.reset_gazebo_world()
             self.set_vehicle_model_state()
             self.obstacles_model_generator.spawn_obstacles()
+            time.sleep(3)
             for j in range(0, self.n_segments):
                 # Build goal
                 goal = MoveBaseGoal()
@@ -160,4 +241,5 @@ class SimulationExecutor():
         msg = self.simulation_results_listener.get_msg(\
             self.plan_file, self.timeout_factor)
         self.simulation_data_pub.publish(msg)
+        self.msg_to_csv(msg)
         self.db_client.insert_simulation_results(msg)

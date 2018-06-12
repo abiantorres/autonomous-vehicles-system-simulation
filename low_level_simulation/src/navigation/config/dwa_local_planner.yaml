@@ -39,13 +39,13 @@ DWAPlannerROS:
   #####################################
   acc_lim_y: 0.0
   # The rotational acceleration limit of the robot in radians/sec^2
-  acc_lim_th: 5.0
+  acc_lim_th: 10.0
   # The absolute value of the maximum translational velocity for the robot in m/s
   max_trans_vel: 2.0
   # The absolute value of the minimum translational velocity for the robot in m/s
   min_trans_vel: 0.05
   # The maximum x velocity for the robot in m/s.
-  max_vel_x: 1.0
+  max_vel_x: 2.0
   # The minimum x velocity for the robot in m/s, negative for backwards motion.
   min_vel_x: 0.0 # -1.0
   # The maximum y velocity for the robot in m/s
@@ -60,7 +60,7 @@ DWAPlannerROS:
   min_vel_y: 0.0
   # The absolute value of the maximum rotational velocity for the robot in rad/s
   # # 0.1 rad/sec = 5.7 degree/sec
-  max_rot_vel: 2.0
+  max_rot_vel: 1.0
   # The absolute value of the minimum rotational velocity for the robot in rad/s
   min_rot_vel: 0.4
   # Speed used for driving during escapes in meters/sec. Note that it must be negative

@@ -352,6 +352,8 @@ class ObstaclesModelGenerator():
 		self.initial_x = round(initial_x, 2)
 		# Set the initial y value
 		self.initial_y = round(initial_y, 2)
+		self.last_x = 0.0
+		self.last_y = 0.0
 		# Set a shiftment limit to give some randomness to the obstacles position
 		self.max_obstacle_shiftment = round(max_obstacle_shiftment, 2)
 		# Set the global distance between obstacles (In case we want the same distance between obstacles for each segment)
@@ -368,9 +370,9 @@ class ObstaclesModelGenerator():
 		if distance_between_obstacles == None:
 			distance_between_obstacles = self.distance_between_obstacles
 		# There are some segments yet
-		if not (self.segments == [] or self.segments == None):
-			self.__concatenate_segment(segment_id, self.segments[-1].segment.p2.x, \
-				self.segments[-1].segment.p2.y, x, y, distance_between_obstacles, max_obstacle_shiftment)
+		if not self.segments == [] and not self.segments == None:
+			self.__concatenate_segment(segment_id, self.last_x, \
+				self.last_y, x, y, distance_between_obstacles, max_obstacle_shiftment)
 		else:
 			# Build the first segment
 			self.__concatenate_segment(segment_id, self.initial_x, self.initial_y, x, y, distance_between_obstacles, \
@@ -387,6 +389,8 @@ class ObstaclesModelGenerator():
 			max_obstacle_shiftment = self.max_obstacle_shiftment
 		if distance_between_obstacles == None:
 			distance_between_obstacles = self.distance_between_obstacles
+		self.x = x2
+		self.y = y2
 		self.segments.append(ObstaclesSegmentModel(segment_id, x1, y1, x2, y2, \
 			self.obstacle_length, self.robot_radius, distance_between_obstacles = distance_between_obstacles, max_obstacle_shiftment = \
 			max_obstacle_shiftment))

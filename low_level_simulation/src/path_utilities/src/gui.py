@@ -4,7 +4,7 @@ from Tkinter import *
 import Tkinter, Tkconstants, tkFileDialog, rospkg, subprocess, re, threading, psutil, os, signal
 from multiprocessing import Process, Queue
 from tkMessageBox import *
-import ntpath, time
+import ntpath, time, atexit
 
 class Gui():
 
@@ -21,7 +21,16 @@ class Gui():
         self.map_process = None
         self.map_thread = None
 
+        self.plan_running = False
+        self.plan_process = None
+        self.plan_thread = None
+
+        self.online_conf_running = False
+        self.online_conf_process = None
+        self.online_conf_thread = None
+
         self.plan_path = None
+        self.new_plan_path = None
         self.world_path = None
         self.map_path = None
         self.mapping_path = None
@@ -96,8 +105,23 @@ class Gui():
         self.map_button = Button(self.actionsLabelFrame, text='Build map', font=("Arial Bold", 12), command=self.map_event)
         self.map_button.grid(column=3, row=0, padx=20, pady=20)
 
+        self.online_conf_button = Button(self.actionsLabelFrame, text='Open Online Configuration', font=("Arial Bold", 12), command=self.online_conf_event)
+        self.online_conf_button.grid(column=4, row=0, padx=20, pady=20)
+
         self.root.grid_columnconfigure(index=0, weight=1)
         self.root.grid_rowconfigure(index=0, weight=1)
+
+        #atexit.register(self.exit_hantkMessageBoxdler)
+
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+    def on_closing(self):
+        if askokcancel("Quit", "Do you want to quit?"):
+            self.root.destroy()
+            threading.Thread(target=self.close_simulation_method).start()
+
+    def exit_handler(self):
+        threading.Thread(target=self.close_simulation_method).start()
 
     def kill(self, proc_pid):
         process = psutil.Process(proc_pid)
@@ -109,28 +133,57 @@ class Gui():
         head, tail = ntpath.split(path)
         return tail or ntpath.basename(head)
 
+    def online_conf_event(self):
+        pass
+
     def simulation_event(self):
-        if(self.world_path != None and self.map_path != None \
-            and self.plan_path != None):
-            if(not self.simulation_running):
-                self.simulation_running = True
-                self.simulation_button["text"] = "Close simulation"
-                self.simulation_thread = threading.Thread(target=self.simulation_method).start()
-            elif (self.simulation_running and self.simulation_process != None):
-                self.simulation_running = False
-                self.simulation_button["text"] = "Start simulation"
-                self.kill(self.simulation_process.pid)
-                #self.simulation_thread.daemon = True
-                threading.Thread(target=self.close_simulation_method).start()
-                self.simulation_process = None
+        if(not self.plan_running and not self.map_running):
+            if(self.world_path != None and self.map_path != None \
+                and self.plan_path != None):
+                if(not self.simulation_running):
+                    self.simulation_running = True
+                    self.simulation_button["text"] = "Close simulation"
+                    self.simulation_thread = threading.Thread(target=self.simulation_method).start()
+                elif (self.simulation_running and self.simulation_process != None):
+                    self.simulation_running = False
+                    self.simulation_button["text"] = "Start simulation"
+                    self.kill(self.simulation_process.pid)
+                    #self.simulation_thread.daemon = True
+                    threading.Thread(target=self.close_simulation_method).start()
+                    self.simulation_process = None
+                else:
+                    self.simulation_running = False
+                    self.simulation_process = None
             else:
-                self.simulation_running = False
-                self.simulation_process = None
+                showinfo('Simulation files', 'Make sure you have selected all the simulation files (map, world and plan)')
         else:
-            showinfo('Simulation files', 'Make sure you have selected all the simulation files')
+            showinfo('Actions', 'There is another action in execution. Make sure you have closed it.')
 
     def plan_event(self):
-        pass
+        if(not self.simulation_running and not self.map_running):
+            if(self.world_path != None and self.map_path != None):
+                if(not self.plan_running):
+                    self.plan_running = True
+                    self.plan_button["text"] = "Save plan"
+                    self.open_plan_file_dialog()
+                    self.plan_thread = threading.Thread(target=self.plan_method).start()
+                elif (self.plan_running and self.plan_process != None):
+                    self.plan_running = False
+                    self.plan_button["text"] = "Build plan"
+                    threading.Thread(target=self.save_plan_method).start()
+                    time.sleep(5)
+                    self.kill(self.plan_process.pid)
+                    #self.simulation_thread.daemon = True
+                    threading.Thread(target=self.close_simulation_method).start()
+                    self.plan_process = None
+                else:
+                    self.plan_running = False
+                    self.plan_process = None
+            else:
+                showinfo('Simulation files', 'Make sure you have selected all the simulation files (world and map)')
+        else:
+            showinfo('Actions', 'There is another action in execution. Make sure you have closed it.')
+
 
     def server_event(self):
         if(not self.server_running):
@@ -146,8 +199,16 @@ class Gui():
             self.server_running = False
             self.server_process = None
 
+    def online_conf_event(self):
+        if(self.simulation_running or self.map_running or self.plan_running):
+            self.online_conf_running = True
+            self.online_conf_button["text"] = "Open Online Configuration"
+            threading.Thread(target=self.online_conf_method).start()
+        else:
+            showinfo('Actions', 'Run a configurable action.')
+
     def map_event(self):
-        if(not self.simulation_running):
+        if(not self.simulation_running and not self.plan_running):
             if(self.world_path != None):
                 if(not self.map_running):
                     self.map_running = True
@@ -166,28 +227,45 @@ class Gui():
                     self.map_running = False
                     self.map_process = None
             else:
-                showinfo('Simulation files', 'Make sure you have selected all the simulation files.')
+                showinfo('Simulation files', 'Make sure you have selected all the simulation files. (world)')
         else:
-            showinfo('Mapping', 'There is a simulation in execution. Make sure you have closed it.')
+            showinfo('Actions', 'There is another action in execution. Make sure you have closed it.')
 
     def server_method(self):
         self.server_process = subprocess.Popen(self.sh_path + "ros_server.sh",   shell=True)
+
+    def online_conf_method(self):
+        self.server_process = subprocess.Popen(self.sh_path + "online_parameters_reconfiguration.sh",   shell=True)
 
     def simulation_method(self):
         self.simulation_process = subprocess.Popen(self.sh_path + "full_simulation.sh "\
             + self.plan_path + " " + str(self.n_iterations_slider.get()) \
             + " " + str(self.distance_between_obstacles_slider.get()) \
-            + " " + self.world_path + " " + self.map_path,   shell=True)
+            + " " + self.world_path + " " + self.map_path + " " + str(self.timeout_factor_slider.get()) + ".0", shell=True)
 
     def map_method(self):
         self.map_process = subprocess.Popen(self.sh_path + "full_mapping.sh "\
             +  self.world_path,   shell=True)
+        showinfo('Mapping', 'Move the robot with the teleop node opened in the xterm window.')
+
+    def plan_method(self):
+        self.plan_process = subprocess.Popen(self.sh_path + "full_plan.sh "\
+            +  self.world_path + " " + self.map_path + " " + self.new_plan_path ,   shell=True)
+        showinfo('Plan', 'Select the goals in the world by pressing the 2D Pose Estimate button in the Rviz window first.' + \
+            ' IMPORTANT: First, move the robot to the initial position you want in Gazebo')
+
+    def save_plan_method(self):
+        self.plan_process = subprocess.Popen(self.sh_path + "path_to_file.sh",   shell=True)
 
     def save_map_method(self):
         subprocess.Popen(self.sh_path + "save_map.sh " +  self.mapping_path,   shell=True)
 
     def close_simulation_method(self):
         subprocess.Popen(self.sh_path + "close_simulation.sh",   shell=True)
+
+    def open_plan_file_dialog(self):
+        filename = tkFileDialog.asksaveasfilename(initialdir = self.plans_path,title = "Select a plan file name",filetypes = [])
+        self.new_plan_path = self.path_leaf(filename) + ".bag"
 
     def open_world_file_dialog(self):
         filename = tkFileDialog.askopenfilename(initialdir = self.worlds_path,title = "Select the world file",filetypes = (("sdf or world files","*.sdf *.world"),("all files","*.*")))

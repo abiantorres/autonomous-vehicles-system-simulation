@@ -288,6 +288,7 @@ class SimulationResults:
             prehash += str(self.segments_metadata[i].end_point.y)
         return hashlib.md5(prehash.encode()).hexdigest()
 
+
     def get_msg(self, plan_file, timeout_factor):
         msg = SimulationMsg()
         msg.global_simulation_results = self.get_global_simulation_results_msg()

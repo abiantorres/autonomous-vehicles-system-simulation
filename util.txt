@@ -1,0 +1,10 @@
+Run low level simulation:
+
+./low_level_simulation/run.sh
+
+Run database service:
+
+1. Make sure you have a data folder in the root path: mkdir data
+2. Open one terminal and type: mongod --dbpath data
+3. Open another terminal and type: mongo
+4. > use avss

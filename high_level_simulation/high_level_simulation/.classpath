@@ -22,15 +22,18 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/parallels/sighos-Model/PSIGHOS/lib/jbarrier-1.0.jar"/>
-	<classpathentry kind="lib" path="/home/parallels/sighos-Model/PSIGHOS/lib/JFlex.jar"/>
-	<classpathentry kind="lib" path="/home/parallels/sighos-Model/utils/lib/poi-3.0.2-FINAL-20080204.jar"/>
-	<classpathentry kind="lib" path="/home/parallels/sighos-Model/utils/lib/actions.jar"/>
-	<classpathentry kind="lib" path="/home/parallels/sighos-Model/PSIGHOS/lib/tools.jar"/>
-	<classpathentry kind="lib" path="/home/parallels/sighos-Model/utils/lib/simkit.jar"/>
-	<classpathentry kind="lib" path="/home/parallels/Downloads/mongodb-driver-core-3.0.2.jar"/>
-	<classpathentry kind="lib" path="/home/parallels/Downloads/bson-3.0.2.jar"/>
-	<classpathentry kind="lib" path="/home/parallels/Downloads/mongodb-driver-3.0.2.jar"/>
-	<classpathentry kind="lib" path="/home/parallels/jcommander-1.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/actions.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/jbarrier-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/jcommander-1.69.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/jcommon-1.0.23.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/JFlex.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/poi-3.0.2-FINAL-20080204.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/poi-3.13-20150929.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/PSIGHOS.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/simkit.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/sp-qcsp-1.0-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/tools.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/utils.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

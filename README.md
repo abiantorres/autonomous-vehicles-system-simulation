@@ -45,6 +45,8 @@ echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
 source /opt/ros/kinetic/setup.bash
 sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
 sudo apt-get install ros-kinetic-teb-local-planner
+sudo apt-get install ros-kinetic-slam-gmapping
+sudo apt-get install ros-kinetic-turtlebot ros-kinetic-turtlebot-apps ros-kinetic-turtlebot-interactions ros-kinetic-turtlebot-simulator
 ```
 
 * ~~Install the MORSE simulator following [this tutorial](https://www.openrobots.org/morse/doc/stable/user/installation.html).~~ **NO USING MORSE ANY MORE, SO NO INSTALLATION NEEDED**
