@@ -1,2 +1,3 @@
 /data/*
 .gitignore
+/low_level_simulation/csv/*.csv
