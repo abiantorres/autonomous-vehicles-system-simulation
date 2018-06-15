@@ -131,13 +131,6 @@ class SimulationResults:
         for i in range(0, self.n_segments):
             self.segments_metadata.append(SegmentMetadata(segment_index = i))
 
-    def get_global_simulation_failures_count(self):
-        count = 0
-        for i in range(0, self.n_iterations):
-            if(self.iterations_results[i].failure):
-                count += 1
-        return count
-
     def get_global_segment_failures_count(self, segment_index):
         count = 0
         for i in range(0, self.n_iterations):
@@ -227,9 +220,8 @@ class SimulationResults:
 
     def get_global_simulation_results_msg(self):
         msg = GlobalSimulationResultsMsg()
-        self.n_failures = msg.n_failures
-        self.useful_simulation = not (self.n_failures >= 2)
-        msg.n_failures = self.get_global_simulation_failures_count()
+        self.useful_simulation = (self.n_iterations - self.n_failures) >= 2
+        msg.n_failures = self.n_failures
         if(self.useful_simulation):
             individual_times_results, individual_speeds_results,\
                 individual_distances_results = self.get_global_simulation_results_lists()
@@ -302,3 +294,5 @@ class SimulationResults:
 
     def stop(self, segment_index, iteration_index, failure):
         self.iterations_results[iteration_index].stop(segment_index, failure)
+        if(failure):
+            self.n_failures += 1

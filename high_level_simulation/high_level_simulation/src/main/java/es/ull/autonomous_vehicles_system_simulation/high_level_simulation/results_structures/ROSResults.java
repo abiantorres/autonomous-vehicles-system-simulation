@@ -1,7 +1,9 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures;
 
 import java.util.ArrayList;
+
 import org.bson.Document;
+
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.ElementReplicableTimeFunction;
 
 public class ROSResults {
@@ -10,10 +12,9 @@ public class ROSResults {
 	 * ATRIBUTTES *
 	 *************/
 	
-	private String planFile, date, localPlanner, globalPlanner;
-	private Integer simulations, globalFailures;
-	private Double globalTimeAverage, globalVelocityAverage, 
-		globalLinearVelocityAverage, globalMaximumLinearVelocity, globalDistanceAverage;
+	private String simulationHash, planFile, robotFile, worldFile, mapFile, date, localPlanner, globalPlanner;
+	private Integer nFailures, nIterations, nSegments, timeoutFactor;
+	private Boolean usefulSimulation;
 	private ArrayList<ROSSegment> segments;
 	
 	/***********************
@@ -21,41 +22,46 @@ public class ROSResults {
 	 **********************/
 	
 	public ROSResults() {
-		this("", "", 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, new ArrayList<ROSSegment>(), "", "");
+		this("", "", "", "", "", "", "", "", 0, 0, 0, 0, false, new ArrayList<ROSSegment> ());
 	}
 	
 	/*************************
 	 * CONSTRUCTOR BY FIELDS *
 	 ************************/
 	
-	/** Build this from fields
-	 * @param planFile ROS simulation plan file name
-	 * @param date Date when the ROS simulation was executed
-	 * @param simulations Number of simulations executed in ROS
-	 * @param globalFailures Number of failures counted for all ROS simulations executed
-	 * @param globalTimeAverage Traveled time average to finished all the plan
-	 * @param globalVelocityAverage Global velocity average (distance / traveled time)
-	 * @param globalLinearVelocityAverage Global linear velocity average 
-	 * @param globalMaximumLinearVelocity Maximum linear velocity peak
-	 * @param sections Information for each plan section
-	 */
-	public ROSResults(String planFile, String date, Integer simulations,
-			Integer globalFailures, Double globalTimeAverage, Double globalVelocityAverage,
-			Double globalLinearVelocityAverage, Double globalMaximumLinearVelocity, 
-			Double globalDistanceAverage, ArrayList<ROSSegment> sections, String localPlanner, String globalPlanner) {
+	/**
+	 * @param simulationHash
+	 * @param planFile
+	 * @param robotFile
+	 * @param worldFile
+	 * @param mapFile
+	 * @param date
+	 * @param localPlanner
+	 * @param globalPlanner
+	 * @param nFailures
+	 * @param nIterations
+	 * @param nSegments
+	 * @param timeoutFactor
+	 * @param usefulSimulation
+	 * @param segments */
+	public ROSResults(String simulationHash, String planFile, String robotFile, String worldFile, String mapFile,
+			String date, String localPlanner, String globalPlanner, Integer nFailures, Integer nIterations,
+			Integer nSegments, Integer timeoutFactor, Boolean usefulSimulation, ArrayList<ROSSegment> segments) {
 		super();
+		this.simulationHash = simulationHash;
 		this.planFile = planFile;
+		this.robotFile = robotFile;
+		this.worldFile = worldFile;
+		this.mapFile = mapFile;
 		this.date = date;
-		this.simulations = simulations;
-		this.globalFailures = globalFailures;
-		this.globalTimeAverage = globalTimeAverage;
-		this.globalVelocityAverage = globalVelocityAverage;
-		this.globalLinearVelocityAverage = globalLinearVelocityAverage;
-		this.globalMaximumLinearVelocity = globalMaximumLinearVelocity;
-		this.globalDistanceAverage = globalDistanceAverage;
-		this.segments = sections;
 		this.localPlanner = localPlanner;
 		this.globalPlanner = globalPlanner;
+		this.nFailures = nFailures;
+		this.nIterations = nIterations;
+		this.nSegments = nSegments;
+		this.timeoutFactor = timeoutFactor;
+		this.usefulSimulation = usefulSimulation;
+		this.segments = segments;
 	}
 	
 	/***********
@@ -71,15 +77,17 @@ public class ROSResults {
 		for(int i = 0; i < getSegments().size(); i++) {
 			segmentsDocuments.add(getSegments().get(i).getDocument());
 		}
-		return new Document("planFile", getPlanFile())
+		return new Document("simulationHash", getSimulationHash())
+                .append("planFile", getPlanFile())
+                .append("worldFile", getWorldFile())
+                .append("robotFile", getRobotFile())
+                .append("mapFile", getMapFile())
                 .append("date", getDate())
-                .append("simulations", getSimulations())
-                .append("globalFailures", getGlobalFailures())
-                .append("globalTimeAverage", getGlobalTimeAverage())
-                .append("globalVelocityAverage", getGlobalVelocityAverage())
-                .append("globalLinearVelocityAverage", getGlobalLinearVelocityAverage())
-                .append("globalMaximumLinearVelocity", getGlobalMaximumLinearVelocity())
-                .append("globalDistanceAverage", getGlobalDistanceAverage())
+                .append("nFailures", getnFailures())
+                .append("nIterations", getnIterations())
+                .append("nSegments", getnSegments())
+                .append("timeoutFactor", getTimeoutFactor())
+                .append("usefulSimulation", getUsefulSimulation())
                 .append("localPlanner", getLocalPlanner())
                 .append("globalPlanner", getGlobalPlanner())
                 .append("segments", segmentsDocuments);              
@@ -107,9 +115,7 @@ public class ROSResults {
 			Double distanceAverage,Double velocityAverage, Double linearVelocityAverage, 
 			Double maximumLinearVelocity, Double density, Double obstacleLength, Double maxObstacleShiftment,
 			Double timeStandardDeviation) {
-		getSegments().add(new ROSSegment(id, failures, timeAverage, distanceAverage, 
-				velocityAverage, linearVelocityAverage, maximumLinearVelocity, density, obstacleLength,
-				maxObstacleShiftment, timeStandardDeviation));
+		getSegments().add(new ROSSegment());
 	}
 	
 	
@@ -151,63 +157,7 @@ public class ROSResults {
 		this.date = date;
 	}
 	
-	/** @return the simulations */
-	public Integer getSimulations() {
-		return simulations;
-	}
-	
-	/** @param simulations the simulations to set */
-	public void setSimulations(Integer simulations) {
-		this.simulations = simulations;
-	}
-	
-	/** @return the globalFailures */
-	public Integer getGlobalFailures() {
-		return globalFailures;
-	}
-	
-	/** @param globalFailures the globalFailures to set */
-	public void setGlobalFailures(Integer globalFailures) {
-		this.globalFailures = globalFailures;
-	}
-	
-	/** @return the globalTimeAverage */
-	public Double getGlobalTimeAverage() {
-		return globalTimeAverage;
-	}
-	
-	/** @param globalTimeAverage the globalTimeAverage to set */
-	public void setGlobalTimeAverage(Double globalTimeAverage) {
-		this.globalTimeAverage = globalTimeAverage;
-	}
-	/** @return the globalVelocityAverage */
-	public Double getGlobalVelocityAverage() {
-		return globalVelocityAverage;
-	}
-	
-	/** @param globalVelocityAverage the globalVelocityAverage to set */
-	public void setGlobalVelocityAverage(Double globalVelocityAverage) {
-		this.globalVelocityAverage = globalVelocityAverage;
-	}
-	
-	/** @return the globalLinearVelocityAverage */
-	public Double getGlobalLinearVelocityAverage() {
-		return globalLinearVelocityAverage;
-	}
-	/** @param globalLinearVelocityAverage the globalLinearVelocityAverage to set */
-	public void setGlobalLinearVelocityAverage(Double globalLinearVelocityAverage) {
-		this.globalLinearVelocityAverage = globalLinearVelocityAverage;
-	}
-	
-	/** @return the globalMaximumLinearVelocity */
-	public Double getGlobalMaximumLinearVelocity() {
-		return globalMaximumLinearVelocity;
-	}
-	
-	/** @param globalMaximumLinearVelocity the globalMaximumLinearVelocity to set */
-	public void setGlobalMaximumLinearVelocity(Double globalMaximumLinearVelocity) {
-		this.globalMaximumLinearVelocity = globalMaximumLinearVelocity;
-	}
+
 	
 	/** @return the sections */
 	public ArrayList<ROSSegment> getSegments() {
@@ -218,15 +168,6 @@ public class ROSResults {
 		this.segments = segments;
 	}
 
-	/** @return the globalDistanceAverage */
-	public Double getGlobalDistanceAverage() {
-		return globalDistanceAverage;
-	}
-
-	/** @param globalDistanceAverage the globalDistanceAverage to set */
-	public void setGlobalDistanceAverage(Double globalDistanceAverage) {
-		this.globalDistanceAverage = globalDistanceAverage;
-	}
 	/** @return the localPlanner */
 	public String getLocalPlanner() {
 		return localPlanner;
@@ -247,21 +188,90 @@ public class ROSResults {
 		this.globalPlanner = globalPlanner;
 	}
 
+	public String getSimulationHash() {
+		return simulationHash;
+	}
+
+	public void setSimulationHash(String simulationHash) {
+		this.simulationHash = simulationHash;
+	}
+
+	public String getRobotFile() {
+		return robotFile;
+	}
+
+	public void setRobotFile(String robotFile) {
+		this.robotFile = robotFile;
+	}
+
+	public String getWorldFile() {
+		return worldFile;
+	}
+
+	public void setWorldFile(String worldFile) {
+		this.worldFile = worldFile;
+	}
+
+	public String getMapFile() {
+		return mapFile;
+	}
+
+	public void setMapFile(String mapFile) {
+		this.mapFile = mapFile;
+	}
+
+	public Integer getnFailures() {
+		return nFailures;
+	}
+
+	public void setnFailures(Integer nFailures) {
+		this.nFailures = nFailures;
+	}
+
+	public Integer getnIterations() {
+		return nIterations;
+	}
+
+	public void setnIterations(Integer nIterations) {
+		this.nIterations = nIterations;
+	}
+
+	public Integer getnSegments() {
+		return nSegments;
+	}
+
+	public void setnSegments(Integer nSegments) {
+		this.nSegments = nSegments;
+	}
+
+	public Integer getTimeoutFactor() {
+		return timeoutFactor;
+	}
+
+	public void setTimeoutFactor(Integer timeoutFactor) {
+		this.timeoutFactor = timeoutFactor;
+	}
+
+	public Boolean getUsefulSimulation() {
+		return usefulSimulation;
+	}
+
+	public void setUsefulSimulation(Boolean usefulSimulation) {
+		this.usefulSimulation = usefulSimulation;
+	}
+
+	
 	/*************
 	 * TO STRING *
 	 ************/
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "OfflineResults [planFile=" + planFile + ", date=" + date + ", localPlanner=" + localPlanner
-				+ ", globalPlanner=" + globalPlanner + ", simulations=" + simulations + ", globalFailures="
-				+ globalFailures + ", globalTimeAverage=" + globalTimeAverage + ", globalVelocityAverage="
-				+ globalVelocityAverage + ", globalLinearVelocityAverage=" + globalLinearVelocityAverage
-				+ ", globalMaximumLinearVelocity=" + globalMaximumLinearVelocity + ", globalDistanceAverage="
-				+ globalDistanceAverage + ", sections=" + segments + "]";
+		return "ROSResults [simulationHash=" + simulationHash + ", planFile=" + planFile + ", robotFile=" + robotFile
+				+ ", worldFile=" + worldFile + ", mapFile=" + mapFile + ", date=" + date + ", localPlanner="
+				+ localPlanner + ", globalPlanner=" + globalPlanner + ", nFailures=" + nFailures + ", nIterations="
+				+ nIterations + ", nSegments=" + nSegments + ", timeoutFactor=" + timeoutFactor + ", usefulSimulation="
+				+ usefulSimulation + ", segments=" + segments + "]";
 	}
-	
+
 }

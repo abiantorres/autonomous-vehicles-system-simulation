@@ -22,11 +22,11 @@ GlobalPlanner:
   # Specifies whether or not to visualize the potential area computed via a PointCloud2.
   visualize_potential: false
   # If true, use dijkstra's algorithm. Otherwise, A*.
-  use_dijkstra: false
+  use_dijkstra: true
   # If true, use the quadratic approximation of the potential. Otherwise, use a simpler calculation.
   use_quadratic: true
   # If true, create a path that follows the grid boundaries. Otherwise, use a gradient descent method.
-  use_grid_path: true
+  use_grid_path: false
   # If for some reason, you want global_planner to exactly mirror the behavior of navfn,
   # set this to true (and use the defaults for the other boolean parameters)
   old_navfn_behavoir: false

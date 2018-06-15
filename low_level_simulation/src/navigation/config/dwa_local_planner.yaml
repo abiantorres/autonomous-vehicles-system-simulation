@@ -108,7 +108,7 @@ DWAPlannerROS:
   # The step size, in meters, to take between points on a given trajectory
   #sim_granularity: 0.025
   # The number of samples to use when exploring the x velocity space
-  vx_samples: 30
+  vx_samples: 20
   # The number of samples to use when exploring the y velocity space
   #####################################
   # VERY IMPORTANT - DIFF ROBOT DRIVE #
@@ -116,7 +116,7 @@ DWAPlannerROS:
   # Diff drive robot, there is only one sample
   vy_samples: 1
   # The number of samples to use when exploring the theta velocity space
-  vth_samples: 50
+  vth_samples: 40
   # The frequency at which this controller will be called in Hz. Uses searchParam
   # to read the parameter from parent namespaces if not set in the namespace of the
   # controller. For use with move_base, this means that you only need to set its
@@ -139,7 +139,7 @@ DWAPlannerROS:
   #############
   # IMPORTANT #
   #############
-  path_distance_bias: 30
+  path_distance_bias: 32
   # The weighting for how much the controller
   # should attempt to reach its local goal, also controls speed
   #############

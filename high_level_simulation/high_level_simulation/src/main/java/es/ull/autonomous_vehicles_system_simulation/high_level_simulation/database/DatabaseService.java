@@ -21,7 +21,7 @@ public class DatabaseService {
 	 * provide persistence to our simulation system */
 	private static MongoClient mongoClient;
 	private static MongoDatabase mongoDatabase;
-	private static MongoCollection<Document> resultsCollection;
+	private static MongoCollection<Document> highLevelResultsCollection;
 	private static Boolean isConnected;
 	
 	/***********************
@@ -43,9 +43,9 @@ public class DatabaseService {
 		// Get the mongodb database
 		DatabaseService.mongoDatabase = DatabaseService.mongoClient.getDatabase(Constants.getMongodbDbName());
 		// Get the results collection
-		DatabaseService.resultsCollection = 
+		DatabaseService.highLevelResultsCollection = 
 				DatabaseService.mongoDatabase.getCollection(
-						Constants.getMongodbResultsCollection());
+						Constants.getMongodbHighLevelResultsCollection());
 	}
 	
 	/** Close the MongoDB connection 
@@ -56,7 +56,7 @@ public class DatabaseService {
 	
 	public static void insertResults(Document data) {
 		if(DatabaseService.isConnected) {
-			DatabaseService.resultsCollection.insertOne(data);
+			DatabaseService.highLevelResultsCollection.insertOne(data);
 		}
 	}
 	

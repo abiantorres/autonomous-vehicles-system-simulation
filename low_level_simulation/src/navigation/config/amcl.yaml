@@ -15,7 +15,7 @@
 # Overall filter parameters #
 #############################
 # Minimum allowed number of particles.
-min_particles:        100
+min_particles:        250
 # Maximum allowed number of particles.
 max_particles:        10000
 # Maximum error between the true distribution and the estimated distribution.
@@ -28,7 +28,7 @@ update_min_d:         0.05
 # Rotational movement required before performing a filter update.
 update_min_a:         0.5235
 # Number of filter updates required before resampling.
-resample_interval:    2
+resample_interval:    1
 # Time with which to post-date the transform that is published,
 # to indicate that this transform is valid into the future.
 transform_tolerance:  0.1
@@ -88,7 +88,7 @@ laser_lambda_short:         0.1
 laser_likelihood_max_dist:  2.0
 # Which model to use, either beam, likelihood_field, or likelihood_field_prob
 # (same as likelihood_field but incorporates the beamskip feature, if enabled).
-laser_model_type:           likelihood_field_prob
+laser_model_type:           likelihood_field
 
 ##############################
 # Odometery model parameters #

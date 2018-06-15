@@ -22,7 +22,9 @@ public final class Constants {
 			MONGODB_URI = "localhost",
 			ROS_URI = "ws://localhost:9090",
 			MONGODB_DB_NAME = "avss",
-			MONGODB_RESULTS_COLLECTION = "results";
+			MONGODB_SIMULATIONS_METADATA_COLLECTION = "simulations_collection",
+			MONGODB_HIGH_LEVEL_RESULTS_COLLECTION = "high_level_collection",
+			MONGODB_LOW_LEVEL_RESULTS_COLLECTION = "low_level_collection";
 	/* ROS connection port */
 	private final static Integer 
 			MONGODB_PORT = 27017;
@@ -62,7 +64,17 @@ public final class Constants {
 	}
 
 	/** @return the mongodbResultsCollection */
-	public static String getMongodbResultsCollection() {
-		return MONGODB_RESULTS_COLLECTION;
+	public static String getMongodbHighLevelResultsCollection() {
+		return MONGODB_HIGH_LEVEL_RESULTS_COLLECTION;
+	}
+
+	/** @return the mongodbSimulationsMetadataCollection */
+	public static String getMongodbSimulationsMetadataCollection() {
+		return MONGODB_SIMULATIONS_METADATA_COLLECTION;
+	}
+
+	/** @return the mongodbLowLevelResultsCollection */
+	public static String getMongodbLowLevelResultsCollection() {
+		return MONGODB_LOW_LEVEL_RESULTS_COLLECTION;
 	}
 }
