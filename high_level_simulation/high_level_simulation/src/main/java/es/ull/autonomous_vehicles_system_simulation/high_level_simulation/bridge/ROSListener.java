@@ -44,6 +44,8 @@ public class ROSListener {
 	
 	public static void main(String[] args) {
 		DatabaseService.connectToDatabase();
+		String hash = DatabaseService.getLowLevelSimulations().get(0).getSimulationHash();
+		DatabaseService.getLowLevelResultsByHashAndDBO(hash, 0, 3, 6);
 		ROSListener.connectToRos();
 		// Defines what actions to take when receiving data from the topic defined and
 		// with which type of ROS message. (We should get a JSON Tree structure)

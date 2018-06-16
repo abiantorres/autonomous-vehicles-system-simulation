@@ -1,9 +1,7 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures;
 
 import java.util.ArrayList;
-
 import org.bson.Document;
-
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.ElementReplicableTimeFunction;
 
 public class ROSResults {
@@ -12,7 +10,8 @@ public class ROSResults {
 	 * ATRIBUTTES *
 	 *************/
 	
-	private String simulationHash, planFile, robotFile, worldFile, mapFile, date, localPlanner, globalPlanner;
+	private ROSSimulationMetadata metadata;
+	private String date, localPlanner, globalPlanner;
 	private Integer nFailures, nIterations, nSegments, timeoutFactor;
 	private Boolean usefulSimulation;
 	private ArrayList<ROSSegment> segments;
@@ -48,11 +47,12 @@ public class ROSResults {
 			String date, String localPlanner, String globalPlanner, Integer nFailures, Integer nIterations,
 			Integer nSegments, Integer timeoutFactor, Boolean usefulSimulation, ArrayList<ROSSegment> segments) {
 		super();
-		this.simulationHash = simulationHash;
-		this.planFile = planFile;
-		this.robotFile = robotFile;
-		this.worldFile = worldFile;
-		this.mapFile = mapFile;
+		this.metadata = new ROSSimulationMetadata();
+		this.metadata.setSimulationHash(simulationHash);
+		this.metadata.setPlanFile(planFile);
+		this.metadata.setRobotFile(robotFile);
+		this.metadata.setWorldFile(worldFile);
+		this.metadata.setMapFile(mapFile);
 		this.date = date;
 		this.localPlanner = localPlanner;
 		this.globalPlanner = globalPlanner;
@@ -77,11 +77,11 @@ public class ROSResults {
 		for(int i = 0; i < getSegments().size(); i++) {
 			segmentsDocuments.add(getSegments().get(i).getDocument());
 		}
-		return new Document("simulationHash", getSimulationHash())
-                .append("planFile", getPlanFile())
-                .append("worldFile", getWorldFile())
-                .append("robotFile", getRobotFile())
-                .append("mapFile", getMapFile())
+		return new Document("simulationHash", getMetadata().getSimulationHash())
+                .append("planFile", getMetadata().getPlanFile())
+                .append("worldFile", getMetadata().getWorldFile())
+                .append("robotFile", getMetadata().getRobotFile())
+                .append("mapFile", getMetadata().getMapFile())
                 .append("date", getDate())
                 .append("nFailures", getnFailures())
                 .append("nIterations", getnIterations())
@@ -141,13 +141,14 @@ public class ROSResults {
 	
 	/** @return the planFile */
 	public String getPlanFile() {
-		return planFile;
+		return this.getMetadata().getPlanFile();
 	}
 	
 	/** @param planFile the planFile to set */
 	public void setPlanFile(String planFile) {
-		this.planFile = planFile;
+		this.getMetadata().setPlanFile(planFile);
 	}
+	
 	/** @return the date */
 	public String getDate() {
 		return date;
@@ -156,8 +157,6 @@ public class ROSResults {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
-
 	
 	/** @return the sections */
 	public ArrayList<ROSSegment> getSegments() {
@@ -189,35 +188,35 @@ public class ROSResults {
 	}
 
 	public String getSimulationHash() {
-		return simulationHash;
+		return this.getMetadata().getSimulationHash();
 	}
 
 	public void setSimulationHash(String simulationHash) {
-		this.simulationHash = simulationHash;
+		this.getMetadata().setSimulationHash(simulationHash);
 	}
 
 	public String getRobotFile() {
-		return robotFile;
+		return this.getMetadata().getRobotFile();
 	}
 
 	public void setRobotFile(String robotFile) {
-		this.robotFile = robotFile;
+		this.getMetadata().setRobotFile(robotFile);
 	}
 
 	public String getWorldFile() {
-		return worldFile;
+		return this.getMetadata().getWorldFile();
 	}
 
 	public void setWorldFile(String worldFile) {
-		this.worldFile = worldFile;
+		this.getMetadata().setWorldFile(worldFile);
 	}
 
 	public String getMapFile() {
-		return mapFile;
+		return this.getMetadata().getMapFile();
 	}
 
 	public void setMapFile(String mapFile) {
-		this.mapFile = mapFile;
+		this.getMetadata().setMapFile(mapFile);
 	}
 
 	public Integer getnFailures() {
@@ -259,19 +258,31 @@ public class ROSResults {
 	public void setUsefulSimulation(Boolean usefulSimulation) {
 		this.usefulSimulation = usefulSimulation;
 	}
-
 	
+	/** @return the metadata */
+	public ROSSimulationMetadata getMetadata() {
+		return metadata;
+	}
+
+	/** @param metadata the metadata to set */
+	public void setMetadata(ROSSimulationMetadata metadata) {
+		this.metadata = metadata;
+	}
+
 	/*************
 	 * TO STRING *
 	 ************/
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return "ROSResults [simulationHash=" + simulationHash + ", planFile=" + planFile + ", robotFile=" + robotFile
-				+ ", worldFile=" + worldFile + ", mapFile=" + mapFile + ", date=" + date + ", localPlanner="
-				+ localPlanner + ", globalPlanner=" + globalPlanner + ", nFailures=" + nFailures + ", nIterations="
-				+ nIterations + ", nSegments=" + nSegments + ", timeoutFactor=" + timeoutFactor + ", usefulSimulation="
+		return "ROSResults [metadata=" + metadata + ", date=" + date + ", localPlanner=" + localPlanner
+				+ ", globalPlanner=" + globalPlanner + ", nFailures=" + nFailures + ", nIterations=" + nIterations
+				+ ", nSegments=" + nSegments + ", timeoutFactor=" + timeoutFactor + ", usefulSimulation="
 				+ usefulSimulation + ", segments=" + segments + "]";
 	}
+		
 
 }

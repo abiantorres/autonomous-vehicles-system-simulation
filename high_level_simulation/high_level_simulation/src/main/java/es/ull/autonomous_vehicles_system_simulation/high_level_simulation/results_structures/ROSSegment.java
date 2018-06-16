@@ -17,7 +17,7 @@ public class ROSSegment {
 	 * ATRIBUTTES *
 	 *************/
 	
-	private Integer index, failures;
+	private Integer index, failures, timeout;
 	private Double timeAverage, timeStandardDeviation, distanceBetweenObstacles;
 	private ArrayList<Double> individualTimes;
 	
@@ -126,6 +126,26 @@ public class ROSSegment {
 
 	public void setIndividualTimes(ArrayList<Double> individualTimes) {
 		this.individualTimes = individualTimes;
+	}
+
+	/** @return the timeout */
+	public Integer getTimeout() {
+		return timeout;
+	}
+
+	/** @param timeout the timeout to set */
+	public void setTimeout(Integer timeout) {
+		this.timeout = timeout;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ROSSegment [index=" + index + ", failures=" + failures + ", timeout=" + timeout + ", timeAverage="
+				+ timeAverage + ", timeStandardDeviation=" + timeStandardDeviation + ", distanceBetweenObstacles="
+				+ distanceBetweenObstacles + ", individualTimes=" + individualTimes + "]";
 	}
 	
 
