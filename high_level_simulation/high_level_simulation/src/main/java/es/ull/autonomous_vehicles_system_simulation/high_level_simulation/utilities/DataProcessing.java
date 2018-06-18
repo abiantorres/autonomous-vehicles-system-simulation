@@ -125,7 +125,7 @@ final public class DataProcessing {
 		return results;
 	}
 	
-	public ROSSegment mergeROSResultsSegment(ArrayList<ROSResults> resultsList, Integer index) {
+	/*public ROSSegment mergeROSResultsSegment(ArrayList<ROSResults> resultsList, Integer index) {
 		if(resultsList != null && resultsList.size() > 1) {
 			ArrayList<Double> individualTimes = new ArrayList<Double>();
 			ArrayList<Double> individualTimeouts = new ArrayList<Double>();
@@ -144,7 +144,7 @@ final public class DataProcessing {
 			segment.setTimeout(MathUtil.mean(individualTimeouts);
 		}
 		return null;
-	}
+	}*/
 	
 	public static String generateUniqueSimulationID() {
 		return UUID.randomUUID().toString();

@@ -1,6 +1,7 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.bson.Document;
 
@@ -18,8 +19,10 @@ public class ROSSegment {
 	 *************/
 	
 	private Integer index, failures, timeout;
-	private Double timeAverage, timeStandardDeviation, distanceBetweenObstacles;
+	private Double timeAverage, timeStandardDeviation, distanceBetweenObstacles, maximumTime,
+		minimumTime;
 	private ArrayList<Double> individualTimes;
+
 	
 	/***********************
 	 * DEFAULT CONSTRUCTOR *
@@ -43,6 +46,7 @@ public class ROSSegment {
 		this.timeStandardDeviation = timeStandardDeviation;
 		this.distanceBetweenObstacles = distanceBetweenObstacles;
 		this.individualTimes = individualTimes;
+		this.setIndividualTimes(individualTimes);
 	}	
 
 	
@@ -126,6 +130,14 @@ public class ROSSegment {
 
 	public void setIndividualTimes(ArrayList<Double> individualTimes) {
 		this.individualTimes = individualTimes;
+		if(individualTimes.size() != 0) {
+			this.maximumTime = Collections.max(individualTimes);
+			this.minimumTime = Collections.min(individualTimes);
+		}
+		else {
+			this.maximumTime = 0.0d;
+			this.minimumTime = 0.0d;
+		}
 	}
 
 	/** @return the timeout */
@@ -136,6 +148,30 @@ public class ROSSegment {
 	/** @param timeout the timeout to set */
 	public void setTimeout(Integer timeout) {
 		this.timeout = timeout;
+	}
+
+	/** @return the maximumTime */
+	public Double getMaximumTime() {
+		return maximumTime;
+	}
+
+	/** @param maximumTime the maximumTime to set */
+	public void setMaximumTime(Double maximumTime) {
+		this.maximumTime = maximumTime;
+	}
+
+	/**
+	 * @return the minimumTime
+	 */
+	public Double getMinimumTime() {
+		return minimumTime;
+	}
+
+	/**
+	 * @param minimumTime the minimumTime to set
+	 */
+	public void setMinimumTime(Double minimumTime) {
+		this.minimumTime = minimumTime;
 	}
 
 	/* (non-Javadoc)

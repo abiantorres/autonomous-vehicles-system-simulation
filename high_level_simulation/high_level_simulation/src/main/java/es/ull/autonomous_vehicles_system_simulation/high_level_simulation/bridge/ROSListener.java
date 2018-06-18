@@ -18,7 +18,7 @@ public class ROSListener {
 	 * ATRIBUTTES *
 	 *************/
 	/* ROS Connection bridge */
-	private static RosBridge bridge;
+	private RosBridge bridge;
 	
 	/***********************
 	 * DEFAULT CONSTRUCTOR *
@@ -30,34 +30,44 @@ public class ROSListener {
 	 **********/
 	
 	/** Establish the ROS connection */
-	public static void connectToRos() {
+	public void connectToRos() {
+		// First, connect to database to save results when the simulation
+		// finalize
+		DatabaseService.connectToDatabase();
 		// Opens the connection with ROS via WebSockets (Using Jetty 9)
-		ROSListener.bridge = RosBridge.createConnection(Constants.getRosUri());
+		this.bridge = RosBridge.createConnection(Constants.getRosUri());
 		// Waiting to establish the connection with the ROS server
-		ROSListener.bridge.waitForConnection();
+		this.bridge.waitForConnection();
 	}
 	
-	/********************************
-	 * MAIN 					    *
-	 * @throws UnknownHostException *
-	 *******************************/
-	
-	public static void main(String[] args) {
-		DatabaseService.connectToDatabase();
-		String hash = DatabaseService.getLowLevelSimulations().get(0).getSimulationHash();
-		DatabaseService.getLowLevelResultsByHashAndDBO(hash, 0, 3, 6);
-		ROSListener.connectToRos();
-		// Defines what actions to take when receiving data from the topic defined and
-		// with which type of ROS message. (We should get a JSON Tree structure)
-		bridge.subscribe(Constants.getLowLevelDataTopic(), Constants.getLowLevelDataMsgType(),
-			new RosListenDelegate() {
-				public void receive(JsonNode data, String stringRep) {	
-					// Parses the information in such a way that it can
-					// be used by high-level simulation
-					ROSResults results = DataProcessing.parseOfflineResultsJson(data);
-					//DatabaseService.insertResults(results.getDocument());	
-					new WheelChairsExperiment(100, results, 1, 2, 0, 6, 4, 30, 1.0, 
-							new Long(0), new Long(7*24*60*60) ).start();
-				}});
+	/**
+	 * @param nExperiments
+	 * @param nJanitors
+	 * @param nDoctors
+	 * @param nAutoChairs
+	 * @param nManualChairs
+	 * @param patientsPerArrival
+	 * @param minutesBetweenArrivals
+	 * @param manualFactor
+	 * @param days
+	 */
+	public void listen(final Integer nExperiments, final Integer nJanitors, final Integer nDoctors, 
+			final Integer nAutoChairs, final Integer nManualChairs, final Integer patientsPerArrival,
+			final Integer minutesBetweenArrivals, final Double manualFactor, final Integer days) {
+		// Conect to ROS
+		connectToRos();
+		// Subscribe to the simulation data topic and wait for results
+		this.bridge.subscribe(Constants.getLowLevelDataTopic(), Constants.getLowLevelDataMsgType(),
+				new RosListenDelegate() {
+					public void receive(JsonNode data, String stringRep) {	
+						// Parses the information in such a way that it can
+						// be used by high-level simulation
+						ROSResults results = DataProcessing.parseOfflineResultsJson(data);
+						//DatabaseService.insertResults(results.getDocument());	
+						new WheelChairsExperiment(nExperiments, results, nJanitors, nDoctors, 
+								nManualChairs, nAutoChairs, patientsPerArrival,
+								minutesBetweenArrivals, manualFactor, 
+								new Long(0), new Long(days*24*60*60) ).start();
+					}});
 	}
 }
