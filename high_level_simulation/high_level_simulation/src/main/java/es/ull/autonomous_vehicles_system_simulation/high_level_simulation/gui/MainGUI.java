@@ -5,6 +5,8 @@
  */
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.gui;
 
+import javax.swing.SwingUtilities;
+
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.bridge.ROSListener;
 
 /**
@@ -87,7 +89,7 @@ public class MainGUI extends javax.swing.JFrame {
 
         simulationDaysSpinner.setModel(new javax.swing.SpinnerNumberModel(7, 1, 1825, 100));
 
-        manualWheelchairsFactorSpinner.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(1.0f), Float.valueOf(0.0f), Float.valueOf(100.0f), Float.valueOf(1.0f)));
+        manualWheelchairsFactorSpinner.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(1.0d), Double.valueOf(0.0d), Double.valueOf(100.0d), Double.valueOf(1.0d)));
 
         minutesBetweenArrivalSpinner.setModel(new javax.swing.SpinnerNumberModel(30, 1, 380, 30));
 
@@ -237,17 +239,27 @@ public class MainGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void listenerModeButtonActionPerformed(java.awt.event.ActionEvent evt) { 
-    	java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-            	new ROSListener().listen(nExperiments, nJanitors, nDoctors, nAutoChairs, nManualChairs, 
-            			patientsPerArrival, minutesBetweenArrivals, manualFactor, days);
-            }
-    	});
+    	this.nExperiments = (Integer) this.experimentsSpinner.getValue();
+    	this.nJanitors = (Integer) this.janitorsSpinner.getValue();
+    	this.nDoctors = (Integer) this.DoctorsSpinner.getValue();
+    	this.nAutoChairs = (Integer) this.aWheelchairsSpinner.getValue();
+    	this.nManualChairs = (Integer) this.mWheelchairsSpinner.getValue();
+    	this.patientsPerArrival = (Integer) this.patientsPerArrivalSpinner.getValue();
+    	this.minutesBetweenArrivals = (Integer) this.minutesBetweenArrivalSpinner.getValue();
+    	this.manualFactor = (Double) this.manualWheelchairsFactorSpinner.getValue();
+    	this.days = (Integer) this.simulationDaysSpinner.getValue();
+    	 Thread t = new Thread(new Runnable() {
+    	    public void run() {
+    	    	new ROSListener().listen(nExperiments, nJanitors, nDoctors, nAutoChairs, nManualChairs, 
+		        	patientsPerArrival, minutesBetweenArrivals, manualFactor, days);
+    	    }
+    	 });
+    	 t.start();
     }  
 
     
     private void historicalModeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historicalModeButtonActionPerformed
-       new HistoricalModeGUI().setVisible(true);
+    	new HistoricalModeGUI(this).setVisible(true);
     }//GEN-LAST:event_historicalModeButtonActionPerformed
 
     /**
@@ -287,28 +299,28 @@ public class MainGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JSpinner DoctorsSpinner;
-    private javax.swing.JSpinner aWheelchairsSpinner;
+    javax.swing.JSpinner DoctorsSpinner;
+    javax.swing.JSpinner aWheelchairsSpinner;
     private javax.swing.JLabel autonomousWheelchairsLabel;
     private javax.swing.JLabel doctorsLabel;
     private javax.swing.JLabel experimentsLabel;
-    private javax.swing.JSpinner experimentsSpinner;
+    javax.swing.JSpinner experimentsSpinner;
     private javax.swing.JButton historicalModeButton;
     private javax.swing.JLabel janitorsLabel;
-    private javax.swing.JSpinner janitorsSpinner;
+    javax.swing.JSpinner janitorsSpinner;
     private javax.swing.JButton listenerModeButton;
-    private javax.swing.JSpinner mWheelchairsSpinner;
+    javax.swing.JSpinner mWheelchairsSpinner;
     private javax.swing.JLabel manualWheelchairsFactorLabel;
-    private javax.swing.JSpinner manualWheelchairsFactorSpinner;
+    javax.swing.JSpinner manualWheelchairsFactorSpinner;
     private javax.swing.JLabel manualWheelchairsLabel;
-    private javax.swing.JSpinner minutesBetweenArrivalSpinner;
+    javax.swing.JSpinner minutesBetweenArrivalSpinner;
     private javax.swing.JLabel minutesBetweenArrivalsLabel;
     private javax.swing.JPanel modePanel;
     private javax.swing.JPanel parametersPanel;
     private javax.swing.JLabel patientsPerArrivalLabel;
-    private javax.swing.JSpinner patientsPerArrivalSpinner;
+    javax.swing.JSpinner patientsPerArrivalSpinner;
     private javax.swing.JLabel simulationDaysLabel;
-    private javax.swing.JSpinner simulationDaysSpinner;
+    javax.swing.JSpinner simulationDaysSpinner;
     // End of variables declaration//GEN-END:variables
     
     private Integer nExperiments, nJanitors, nDoctors, nAutoChairs, nManualChairs, 

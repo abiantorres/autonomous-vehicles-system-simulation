@@ -7,14 +7,15 @@ package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.gui;
 
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-
-import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.bridge.ROSListener;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.database.DatabaseService;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSResults;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSSimulationMetadata;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.WheelChairsExperiment;
 
 /**
  *
@@ -29,7 +30,16 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
 	/**
      * Creates new form HistoricalModeGUI
      */
-    public HistoricalModeGUI() {
+    public HistoricalModeGUI(MainGUI mainGUI) {
+    	this.nExperiments = (Integer) mainGUI.experimentsSpinner.getValue();
+    	this.nJanitors = (Integer) mainGUI.janitorsSpinner.getValue();
+    	this.nDoctors = (Integer) mainGUI.DoctorsSpinner.getValue();
+    	this.nAutoChairs = (Integer) mainGUI.aWheelchairsSpinner.getValue();
+    	this.nManualChairs = (Integer) mainGUI.mWheelchairsSpinner.getValue();
+    	this.patientsPerArrival = (Integer) mainGUI.patientsPerArrivalSpinner.getValue();
+    	this.minutesBetweenArrivals = (Integer) mainGUI.minutesBetweenArrivalSpinner.getValue();
+    	this.manualFactor = (Double) mainGUI.manualWheelchairsFactorSpinner.getValue();
+    	this.days = (Integer) mainGUI.simulationDaysSpinner.getValue();
         initComponents();
     }
 
@@ -210,7 +220,7 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
         pack();
         
        // if(!DatabaseService.isConnected()) {
-        	DatabaseService.connectToDatabase();
+        DatabaseService.connectToDatabase();
         //}
         this.simulationsMetadata = DatabaseService.getLowLevelSimulations();
         DefaultTableModel model = (DefaultTableModel) simulationsMetadataTable.getModel();
@@ -275,7 +285,15 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+	    if(simulationResultsTable != null && simulationResultsTable.getSelectedRow() != -1) {
+	    	new WheelChairsExperiment(nExperiments, simulationsResults.get(simulationResultsTable.getSelectedRow()), nJanitors, nDoctors, 
+					nManualChairs, nAutoChairs, patientsPerArrival,
+					minutesBetweenArrivals, manualFactor, 
+					new Long(0), new Long(days*24*60*60)).start();
+	    }
+	    else {
+	    	JOptionPane.showMessageDialog(this, "Select a valid low level result");
+	    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
