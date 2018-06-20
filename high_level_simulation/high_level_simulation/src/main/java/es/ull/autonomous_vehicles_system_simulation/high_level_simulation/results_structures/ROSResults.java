@@ -13,7 +13,7 @@ public class ROSResults {
 	private ROSSimulationMetadata metadata;
 	private String date, localPlanner, globalPlanner;
 	private Integer nFailures, nIterations, nSegments, timeoutFactor;
-	private Boolean usefulSimulation;
+	private Boolean usefulSimulation, merged;
 	private ArrayList<ROSSegment> segments;
 	
 	/***********************
@@ -21,7 +21,7 @@ public class ROSResults {
 	 **********************/
 	
 	public ROSResults() {
-		this("", "", "", "", "", "", "", "", 0, 0, 0, 0, false, new ArrayList<ROSSegment> ());
+		this("", "", "", "", "", "", "", "", 0, 0, 0, 0, false, new ArrayList<ROSSegment> (), false);
 	}
 	
 	/*************************
@@ -45,7 +45,7 @@ public class ROSResults {
 	 * @param segments */
 	public ROSResults(String simulationHash, String planFile, String robotFile, String worldFile, String mapFile,
 			String date, String localPlanner, String globalPlanner, Integer nFailures, Integer nIterations,
-			Integer nSegments, Integer timeoutFactor, Boolean usefulSimulation, ArrayList<ROSSegment> segments) {
+			Integer nSegments, Integer timeoutFactor, Boolean usefulSimulation, ArrayList<ROSSegment> segments, Boolean merged) {
 		super();
 		this.metadata = new ROSSimulationMetadata();
 		this.metadata.setSimulationHash(simulationHash);
@@ -62,6 +62,7 @@ public class ROSResults {
 		this.timeoutFactor = timeoutFactor;
 		this.usefulSimulation = usefulSimulation;
 		this.segments = segments;
+		this.merged = merged;
 	}
 	
 	/***********
@@ -90,7 +91,8 @@ public class ROSResults {
                 .append("usefulSimulation", getUsefulSimulation())
                 .append("localPlanner", getLocalPlanner())
                 .append("globalPlanner", getGlobalPlanner())
-                .append("segments", segmentsDocuments);              
+                .append("segments", segmentsDocuments)    
+				.append("merged", getMerged());
 	}
 	
 	/** Add a section results
@@ -267,6 +269,16 @@ public class ROSResults {
 	/** @param metadata the metadata to set */
 	public void setMetadata(ROSSimulationMetadata metadata) {
 		this.metadata = metadata;
+	}
+	
+	/** @return the merged */
+	public Boolean getMerged() {
+		return merged;
+	}
+
+	/** @param merged the merged to set */
+	public void setMerged(Boolean merged) {
+		this.merged = merged;
 	}
 
 	/*************

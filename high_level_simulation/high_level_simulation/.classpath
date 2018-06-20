@@ -36,5 +36,7 @@
 	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/tools.jar"/>
 	<classpathentry exported="true" kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/utils.jar"/>
 	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
+	<classpathentry kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/controlsfx-8.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/high_level_simulation/high_level_simulation/lib/jide.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

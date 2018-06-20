@@ -1,8 +1,9 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.OptionalDouble;
+import java.util.Date;
 import java.util.UUID;
 
 import org.bson.Document;
@@ -125,26 +126,145 @@ final public class DataProcessing {
 		return results;
 	}
 	
-	/*public ROSSegment mergeROSResultsSegment(ArrayList<ROSResults> resultsList, Integer index) {
-		if(resultsList != null && resultsList.size() > 1) {
-			ArrayList<Double> individualTimes = new ArrayList<Double>();
-			ArrayList<Double> individualTimeouts = new ArrayList<Double>();
-			ArrayList<Double> individualDistancesBetweenObstacles = new ArrayList<Double>();
-			Integer failures = 0;
-			for(int i = 0; i < resultsList.size(); i++) {
-				ROSSegment tmp = resultsList.get(i).getSegments().get(index);
-				failures += tmp.getFailures();
-				individualTimes.addAll(tmp.getIndividualTimes());
-				individualTimeouts.add(tmp.getTimeout());
-				individualDistancesBetweenObstacles.add(tmp.getDistanceBetweenObstacles());
-			}
+	public static ROSResults parseMergedROSResultsDocument(Document doc) {
+		ROSResults results = new ROSResults();
+		// Get the list of segments results
+		@SuppressWarnings("unchecked")
+		ArrayList<Document> segments = 
+			(ArrayList<Document>) doc.get("segments");
+		// Build ROSResults document
+		results.setSimulationHash(doc.getString("simulationHash"));
+		results.setPlanFile(doc.getString("planFile"));
+		results.setWorldFile(doc.getString("worldFile"));
+		results.setRobotFile(doc.getString("robotFile"));
+		results.setMapFile(doc.getString("mapFile"));
+		results.setDate(doc.getString("date"));
+		results.setnSegments(doc.getInteger("nSegments"));
+		results.setnIterations(doc.getInteger("nIterations"));
+		results.setTimeoutFactor(doc.getInteger("timeoutFactor"));
+		results.setUsefulSimulation(doc.getBoolean("usefulSimulation"));
+		results.setLocalPlanner(doc.getString("localPlanner"));
+		results.setGlobalPlanner(doc.getString("globalPlanner"));
+		results.setMerged(doc.getBoolean("merged"));
+		for(int i = 0; i < results.getnSegments(); i++) {
+
 			ROSSegment segment = new ROSSegment();
-			segment.setIndex(index);
-			segment.setDistanceBetweenObstacles(MathUtil.mean(individualDistancesBetweenObstacles));
-			segment.setTimeout(MathUtil.mean(individualTimeouts);
+			segment.setIndex(i);
+			segment.setFailures(segments.get(i).getInteger("failures"));
+			segment.setDistanceBetweenObstacles(
+					segments.get(i).getDouble("distanceBetweenObstacles"));
+			segment.setTimeout(
+					segments.get(i).getInteger("timeout"));
+			segment.setTimeAverage(segments.get(i).getDouble("timeAverage"));
+			segment.setMaximumTime(segments.get(i).getDouble("maximumTime"));
+			segment.setMinimumTime(segments.get(i).getDouble("minimumTime"));
+			segment.setTimeStandardDeviation(segments.get(i).getDouble("timeStandardDeviation"));
+			
+			// Search individual times (each simulation iteration) for the current segment
+			@SuppressWarnings("unchecked" )
+			ArrayList<Double> individualTimes =
+				(ArrayList<Double>) segments.get(i).get("individualTimes");
+			segment.setIndividualTimes(individualTimes);
+
+			results.addSegment(segment);
+		}
+		return results;
+	}
+	
+	
+	
+	public static ROSResults mergeROSResults(ArrayList<ROSResults> resultsList) {
+		if(resultsList != null && resultsList.size() > 1) {
+			
+			// The merged results
+			ROSResults results = new ROSResults();
+			
+			// New date
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date date = new Date();
+			String newDate = dateFormat.format(date); //2016/11/16 12:08:43	
+			// Set the new date
+			results.setDate(newDate);
+			
+			// Set others simulation parameters
+			results.setGlobalPlanner("Merged");
+			results.setLocalPlanner("Merged");
+			results.setPlanFile(resultsList.get(0).getPlanFile());
+			results.setWorldFile(resultsList.get(0).getWorldFile());
+			results.setRobotFile(resultsList.get(0).getRobotFile());
+			results.setMapFile(resultsList.get(0).getMapFile());
+			results.setSimulationHash(resultsList.get(0).getSimulationHash());
+			results.setnSegments(resultsList.get(0).getnSegments());
+			
+			/* FOR EACH SEGMENT (EACH ARRAY OF SIZE EQUAL TO THE TOTAL NUMBER OF ITERATIONS)*/
+			// Individual segments times
+			ArrayList<Double> individualTimes = new ArrayList<Double>();
+			// Individual segments timeouts
+			ArrayList<Integer> individualTimeouts = new ArrayList<Integer>();
+			// Individual segments distances between obstacles
+			ArrayList<Double> individualDistancesBetweenObstacles = new ArrayList<Double>();
+			// Individual segments failures and iterations 
+			Integer individualFailures = 0;
+			
+			/* FOR GLOBAL RESULTS */
+			// Individual simulations timeout factors
+			ArrayList<Integer> individualTimeoutFactors = new ArrayList<Integer>();
+			// Global simulation failures and iterations
+			Integer globalFailures = 0, globalIterations = 0;
+			// Useful simulation
+			Boolean usefulSimulation = false;
+			
+			results.setMerged(true);
+			ROSSegment segment = new ROSSegment();
+			
+			// For each results segment
+			for(int i = 0; i < resultsList.get(0).getnSegments(); i++) {
+				segment.setIndex(i);
+				// For each results instance
+				for(int j = 0; j < resultsList.size(); j++) {
+					// To avoid unnecessary iterations, set the global data 
+					// only in the first iteration (first segment)
+					if(i == 0) {
+						globalFailures += resultsList.get(j).getnFailures();
+						globalIterations += resultsList.get(j).getnIterations();
+						individualTimeoutFactors.add(resultsList.get(j).getTimeoutFactor());
+						if(!usefulSimulation && resultsList.get(j).getUsefulSimulation()) {
+							usefulSimulation = true;
+						}
+					}
+					// Get the segment data for the simulation j 
+					individualTimeouts.add(resultsList.get(j).getSegments().get(i).getTimeout());
+					individualDistancesBetweenObstacles.add(
+							resultsList.get(j).getSegments().get(i).getDistanceBetweenObstacles());
+					individualTimes.addAll(resultsList.get(j).getSegments().get(i).getIndividualTimes());
+					individualFailures += resultsList.get(j).getSegments().get(i).getFailures();
+				}
+				if(i == 0) {
+					results.setnFailures(globalFailures);
+					results.setnIterations(globalIterations);
+					results.setTimeoutFactor(MathUtil.meanInteger(individualTimeoutFactors));
+					individualTimeoutFactors.clear();
+				}
+				// Set the segment data
+				segment.setDistanceBetweenObstacles(MathUtil.mean(individualDistancesBetweenObstacles));
+				segment.setTimeout(MathUtil.meanInteger(individualTimeouts));
+				segment.setTimeAverage(MathUtil.mean(individualTimes));
+				segment.setTimeStandardDeviation(MathUtil.sd(individualTimes));
+				segment.setFailures(individualFailures);
+				segment.setIndividualTimes(individualTimes);
+				results.addSegment(segment);
+				// Reset the arrays content to fill them with the data of the
+				// next segment
+				individualTimes.clear();
+				individualTimeouts.clear();
+				individualDistancesBetweenObstacles.clear();
+				individualFailures = 0;
+				segment = new ROSSegment();
+			}
+			return results;
 		}
 		return null;
-	}*/
+	}
 	
 	public static String generateUniqueSimulationID() {
 		return UUID.randomUUID().toString();

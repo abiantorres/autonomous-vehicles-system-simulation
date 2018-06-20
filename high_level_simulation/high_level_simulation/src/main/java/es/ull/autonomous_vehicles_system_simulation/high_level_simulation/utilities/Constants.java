@@ -24,7 +24,8 @@ public final class Constants {
 			MONGODB_DB_NAME = "avss",
 			MONGODB_SIMULATIONS_METADATA_COLLECTION = "simulations_collection",
 			MONGODB_HIGH_LEVEL_RESULTS_COLLECTION = "high_level_collection",
-			MONGODB_LOW_LEVEL_RESULTS_COLLECTION = "low_level_collection";
+			MONGODB_LOW_LEVEL_RESULTS_COLLECTION = "low_level_collection",
+			MONGODB_MERGED_COLLECTION = "merged_collection";
 	/* ROS connection port */
 	private final static Integer 
 			MONGODB_PORT = 27017;
@@ -76,5 +77,10 @@ public final class Constants {
 	/** @return the mongodbLowLevelResultsCollection */
 	public static String getMongodbLowLevelResultsCollection() {
 		return MONGODB_LOW_LEVEL_RESULTS_COLLECTION;
+	}
+
+	/** @return the mongodbMergedCollection */
+	public static String getMongodbMergedCollection() {
+		return MONGODB_MERGED_COLLECTION;
 	}
 }

@@ -60,9 +60,13 @@ public class ROSSegment {
 	public Document getDocument() {
 		return new Document("index", getIndex())
                 .append("failures", getFailures())
+                .append("timeout", getTimeout())
                 .append("timeStandardDeviation", getTimeStandardDeviation())
                 .append("timeAverage", getTimeAverage())
-                .append("distanceBetweenObstacles", getDistanceBetweenObstacles());
+                .append("distanceBetweenObstacles", getDistanceBetweenObstacles())
+				.append("maximumTime", getMaximumTime())
+				.append("individualTimes", getIndividualTimes())
+				.append("minimumTime", getMinimumTime());
 	}
 	
 	

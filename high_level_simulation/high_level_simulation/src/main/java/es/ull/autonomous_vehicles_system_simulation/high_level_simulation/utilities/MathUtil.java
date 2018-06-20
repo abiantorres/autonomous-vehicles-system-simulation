@@ -12,12 +12,32 @@ public class MathUtil {
 	        }
 	        return 0;
 	    }
+	    
+	    public static int sumInteger (List<Integer> a){
+	        if (a.size() > 0) {
+	        	int sum = 0;
+	            for (Integer i : a) {
+	                sum += i;
+	            }
+	            return sum;
+	        }
+	        return 0;
+	    }
+	    
 	    public static double mean (List<Double> a){
 	    	double sum = sum(a);
 	        double mean = 0;
 	        mean = sum / (a.size() * 1.0);
 	        return mean;
 	    }
+	    
+	    public static int meanInteger (List<Integer> a){
+	    	int sum = sumInteger(a);
+	    	int mean = 0;
+	        mean = sum / a.size();
+	        return mean;
+	    }
+	    
 	    public static double median (List<Double> a){
 	        int middle = a.size()/2;
 	 

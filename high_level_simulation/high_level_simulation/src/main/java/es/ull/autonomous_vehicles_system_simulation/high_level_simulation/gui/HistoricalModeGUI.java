@@ -7,15 +7,22 @@ package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.gui;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.database.DatabaseService;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.gui.range_slider.RangeSlider;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSResults;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSSimulationMetadata;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.WheelChairsExperiment;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities.DataProcessing;
 
 /**
  *
@@ -63,6 +70,11 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
         individualSegmentsResultsTable = new javax.swing.JTable();
         jSeparator1 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        lowValueDistanceBetweenObstacles = new javax.swing.JLabel();
+        highValueDistanceBetweenObstacles = new javax.swing.JLabel();
+        selectedResults = null;
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Historical Mode");
@@ -100,42 +112,39 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(simulationsMetadataTable);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Select one of the avalible low level simulations configurations*");
+        jLabel1.setText("Select one of the avalible low level simulations configurations");
 
         simulationResultsTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object [][] {
 
-            },
-            new String [] {
-                "Date", "Iterations", "Time out factor", "Failures", "Useful Simulation"
-            }
-        ) {
-            /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			@SuppressWarnings("rawtypes")
-			Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
+                },
+                new String [] {
+                    "Date", "Iterations", "Time out factor", "Failures", "Useful Simulation", "Merged"
+                }
+            ) {
+                @SuppressWarnings("rawtypes")
+				Class[] types = new Class [] {
+                    java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Boolean.class
+                };
+                boolean[] canEdit = new boolean [] {
+                    false, false, false, false, false, false
+                };
 
-            @SuppressWarnings("rawtypes")
-			public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+                @SuppressWarnings("rawtypes")
+				public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        simulationResultsTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+         });
+        simulationResultsTable.setRowSelectionAllowed(true);
+        simulationResultsTable.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane2.setViewportView(simulationResultsTable);
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Select one of the avalible low level simulation results*");
+        jLabel2.setText("Select one or more of the avalible low level simulation results (CTRL+CLICK)");
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Information: Individual segments results");
@@ -167,11 +176,71 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
         });
         individualSegmentsResultsTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane3.setViewportView(individualSegmentsResultsTable);
-
-        jButton1.setText("Launch");
+        
+        jButton1.setText("Save merge");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Launch");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        rangeSlider = new RangeSlider();
+        rangeSlider.setMinimum(1);
+        rangeSlider.setMaximum(50);
+        rangeSlider.setValue(1);
+        rangeSlider.setUpperValue(50);
+        lowValueDistanceBetweenObstacles.setText(String.valueOf(1));
+        highValueDistanceBetweenObstacles.setText(String.valueOf(50));
+        
+        rangeSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                RangeSlider slider = (RangeSlider) e.getSource();
+                lowValueDistanceBetweenObstacles.setText(String.valueOf(slider.getValue()));
+                highValueDistanceBetweenObstacles.setText(String.valueOf(slider.getUpperValue()));
+                updateSimulationsResults();
+            }
+        });
+        
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(269, 269, 269)
+                .addComponent(lowValueDistanceBetweenObstacles)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rangeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(highValueDistanceBetweenObstacles)
+                .addGap(256, 256, 256))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(highValueDistanceBetweenObstacles, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(rangeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGap(33, 33, 33))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(lowValueDistanceBetweenObstacles)
+                .addContainerGap(50, Short.MAX_VALUE))
+        );
+
+        jButton2.setText("Launch");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -180,41 +249,50 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(351, 351, 351)
+                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                .addGap(34, 34, 34)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                .addGap(361, 361, 361))
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 848, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(387, 387, 387))
-                    .addComponent(jScrollPane2))
-                .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                 .addGap(7, 7, 7)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(49, 49, 49)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(5, 5, 5)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -241,22 +319,7 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
            public void valueChanged(ListSelectionEvent event) {
                // do some actions here, for example
                // print first column value from selected row
-        	   if(simulationsMetadataTable.getSelectedRow() != -1) {
-	        	   simulationsResults = DatabaseService.getLowLevelResultsByHash(
-	        			   simulationsMetadata.get(simulationsMetadataTable.getSelectedRow()).getSimulationHash());
-	               DefaultTableModel simulationResultsTableModel = (DefaultTableModel) simulationResultsTable.getModel();
-	               simulationResultsTableModel.setRowCount(0);
-	               DefaultTableModel individualSegmentsResultsTableModel = (DefaultTableModel) individualSegmentsResultsTable.getModel();
-	               individualSegmentsResultsTableModel.setRowCount(0);
-	               for(int i = 0; i < simulationsResults.size(); i++) {
-	            	   simulationResultsTableModel.addRow(new Object[] {
-	               			simulationsResults.get(i).getDate(), 
-	               			simulationsResults.get(i).getnIterations(), 
-	               			simulationsResults.get(i).getTimeoutFactor(), 
-	               	        simulationsResults.get(i).getnFailures(), 
-	               	        simulationsResults.get(i).getUsefulSimulation()});
-	               }
-        	   }
+        	   updateSimulationsResults();
            }
        });
        
@@ -267,24 +330,61 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
                DefaultTableModel individualSegmentsResultsTableModel = (DefaultTableModel) individualSegmentsResultsTable.getModel();
                individualSegmentsResultsTableModel.setRowCount(0);
                if(simulationResultsTable.getSelectedRow() != -1) {
-	               for(int i = 0; i < simulationsResults.get(simulationResultsTable.getSelectedRow()).getnSegments(); i++) {
-	            	   individualSegmentsResultsTableModel.addRow(new Object[] {
-	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getIndex(), 
-	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getFailures(), 
-	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getDistanceBetweenObstacles(), 
-	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getTimeout(), 
-	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getTimeAverage(),
-	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getTimeStandardDeviation(),
-	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getMaximumTime(),
-	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getMinimumTime()
-	               	});
-	               }
+            	   ListSelectionModel lsm = (ListSelectionModel)event.getSource();
+            	   JList jlist = new JList();
+            	   jlist.setSelectionModel(lsm);
+            	   // If there is only one selection
+            	   if(jlist.getSelectedIndices().length == 1) {
+	            	     for(int i = 0; i < simulationsResults.get(simulationResultsTable.getSelectedRow()).getnSegments(); i++) {
+	  	            	   individualSegmentsResultsTableModel.addRow(new Object[] {
+	  	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getIndex(), 
+	  	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getFailures(), 
+	  	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getDistanceBetweenObstacles(), 
+	  	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getTimeout(), 
+	  	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getTimeAverage(),
+	  	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getTimeStandardDeviation(),
+	  	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getMaximumTime(),
+	  	               			simulationsResults.get(simulationResultsTable.getSelectedRow()).getSegments().get(i).getMinimumTime()
+	  	               		});
+	  	               }
+            	   }
+            	   // If there are more than one selection, we need to merge the results
+            	   else {
+                	   ArrayList<ROSResults> selectedResutls = new ArrayList<ROSResults>();
+                	   for(int i = 0; i < jlist.getSelectedIndices().length; i++) {
+                		   selectedResutls.add(simulationsResults.get(jlist.getSelectedIndices()[i]));
+                	   }
+                	   ROSResults merged = DataProcessing.mergeROSResults(selectedResutls);
+                	   for(int i = 0; i < merged.getnSegments(); i++) {
+	  	            	   individualSegmentsResultsTableModel.addRow(new Object[] {
+	  	            			merged.getSegments().get(i).getIndex(), 
+	  	            			merged.getSegments().get(i).getFailures(), 
+	  	            			merged.getSegments().get(i).getDistanceBetweenObstacles(), 
+	  	            			merged.getSegments().get(i).getTimeout(), 
+	  	            			merged.getSegments().get(i).getTimeAverage(),
+	  	            			merged.getSegments().get(i).getTimeStandardDeviation(),
+	  	            			merged.getSegments().get(i).getMaximumTime(),
+	  	               		});
+	  	               }
+                	   selectedResults = merged;
+            	   }
                }
            }
        });
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) { 
+    	if(selectedResults != null) {
+    		DatabaseService.insertMergeResults(selectedResults.getDocument());
+    		JOptionPane.showMessageDialog(this, "Merged results saved");
+    	}
+    	else {
+    		JOptionPane.showMessageDialog(this, "Select at least two instances");
+    	}
+        // TODO add your handling code here:
+    }                                        
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 	    if(simulationResultsTable != null && simulationResultsTable.getSelectedRow() != -1) {
 	    	new WheelChairsExperiment(nExperiments, simulationsResults.get(simulationResultsTable.getSelectedRow()), nJanitors, nDoctors, 
 					nManualChairs, nAutoChairs, patientsPerArrival,
@@ -295,15 +395,39 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
 	    	JOptionPane.showMessageDialog(this, "Select a valid low level result");
 	    }
     }//GEN-LAST:event_jButton1ActionPerformed
+    
+    public void updateSimulationsResults() {
+    	if(simulationsMetadataTable.getSelectedRow() != -1) {
+     	   simulationsResults = DatabaseService.getAllResultsByHashAndDBO(
+     			   simulationsMetadata.get(simulationsMetadataTable.getSelectedRow()).getSimulationHash()
+     			   , 0, rangeSlider.getValue(), rangeSlider.getUpperValue());
+            DefaultTableModel simulationResultsTableModel = (DefaultTableModel) simulationResultsTable.getModel();
+            simulationResultsTableModel.setRowCount(0);
+            DefaultTableModel individualSegmentsResultsTableModel = (DefaultTableModel) individualSegmentsResultsTable.getModel();
+            individualSegmentsResultsTableModel.setRowCount(0);
+            for(int i = 0; i < simulationsResults.size(); i++) {
+         	   simulationResultsTableModel.addRow(new Object[] {
+            			simulationsResults.get(i).getDate(), 
+            			simulationsResults.get(i).getnIterations(), 
+            			simulationsResults.get(i).getTimeoutFactor(), 
+            	        simulationsResults.get(i).getnFailures(), 
+            	        simulationsResults.get(i).getUsefulSimulation(),
+            	        simulationsResults.get(i).getMerged()});
+            }
+ 	   }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton1, jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel lowValueDistanceBetweenObstacles;
+    private javax.swing.JLabel highValueDistanceBetweenObstacles;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable simulationsMetadataTable;
     private javax.swing.JTable simulationResultsTable;
@@ -311,6 +435,8 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private ArrayList<ROSSimulationMetadata> simulationsMetadata;
     private ArrayList<ROSResults> simulationsResults;
+    private ROSResults selectedResults;
+    private RangeSlider rangeSlider;
     
     private Integer nExperiments, nJanitors, nDoctors, nAutoChairs, nManualChairs, 
     	patientsPerArrival, minutesBetweenArrivals, days; 
