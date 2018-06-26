@@ -16,7 +16,7 @@
   <arg name="yaw" default="0"/>
 
   <!-- simulation description input file -->
-  <arg name="world_file" default="complete_hotel.sdf"/>
+  <arg name="world_file" default="$(find gazebo_simulation)/world/complete_hotel.sdf"/>
   <arg name="robot_file" default="vehicle.xacro"/>
   <!-- set input files as server parameters to use them us metadata information -->
   <param name="world_file" value="$(arg world_file)"/>

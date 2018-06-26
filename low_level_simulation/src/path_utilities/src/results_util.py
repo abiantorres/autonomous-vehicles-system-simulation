@@ -164,8 +164,9 @@ class SimulationResults:
         individual_times_results = []
         individual_speeds_results = []
         individual_distances_results = []
+        # Get only full simulation results
         for i in range(0, self.n_iterations):
-            if(self.iterations_results[i].failure):
+            if(not self.iterations_results[i].failure):
                 individual_times_results.append(\
                     self.iterations_results[i].segments_results[segment_index].time)
                 individual_speeds_results.append(\

@@ -5,11 +5,12 @@
  */
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.gui;
 
+import java.awt.Container;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -19,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.database.DatabaseService;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.gui.range_slider.RangeSlider;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.CompleteResults;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSResults;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSSimulationMetadata;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.WheelChairsExperiment;
@@ -237,13 +239,6 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
-        jButton2.setText("Launch");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -386,10 +381,20 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 	    if(simulationResultsTable != null && simulationResultsTable.getSelectedRow() != -1) {
-	    	new WheelChairsExperiment(nExperiments, simulationsResults.get(simulationResultsTable.getSelectedRow()), nJanitors, nDoctors, 
+	    	final JFrame self = this;
+	    	ROSResults results = simulationsResults.get(simulationResultsTable.getSelectedRow());
+	    	 Thread t = new Thread(new Runnable() {
+	     	    public void run() {
+	    			DataProcessing.showLongTextMessageInDialog(self);
+	     	    }
+	    	 });
+	    	 t.start();
+	    	WheelChairsExperiment experiments = new WheelChairsExperiment(nExperiments, results, nJanitors, nDoctors, 
 					nManualChairs, nAutoChairs, patientsPerArrival,
 					minutesBetweenArrivals, manualFactor, 
-					new Long(0), new Long(days*24*60*60)).start();
+					new Long(0), new Long(days*24*60*60));
+	    	experiments.start();
+	    	DatabaseService.insertTotalResults(new CompleteResults(DataProcessing.mergePSIGHOSResults(WheelChairsExperiment.psighosResults), results).getDocument());
 	    }
 	    else {
 	    	JOptionPane.showMessageDialog(this, "Select a valid low level result");

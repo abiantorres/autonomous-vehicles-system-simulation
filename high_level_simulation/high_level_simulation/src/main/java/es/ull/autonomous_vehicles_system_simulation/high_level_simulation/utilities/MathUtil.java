@@ -24,6 +24,18 @@ public class MathUtil {
 	        return 0;
 	    }
 	    
+	    public static Long sumLong (List<Long> a){
+	        if (a.size() > 0) {
+	        	Long sum = new Long(0);
+	            for (Long i : a) {
+	                sum = Long.sum(i, sum);
+	            }
+	            return sum;
+	        }
+	        return new Long(0);
+	    }
+	    
+	    
 	    public static double mean (List<Double> a){
 	    	double sum = sum(a);
 	        double mean = 0;
@@ -35,6 +47,13 @@ public class MathUtil {
 	    	int sum = sumInteger(a);
 	    	int mean = 0;
 	        mean = sum / a.size();
+	        return mean;
+	    }
+	    
+	    public static Long meanLong (List<Long> a){
+	    	Long sum = sumLong(a);
+	    	Long mean = new Long(0);
+	        mean = Long.divideUnsigned(sum, a.size());
 	        return mean;
 	    }
 	    

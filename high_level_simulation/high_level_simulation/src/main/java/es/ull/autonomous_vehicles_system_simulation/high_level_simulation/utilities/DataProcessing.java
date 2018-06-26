@@ -1,18 +1,34 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities;
 
+import java.awt.Frame;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.UUID;
+
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import org.bson.Document;
 
 //JSON tree structures handling 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.PSIGHOSResults;
 // Simulation Structures
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSResults;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSSegment;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.WheelChairsSimulation;
+import es.ull.iis.simulation.model.Element;
+import es.ull.iis.simulation.model.Resource;
+import es.ull.iis.simulation.model.TimeUnit;
 
 final public class DataProcessing {
 	
@@ -171,6 +187,307 @@ final public class DataProcessing {
 		return results;
 	}
 	
+	public static PSIGHOSResults mergePSIGHOSResults(ArrayList<PSIGHOSResults> resultsList) {
+		if(resultsList != null && resultsList.size() > 1) {
+
+			// Initialize the PSIGHOS Results instance
+			PSIGHOSResults results = new PSIGHOSResults(
+					TimeUnit.MINUTE,
+					resultsList.get(0).getnJanitors(),
+					resultsList.get(0).getnDoctors(),
+					resultsList.get(0).getnAutoChairs(),
+					resultsList.get(0).getnManualChairs(),
+					resultsList.get(0).getMaxJanitors(),
+					resultsList.get(0).getMaxDoctors(),
+					resultsList.get(0).getMaxAutoChairs(),
+					resultsList.get(0).getMaxManualChairs(),
+					resultsList.get(0).getPatientsPerArrival(),
+					resultsList.get(0).getMinutesBetweenArrivals(),
+					resultsList.get(0).getManualFactor()
+					);
+			
+			ArrayList<Long> tmp = new ArrayList<Long>();
+			// Get the accomodationTimes average for each element
+			Set<Element> keySet = resultsList.get(0).getAccomodationTimes().keySet();
+			for(Element element : keySet) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getAccomodationTimes().get(element);
+					if(v != null)
+						tmp.add(resultsList.get(i).getAccomodationTimes().get(element));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getAccomodationTimes().put(element, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			keySet.clear();
+			// Get the Times average for each element
+			keySet = resultsList.get(0).getTimes().keySet();
+			for(Element element : keySet) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getTimes().get(element);
+					if(v != null)
+						tmp.add(resultsList.get(i).getTimes().get(element));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getTimes().put(element, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			keySet.clear();
+			// Get the CummWaitForJanitorTimes average for each element
+			keySet = resultsList.get(0).getCummWaitForJanitorTimes().keySet();
+			for(Element element : keySet) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getCummWaitForJanitorTimes().get(element);
+					if(v != null)
+						tmp.add(resultsList.get(i).getCummWaitForJanitorTimes().get(element));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getCummWaitForJanitorTimes().put(element, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			keySet.clear();
+			// Get the WaitForJanitorTimes average for each element
+			keySet = resultsList.get(0).getWaitForJanitorTimes().keySet();
+			for(Element element : keySet) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getWaitForJanitorTimes().get(element);
+					if(v != null)
+						tmp.add(resultsList.get(i).getWaitForJanitorTimes().get(element));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getWaitForJanitorTimes().put(element, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			keySet.clear();
+			// Get the CummWaitForDoctorTimes average for each element
+			keySet = resultsList.get(0).getCummWaitForDoctorTimes().keySet();
+			for(Element element : keySet) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getCummWaitForDoctorTimes().get(element);
+					if(v != null)
+						tmp.add(resultsList.get(i).getCummWaitForDoctorTimes().get(element));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getCummWaitForDoctorTimes().put(element, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			keySet.clear();
+			// Get the WaitForDoctorTimes average for each element
+			keySet = resultsList.get(0).getWaitForDoctorTimes().keySet();
+			for(Element element : keySet) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getWaitForDoctorTimes().get(element);
+					if(v != null)
+						tmp.add(resultsList.get(i).getWaitForDoctorTimes().get(element));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getWaitForDoctorTimes().put(element, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			keySet.clear();
+			// Get the AppointmentTimes average for each element
+			keySet = resultsList.get(0).getAppointmentTimes().keySet();
+			for(Element element : keySet) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getAppointmentTimes().get(element);
+					if(v != null)
+						tmp.add(resultsList.get(i).getAppointmentTimes().get(element));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getAppointmentTimes().put(element, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			keySet.clear();
+			// Get the RouteTimes average for each element
+			keySet = resultsList.get(0).getRouteTimes().keySet();
+			for(Element element : keySet) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getRouteTimes().get(element);
+					if(v != null)
+						tmp.add(resultsList.get(i).getRouteTimes().get(element));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getRouteTimes().put(element, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+	
+			keySet.clear();
+			// Get the AccomodationTimes average for each element
+			keySet = resultsList.get(0).getAccomodationTimes().keySet();
+			for(Element element : keySet) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getAccomodationTimes().get(element);
+					if(v != null)
+						tmp.add(resultsList.get(i).getAccomodationTimes().get(element));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getAccomodationTimes().put(element, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			keySet.clear();
+			
+			
+			// Get the rTimes average for each resource
+			Set<Resource> keySet2 = resultsList.get(0).getrTimes().keySet();
+			for(Resource resource : keySet2) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getrTimes().get(resource);
+					if(v != null)
+						tmp.add(resultsList.get(i).getrTimes().get(resource));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getrTimes().put(resource, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			// Get the JanitorUsage average for each resource
+			keySet2.clear();
+			keySet2 = resultsList.get(0).getJanitorUsage().keySet();
+			for(Resource resource : keySet2) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getJanitorUsage().get(resource);
+					if(v != null)
+						tmp.add(resultsList.get(i).getJanitorUsage().get(resource));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getJanitorUsage().put(resource, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			// Get the DoctorUsage average for each resource
+			keySet2.clear();
+			keySet2 = resultsList.get(0).getDoctorUsage().keySet();
+			for(Resource resource : keySet2) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getDoctorUsage().get(resource);
+					if(v != null)
+						tmp.add(resultsList.get(i).getDoctorUsage().get(resource));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getDoctorUsage().put(resource, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			// Get the aChairUsage average for each resource
+			keySet2.clear();
+			keySet2 = resultsList.get(0).getaChairUsage().keySet();
+			for(Resource resource : keySet2) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getaChairUsage().get(resource);
+					if(v != null)
+						tmp.add(resultsList.get(i).getaChairUsage().get(resource));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getaChairUsage().put(resource, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			// Get the aChairUsage average for each resource
+			keySet2.clear();
+			keySet2 = resultsList.get(0).getaChairUsage().keySet();
+			for(Resource resource : keySet2) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getaChairUsage().get(resource);
+					if(v != null)
+						tmp.add(resultsList.get(i).getaChairUsage().get(resource));
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getaChairUsage().put(resource, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+
+			// Get the mChairUsage average for each resource
+			keySet2.clear();
+			keySet2 = resultsList.get(0).getmChairUsage().keySet();
+			for(Resource resource : keySet2) {
+				for(int i = 0; i < resultsList.size(); i++) {
+					Long v = resultsList.get(i).getmChairUsage().get(resource);
+					if(v != null)
+						tmp.add(v);
+				}
+				if(tmp != null && tmp.size() > 0)
+					results.getmChairUsage().put(resource, MathUtil.meanLong(tmp));
+				tmp.clear();
+			}
+			
+			ArrayList<Integer> tmp2 = new ArrayList<Integer>();
+			for(int i = 0; i < resultsList.size(); i++) {
+				if(!resultsList.get(i).getPatientEndCounter().equals(null))
+					tmp2.add(resultsList.get(i).getPatientEndCounter());
+			}
+			if(tmp2 != null && tmp2.size() > 0)
+				results.setPatientEndCounter(MathUtil.meanInteger(tmp2));
+			
+			tmp2.clear();
+			for(int i = 0; i < resultsList.size(); i++) {
+				if(!resultsList.get(i).getaChairCounter().equals(null))
+					tmp2.add(resultsList.get(i).getaChairCounter());
+			}
+			if(tmp2 != null && tmp2.size() > 0)
+				results.setaChairCounter(MathUtil.meanInteger(tmp2));
+			
+			tmp2.clear();
+			for(int i = 0; i < resultsList.size(); i++) {
+				if(!resultsList.get(i).getmChairCounter().equals(null))
+					tmp2.add(resultsList.get(i).getmChairCounter());
+			}
+			if(tmp2 != null && tmp2.size() > 0)
+				results.setmChairCounter(MathUtil.meanInteger(tmp2));
+			
+			tmp2.clear();
+			for(int i = 0; i < resultsList.size(); i++) {
+				if(!resultsList.get(i).getDoctorCounter().equals(null))
+					tmp2.add(resultsList.get(i).getDoctorCounter());
+			}
+			if(tmp2 != null && tmp2.size() > 0)
+				results.setDoctorCounter(MathUtil.meanInteger(tmp2));
+			
+			tmp2.clear();
+			for(int i = 0; i < resultsList.size(); i++) {
+				if(!resultsList.get(i).getJanitorCounter().equals(null))
+					tmp2.add(resultsList.get(i).getJanitorCounter());
+			}
+			if(tmp2 != null && tmp2.size() > 0)
+				results.setJanitorCounter(MathUtil.meanInteger(tmp2));
+			
+			tmp2.clear();
+			for(int i = 0; i < resultsList.size(); i++) {
+				if(!resultsList.get(i).getnPatientsWaitForDoctor().equals(null))
+					tmp2.add(resultsList.get(i).getnPatientsWaitForDoctor());
+			}
+			if(tmp2 != null && tmp2.size() > 0)
+				results.setnPatientsWaitForDoctor(MathUtil.meanInteger(tmp2));
+			
+			tmp2.clear();
+			for(int i = 0; i < resultsList.size(); i++) {
+				if(!resultsList.get(i).getnPatientsWaitForJanitor().equals(null))
+					tmp2.add(resultsList.get(i).getnPatientsWaitForJanitor());
+			}
+			if(tmp2 != null && tmp2.size() > 0)
+				results.setnPatientsWaitForJanitor(MathUtil.meanInteger(tmp2));
+			
+			tmp.clear();
+			for(int i = 0; i < resultsList.size(); i++) {
+				Long v = resultsList.get(i).getEndTs();
+				if(!v.equals(null))
+					tmp.add(resultsList.get(i).getEndTs());
+			}
+			if(tmp != null && tmp.size() > 0)
+				results.setEndTs(MathUtil.meanLong(tmp));
+			
+			return results;
+		}
+		return null;
+	}
+	
 	
 	
 	public static ROSResults mergeROSResults(ArrayList<ROSResults> resultsList) {
@@ -264,6 +581,33 @@ final public class DataProcessing {
 			return results;
 		}
 		return null;
+	}
+	
+	public static class CustomOutputStream extends OutputStream {
+	    private JTextArea textArea;
+	     
+	    public CustomOutputStream(JTextArea textArea) {
+	        this.textArea = textArea;
+	    }
+	     
+	    @Override
+	    public void write(int b) throws IOException {
+	        // redirects data to the text area
+	        textArea.append(String.valueOf((char)b));
+	        // scrolls the text area to the end of data
+	        textArea.setCaretPosition(textArea.getDocument().getLength());
+	    }
+	}
+	
+	public static void showLongTextMessageInDialog(javax.swing.JFrame  frame) {
+	    JTextArea textArea = new JTextArea(25, 100);
+	    textArea.setEditable(false);
+	    PrintStream printStream = new PrintStream(new CustomOutputStream(textArea)); 
+	    System.setOut(printStream);
+	    //System.setErr(printStream);
+
+	    JScrollPane scrollPane = new JScrollPane(textArea);
+	    JOptionPane.showMessageDialog(frame, scrollPane);
 	}
 	
 	public static String generateUniqueSimulationID() {

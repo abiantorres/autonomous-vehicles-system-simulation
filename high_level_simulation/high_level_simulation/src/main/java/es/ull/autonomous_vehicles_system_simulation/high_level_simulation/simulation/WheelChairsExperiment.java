@@ -1,5 +1,8 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation;
 
+import java.util.ArrayList;
+
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.PSIGHOSResults;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.results_structures.ROSResults;
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities.DataProcessing;
 import es.ull.iis.simulation.model.Experiment;
@@ -13,6 +16,8 @@ public class WheelChairsExperiment extends Experiment{
 		nMinutesBetweenArrivals;
 	private static Double manualFactor;
 	private static Long startTime, endTime;
+	public static ArrayList<PSIGHOSResults> psighosResults;
+	public final static String simulationHash = DataProcessing.generateUniqueSimulationID();
 		
 	/** Build a wheel chairs model experiment
 	 * @param nExperiments Number of experiments
@@ -40,6 +45,7 @@ public class WheelChairsExperiment extends Experiment{
 		WheelChairsExperiment.manualFactor = manualFactor;
 		WheelChairsExperiment.startTime = startTime;
 		WheelChairsExperiment.endTime = endTime;
+		WheelChairsExperiment.psighosResults = new ArrayList<PSIGHOSResults>();
 	}
 
 	@Override

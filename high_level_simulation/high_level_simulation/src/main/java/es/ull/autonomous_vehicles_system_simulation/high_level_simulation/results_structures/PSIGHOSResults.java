@@ -18,9 +18,11 @@ public class PSIGHOSResults {
 	public TreeMap<Resource, Long> rTimes, janitorUsage, doctorUsage, aChairUsage, mChairUsage;
 	public Integer patientEndCounter, aChairCounter, mChairCounter, doctorCounter, janitorCounter,
 		nPatientsWaitForDoctor, nPatientsWaitForJanitor;
+	
 	public final Integer nJanitors, nDoctors, nAutoChairs, nManualChairs, maxJanitors, maxDoctors, maxAutoChairs,
 		maxManualChairs, patientsPerArrival, minutesBetweenArrivals;
 	public final Double manualFactor, unitConversion;
+	
 	public long endTs;
 	
 	/****************
@@ -29,7 +31,6 @@ public class PSIGHOSResults {
 	public PSIGHOSResults(TimeUnit unit, Integer nJanitors, Integer nDoctors, Integer nAutoChairs, Integer nManualChairs, 
 			Integer maxJanitors, Integer maxDoctors, Integer maxAutoChairs, Integer maxManualChairs, 
 			Integer patientsPerArrival, Integer minutesBetweenArrivals, Double manualFactor) {
-		
 		this.times = new TreeMap<Element, Long>();
 		this.cummWaitForJanitorTimes = new TreeMap<Element, Long>();
 		this.waitForJanitorTimes = new TreeMap<Element, Long>();
@@ -97,7 +98,8 @@ public class PSIGHOSResults {
                 .append("manualFactor", getManualFactor())
                 .append("unitConversion", getUnitConversion())
 				.append("resources", getAllResourcesUsage())
-				.append("generalTimesStats", getAllGeneralTimeStats());
+				.append("generalTimesStats", getAllGeneralTimeStats())
+				.append("endTs",getEndTs());
                 
 	}
 	

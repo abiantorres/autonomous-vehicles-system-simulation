@@ -2,35 +2,35 @@ TebLocalPlannerROS:
 
   odom_topic: odom
   map_frame: odom
-    
+
   # Trajectory
-  
+
   teb_autosize: True
   dt_ref: 0.3
   dt_hysteresis: 0.1
   global_plan_overwrite_orientation: True
   max_global_plan_lookahead_dist: 3.0
   feasibility_check_no_poses: 5
-    
+
   # Robot
-          
-  max_vel_x: 0.4
-  max_vel_x_backwards: 0.1
-  max_vel_theta: 0.3
-  acc_lim_x: 0.5
+
+  max_vel_x: 0.6
+  max_vel_x_backwards: 0.2
+  max_vel_theta: 0.8
+  acc_lim_x: 0.8
   acc_lim_theta: 0.5
   min_turning_radius: 0.0 # diff-drive robot (can turn on place!)
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
     type: "point"
 
   # GoalTolerance
-    
+
   xy_goal_tolerance: 0.2
   yaw_goal_tolerance: 0.1
   free_goal_vel: False
-    
+
   # Obstacles
-    
+
   min_obstacle_dist: 0.55
   include_costmap_obstacles: True
   costmap_obstacles_behind_robot_dist: 1.0
@@ -40,7 +40,7 @@ TebLocalPlannerROS:
   costmap_converter_rate: 5
 
   # Optimization
-    
+
   no_inner_iterations: 5
   no_outer_iterations: 4
   optimization_activate: True
@@ -48,8 +48,9 @@ TebLocalPlannerROS:
   penalty_epsilon: 0.1
   weight_max_vel_x: 2
   weight_max_vel_theta: 1
-  weight_acc_lim_x: 1
-  weight_acc_lim_theta: 1
+  weight_acc_lim_x: 0
+  weight_acc_lim_y: 0
+  weight_acc_lim_theta: 0
   weight_kinematics_nh: 1000
   weight_kinematics_forward_drive: 1
   weight_kinematics_turning_radius: 1
@@ -71,3 +72,7 @@ TebLocalPlannerROS:
   obstacle_keypoint_offset: 0.1
   obstacle_heading_threshold: 0.45
   visualize_hc_graph: False
+
+  # ViaPoints
+
+  #global_plan_viapoint_sep: 0.2

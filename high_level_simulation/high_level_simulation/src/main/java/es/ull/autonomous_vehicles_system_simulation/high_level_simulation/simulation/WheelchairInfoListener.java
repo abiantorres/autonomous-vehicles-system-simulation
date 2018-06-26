@@ -19,8 +19,10 @@ public class WheelchairInfoListener extends View {
 	/**************
 	 * ATTRIBUTES *
 	 *************/
+	
 	private static PSIGHOSResults psighosResults;
 	private static ROSResults rosResults;
+	private static String resultsInfo;
 	
 	/****************
 	 * CONSTRUCTORS *
@@ -226,8 +228,10 @@ public class WheelchairInfoListener extends View {
 					entry.setValue(endTs + entry.getValue());
 				}
 			}
-			
+			//System.out.print(endTs/unitConversion + "\t" + patientsPerArrival + "\t" + minutesBetweenArrivals + "\t" + manualFactor);
 			getPsighosResults().setEndTs(endTs);
+			WheelChairsExperiment.psighosResults.add(getPsighosResults());
+			System.out.println(new CompleteResults(psighosResults, rosResults).getDocument());
 			DatabaseService.insertResults(
 					new CompleteResults(psighosResults, rosResults).getDocument());
 		}
@@ -240,25 +244,29 @@ public class WheelchairInfoListener extends View {
 		return psighosResults;
 	}
 
-	/**
-	 * @param results the results to set
-	 */
+	/** @param results the results to set  */
 	public static void setPsighosResults(PSIGHOSResults results) {
 		WheelchairInfoListener.psighosResults = results;
 	}
 
-	/**
-	 * @return the rosResults
-	 */
+	/** @return the rosResults */
 	public static ROSResults getRosResults() {
 		return rosResults;
 	}
 
-	/**
-	 * @param rosResults the rosResults to set
-	 */
+	/** @param rosResults the rosResults to set */
 	public static void setRosResults(ROSResults rosResults) {
 		WheelchairInfoListener.rosResults = rosResults;
+	}
+
+	/** @return the resultsInfo */
+	public static String getResultsInfo() {
+		return resultsInfo;
+	}
+
+	/** @param resultsInfo the resultsInfo to set */
+	public static void setResultsInfo(String resultsInfo) {
+		WheelchairInfoListener.resultsInfo = resultsInfo;
 	}
 
 }

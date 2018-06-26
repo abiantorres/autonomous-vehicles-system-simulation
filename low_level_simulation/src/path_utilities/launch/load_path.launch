@@ -10,11 +10,11 @@
 	<arg name="distance_between_obstacles" default="3.0"/>
   <param name="distance_between_obstacles" value="$(arg distance_between_obstacles)" />
 
-  <arg name="robot_radius" default="0.5"/>
+  <arg name="robot_radius" default="0.8"/>
   <param name="robot_radius" value="$(arg robot_radius)" />
-  <arg name="max_robot_speed" default="1.0"/>
+  <arg name="max_robot_speed" default="0.8"/>
   <param name="max_robot_speed" value="$(arg max_robot_speed)" />
-  <arg name="obstacle_length" default="0.1"/>
+  <arg name="obstacle_length" default="0.5"/>
   <param name="obstacle_length" value="$(arg obstacle_length)" />
   <arg name="max_obstacle_shiftment" default="0.1"/>
   <param name="max_obstacle_shiftment" value="$(arg max_obstacle_shiftment)" />

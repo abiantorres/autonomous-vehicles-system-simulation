@@ -29,7 +29,7 @@ public class DatabaseService {
 	private static MongoClient mongoClient;
 	private static MongoDatabase mongoDatabase;
 	private static MongoCollection<Document> highLevelResultsCollection, 
-		lowLevelResultsCollection, simulationsMetadataCollection, mergedCollection;
+		lowLevelResultsCollection, simulationsMetadataCollection, mergedCollection, highLevelTotalResultsCollection;
 	private static Boolean isConnected;
 	
 	/***********************
@@ -61,6 +61,8 @@ public class DatabaseService {
 				Constants.getMongodbSimulationsMetadataCollection());
 		DatabaseService.mergedCollection = DatabaseService.mongoDatabase.getCollection(
 				Constants.getMongodbMergedCollection());
+		DatabaseService.highLevelTotalResultsCollection = DatabaseService.mongoDatabase.getCollection(
+				Constants.getMongodbHighLevelTotalResultsCollection());
 	}
 	
 	/** Close the MongoDB connection 
@@ -72,6 +74,12 @@ public class DatabaseService {
 	public static void insertResults(Document data) {
 		if(DatabaseService.isConnected) {
 			DatabaseService.highLevelResultsCollection.insertOne(data);
+		}
+	}
+	
+	public static void insertTotalResults(Document data) {
+		if(DatabaseService.isConnected) {
+			DatabaseService.highLevelTotalResultsCollection.insertOne(data);
 		}
 	}
 	
@@ -210,7 +218,6 @@ public class DatabaseService {
 			if(mergedResults != null && mergedResults.size() > 0) {
 				allResults.addAll(mergedResults);
 			}
-			System.out.println(lowLevelResults);
 			return allResults;
 		}
 		return null;

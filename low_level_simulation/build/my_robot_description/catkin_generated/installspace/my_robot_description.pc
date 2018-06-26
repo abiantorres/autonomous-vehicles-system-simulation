@@ -1,0 +1,8 @@
+prefix=/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install
+
+Name: my_robot_description
+Description: Description of my_robot_description
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/abiantorres/Documentos/tfg/autonomous-vehicles-system-simulation/low_level_simulation/install/lib 
+Requires: 
