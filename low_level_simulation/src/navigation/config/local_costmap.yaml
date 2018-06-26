@@ -6,6 +6,6 @@ local_costmap:
   static_map: false
   rolling_window: true
   transform_tolerance: 0.5
-  width: 20.0
-  height: 20.0
+  width: 8.0
+  height: 8.0
   resolution: 0.01

@@ -1,6 +1,4 @@
 #!/bin/bash
-roscore &
-sleep 5
 ./sh/gazebo.sh $4 &
 sleep 5
 ./sh/move_base_navigation.sh $5 &

@@ -1,6 +1,6 @@
 # Robot radius calculated from the circle defined by the
 # point model robot. (Square shape)
-robot_radius: 0.6
+robot_radius: 0.7
 
 ####################################
 #Coordinate frame and tf parameters#

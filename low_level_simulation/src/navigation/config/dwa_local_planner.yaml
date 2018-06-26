@@ -94,9 +94,9 @@ DWAPlannerROS:
   ###########################
 
   # The tolerance in radians for the controller in yaw/rotation when achieving its goal
-  yaw_goal_tolerance: 0.3
+  yaw_goal_tolerance: 0.7
   # The tolerance in meters for the controller in the x & y distance when achieving a goal
-  xy_goal_tolerance: 0.15
+  xy_goal_tolerance: 0.8
   # If goal tolerance is latched, if the robot ever reaches the goal xy location it will
   # simply rotate in place, even if it ends up outside the goal tolerance while it is doing so.
   latch_xy_goal_tolerance: true
@@ -196,7 +196,7 @@ DWAPlannerROS:
 
   # Defines whether or not to eat up the plan as the robot moves along the path. If set to
   # true, points will fall off the end of the plan once the robot moves 1 meter past them.
-  prune_plan: true
+  prune_plan: false
 
   ###########################
   # TODO: Check information #
