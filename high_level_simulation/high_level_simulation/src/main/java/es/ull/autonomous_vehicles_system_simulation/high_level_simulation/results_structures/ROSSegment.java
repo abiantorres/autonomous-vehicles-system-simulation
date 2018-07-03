@@ -134,7 +134,7 @@ public class ROSSegment {
 
 	public void setIndividualTimes(ArrayList<Double> individualTimes) {
 		this.individualTimes = individualTimes;
-		if(individualTimes.size() != 0) {
+		if(individualTimes != null && individualTimes.size() > 0) {
 			this.maximumTime = Collections.max(individualTimes);
 			this.minimumTime = Collections.min(individualTimes);
 		}

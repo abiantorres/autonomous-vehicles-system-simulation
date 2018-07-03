@@ -360,6 +360,7 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
 	  	            			merged.getSegments().get(i).getTimeAverage(),
 	  	            			merged.getSegments().get(i).getTimeStandardDeviation(),
 	  	            			merged.getSegments().get(i).getMaximumTime(),
+	  	            			merged.getSegments().get(i).getMinimumTime()
 	  	               		});
 	  	               }
                 	   selectedResults = merged;
