@@ -5,9 +5,11 @@
  */
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.gui;
 
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.bridge.ROSListener;
+import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities.DataProcessing;
 
 /**
  *
@@ -248,14 +250,20 @@ public class MainGUI extends javax.swing.JFrame {
     	this.minutesBetweenArrivals = (Integer) this.minutesBetweenArrivalSpinner.getValue();
     	this.manualFactor = (Double) this.manualWheelchairsFactorSpinner.getValue();
     	this.days = (Integer) this.simulationDaysSpinner.getValue();
-    	 Thread t = new Thread(new Runnable() {
-    	    public void run() {
-    	    	new ROSListener().listen(nExperiments, nJanitors, nDoctors, nAutoChairs, nManualChairs, 
-		        	patientsPerArrival, minutesBetweenArrivals, manualFactor, days);
-    	    }
-    	 });
-    	 t.start();
-    }  
+    	Thread t = new Thread(new Runnable() {
+    		public void run() {
+	     		new TextAreaLogProgram().setVisible(true);
+	     	}
+	    });
+	    t.start();
+	    Thread t2 = new Thread(new Runnable() {
+	    	public void run() {
+	    		new ROSListener().listen(nExperiments, nJanitors, nDoctors, nAutoChairs, nManualChairs, 
+	    				patientsPerArrival, minutesBetweenArrivals, manualFactor, days);
+	    	}
+	    });
+	    t2.start();
+	}  
 
     
     private void historicalModeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historicalModeButtonActionPerformed

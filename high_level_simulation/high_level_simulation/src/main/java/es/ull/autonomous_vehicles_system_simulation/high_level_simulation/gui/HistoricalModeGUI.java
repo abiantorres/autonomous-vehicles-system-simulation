@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
@@ -381,21 +382,25 @@ public class HistoricalModeGUI extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 	    if(simulationResultsTable != null && simulationResultsTable.getSelectedRow() != -1) {
-	    	final JFrame self = this;
-	    	ROSResults results = simulationsResults.get(simulationResultsTable.getSelectedRow());
-	    	 Thread t = new Thread(new Runnable() {
-	     	    public void run() {
-	    			DataProcessing.showLongTextMessageInDialog(self);
-	     	    }
-	    	 });
-	    	 t.start();
-	    	WheelChairsExperiment experiments = new WheelChairsExperiment(nExperiments, results, nJanitors, nDoctors, 
-					nManualChairs, nAutoChairs, patientsPerArrival,
-					minutesBetweenArrivals, manualFactor, 
-					new Long(0), new Long(days*24*60*60));
-	    	experiments.start();
-	    	DatabaseService.insertTotalResults(new CompleteResults(DataProcessing.mergePSIGHOSResults(WheelChairsExperiment.psighosResults), results).getDocument());
-	    }
+	    	Thread t = new Thread(new Runnable() {
+	     	   public void run() {
+	     		  new TextAreaLogProgram().setVisible(true);
+	     	   }
+	    	});
+	    	t.start();
+	    	Thread t2 = new Thread(new Runnable() {
+		     	   public void run() {
+		     		  ROSResults results = simulationsResults.get(simulationResultsTable.getSelectedRow());
+		     		  WheelChairsExperiment experiments = new WheelChairsExperiment(nExperiments, results, nJanitors, nDoctors, 
+						nManualChairs, nAutoChairs, patientsPerArrival,
+						minutesBetweenArrivals, manualFactor, 
+						new Long(0), new Long(days*24*60*60));
+		     		  experiments.start();
+		     		  DatabaseService.insertTotalResults(new CompleteResults(DataProcessing.mergePSIGHOSResults(WheelChairsExperiment.psighosResults), results).getDocument());
+		     	   }
+	    	});
+	    	t2.start();
+		}
 	    else {
 	    	JOptionPane.showMessageDialog(this, "Select a valid low level result");
 	    }

@@ -1,5 +1,6 @@
 package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.utilities;
 
+import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,6 +14,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -69,7 +71,8 @@ final public class DataProcessing {
 				segment.setIndex(segmentNode.get("segment_index").intValue());
 				segment.setFailures(segmentNode.get("n_failures").intValue());
 				segment.setTimeAverage(segmentNode.get("time_mean").doubleValue());
-				segment.setTimeout(segmentNode.get("segment_simulation_timeout").intValue());
+				segment.setTimeout(data.get("msg").get("metadata").get("segments_metadata")
+						.get("segments_metadata").get(segment.getIndex()).get("segment_simulation_timeout").intValue());
 				segment.setTimeStandardDeviation(segmentNode.get("time_stdev").doubleValue());
 				// Search for the distance between obstacles for this segment
 				segment.setDistanceBetweenObstacles(data.get("msg").get("metadata").get("segments_metadata")
@@ -599,15 +602,20 @@ final public class DataProcessing {
 	    }
 	}
 	
-	public static void showLongTextMessageInDialog(javax.swing.JFrame  frame) {
+	public static void showLongTextMessageInDialog(final javax.swing.JFrame  frame) {
 	    JTextArea textArea = new JTextArea(25, 100);
 	    textArea.setEditable(false);
 	    PrintStream printStream = new PrintStream(new CustomOutputStream(textArea)); 
 	    System.setOut(printStream);
 	    //System.setErr(printStream);
-
-	    JScrollPane scrollPane = new JScrollPane(textArea);
-	    JOptionPane.showMessageDialog(frame, scrollPane);
+	    final JScrollPane scrollPane = new JScrollPane(textArea);
+	   // scrollPane.add(progressBar, BorderLayout.NORTH);
+	    Thread t = new Thread(new Runnable() {
+	    	public void run() {
+	    		JOptionPane.showMessageDialog(frame, scrollPane);
+	    	}
+	    });
+	    t.start();
 	}
 	
 	public static String generateUniqueSimulationID() {

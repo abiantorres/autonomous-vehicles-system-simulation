@@ -98,12 +98,12 @@ class IterationResults:
         self.segments_results[segment_index].stop(failure)
         self.time += self.segments_results[segment_index].time
         self.distance += self.segments_results[segment_index].distance
+        self.speed = self.distance / self.time
         if(failure):
             self.failure = True
             self.failure_segment_index = segment_index
 
     def get_msg(self):
-        self.speed = self.distance / self.time
         msg = IndividualIterationResultsMsg()
         msg.iteration_index = self.iteration_index
         msg.failure = self.failure
