@@ -2,8 +2,11 @@ package es.ull.autonomous_vehicles_system_simulation.high_level_simulation.resul
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.bson.Document;
+
+import com.mongodb.DBObject;
 
 import es.ull.autonomous_vehicles_system_simulation.high_level_simulation.simulation.ElementReplicableTimeFunction;
 import es.ull.iis.function.TimeFunctionFactory;

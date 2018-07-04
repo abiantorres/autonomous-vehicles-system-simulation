@@ -175,8 +175,8 @@ final public class DataProcessing {
 			segment.setTimeout(
 					segments.get(i).getInteger("timeout"));
 			segment.setTimeAverage(segments.get(i).getDouble("timeAverage"));
-			segment.setMaximumTime(segments.get(i).getDouble("maximumTime"));
-			segment.setMinimumTime(segments.get(i).getDouble("minimumTime"));
+			//segment.setMaximumTime(segments.get(i).getDouble("maximumTime"));
+			//segment.setMinimumTime(segments.get(i).getDouble("minimumTime"));
 			segment.setTimeStandardDeviation(segments.get(i).getDouble("timeStandardDeviation"));
 			
 			// Search individual times (each simulation iteration) for the current segment
@@ -506,6 +506,16 @@ final public class DataProcessing {
 			// Set the new date
 			results.setDate(newDate);
 			
+			Integer nIterations = 0, nFailures = 0;
+			
+			for(int i = 0; i < resultsList.size(); i++) {
+				nIterations += resultsList.get(i).getnIterations();
+				nFailures += resultsList.get(i).getnFailures();
+			}
+			if(nIterations - nFailures >= 2) {
+				results.setUsefulSimulation(true);
+			}
+			
 			// Set others simulation parameters
 			results.setGlobalPlanner("Merged");
 			results.setLocalPlanner("Merged");
@@ -563,7 +573,7 @@ final public class DataProcessing {
 					results.setnFailures(globalFailures);
 					results.setnIterations(globalIterations);
 					results.setTimeoutFactor(MathUtil.meanInteger(individualTimeoutFactors));
-					individualTimeoutFactors.clear();
+					individualTimeoutFactors = new ArrayList<Integer>();
 				}
 				// Set the segment data
 				segment.setDistanceBetweenObstacles(MathUtil.mean(individualDistancesBetweenObstacles));
@@ -575,9 +585,9 @@ final public class DataProcessing {
 				results.addSegment(segment);
 				// Reset the arrays content to fill them with the data of the
 				// next segment
-				individualTimes.clear();
-				individualTimeouts.clear();
-				individualDistancesBetweenObstacles.clear();
+				individualTimes = new ArrayList<Double>();
+				individualTimeouts = new ArrayList<Integer>();
+				individualDistancesBetweenObstacles = new ArrayList<Double>();
 				individualFailures = 0;
 				segment = new ROSSegment();
 			}
